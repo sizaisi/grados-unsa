@@ -1,0 +1,14 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine On    
+
+    RewriteCond %{SCRIPT_FILENAME} !-d
+    RewriteCond %{SCRIPT_FILENAME} !-f
+
+    RewriteRule ^(\w+)/(\w+)/?$ index.php?controller=$1&action=$2
+    #RewriteRule ^(\w+)/(\w+)/(.*)?$ index.php?controller=$1&action=$2&id=$3
+    #RewriteRule ^index/?$ index.php
+</IfModule>
+
+<IfModule mod_headers.c>
+    Header set Access-Control-Allow-Origin "*"
+</IfModule>

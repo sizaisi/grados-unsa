@@ -118,7 +118,7 @@ export default {
     name: 'programa-estudios',  
     data() {
         return { 
-            url: 'http://10.50.1.33/sisacad_pruebas/graduacion/controlador/',
+            url : '//localhost/grados-unsa/backend2',
             array_programa_estudios : [],
             programa_estudios : {
                 id: '',
@@ -149,7 +149,8 @@ export default {
     methods: {
         getAllProgramaEstudios() {
             let me = this
-            this.axios.get(this.url+"ProgramaEstudiosController.php?action=read")
+
+            this.axios.get(`${this.url}/ProgramaEstudios/index`)
                 .then(function(response) {
                 if (response.data.error) {
                     me.errorMsg = response.data.message
@@ -185,7 +186,7 @@ export default {
             let me = this            
             var formData = this._toFormData(this.programa_estudios);
 
-            this.axios.post(this.url+"ProgramaEstudiosController.php?action=store", formData)
+            this.axios.post(`${this.url}/ProgramaEstudios/store`, formData)
             .then(function(response) {
                 me.cerrarAddEditModal()
                 me.dismissCountDown = me.dismissSecs //contador para el alert
@@ -278,7 +279,7 @@ export default {
             var fd = new FormData()
 
             for (var i in obj) {
-                fd.meend(i, obj[i])
+                fd.append(i, obj[i])
             }
 
             return fd
@@ -288,7 +289,7 @@ export default {
         },
     },
     mounted: function() {
-        //this.getAllProgramaEstudios()
+        this.getAllProgramaEstudios()
     },
 }
 </script>
