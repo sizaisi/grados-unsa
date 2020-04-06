@@ -300,18 +300,7 @@ export default {
         left: 0;
         right: 0;
         background: rgba(0, 0, 0, 0.6);
-    }
-
-    .tabla-info-exp {
-        width: 75%;
-        margin: 0px auto;
-
-    }
-
-    .list-inicio {
-        width: 50%;
-        margin: 0px auto;
-    }
+    }    
     
     table#tbl-programa-estudios .flip-list-move {
         transition: transform 1s;
