@@ -11,11 +11,14 @@
           <b-nav-item href="#">Reportes</b-nav-item>          
           <!-- Navbar dropdowns -->
           <b-nav-item-dropdown text="Mantenimiento" left>
-            <b-dropdown-item href="#">Rutas</b-dropdown-item>
-            <b-dropdown-item href="#">Grado Título</b-dropdown-item>
+            <b-dropdown-item to="/rutas">Rutas</b-dropdown-item>
+            <b-dropdown-item to="/grado-titulo">Grado Título</b-dropdown-item>
             <b-dropdown-item to="/programa-estudios">Programa Estudios</b-dropdown-item>
-            <b-dropdown-item href="#">Modalidad Obtención</b-dropdown-item>
-            <b-dropdown-item href="#">Grado Procedimiento</b-dropdown-item>
+            <b-dropdown-item to="/modalidad-obtencion">Modalidad Obtención</b-dropdown-item>
+            <b-dropdown-item to="/grado-procedimiento">Grado Procedimiento</b-dropdown-item>
+            <b-dropdown-item to="/grado-modalidad">Grado Modalidad</b-dropdown-item>
+            <b-dropdown-item to="/rol-area">Rol Area</b-dropdown-item>
+            <b-dropdown-item to="/procedimientos">Procedimiento</b-dropdown-item>
           </b-nav-item-dropdown>
           <b-nav-item href="#">Configuración</b-nav-item>          
         </b-navbar-nav>
