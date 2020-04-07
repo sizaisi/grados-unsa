@@ -3,7 +3,6 @@
 class ModalidadObtencion {
 	private $id;
 	private $nombre;
-	private $conn;
 	
 	public function __construct() {
 		$this->conn = Database::conectar();
