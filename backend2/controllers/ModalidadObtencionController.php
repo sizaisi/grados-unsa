@@ -14,42 +14,42 @@ class ModalidadObtencionController {
 	public function store(){
 		$modalidad_obtencion = new ModalidadObtencion();
 
-      $modalidad_obtencion->setNombre($_POST['nombre']);
+		$modalidad_obtencion->setNombre($_POST['nombre']);
 
-      $result = $modalidad_obtencion->insertar();
+		$result = $modalidad_obtencion->insertar();
 
-      echo json_encode($result);
+		echo json_encode($result);
 	}
 	
 	public function update(){
 		$modalidad_obtencion = new ModalidadObtencion();
 
-      $modalidad_obtencion->setId($_POST['id']);
-      $modalidad_obtencion->setNombre($_POST['nombre']);
-      
-      $result = $modalidad_obtencion->actualizar();
+		$modalidad_obtencion->setId($_POST['id']);
+		$modalidad_obtencion->setNombre($_POST['nombre']);
+		
+		$result = $modalidad_obtencion->actualizar();
 
-      echo json_encode($result);
+		echo json_encode($result);
 	            
 	}
 	
 	public function activar(){
 		$modalidad_obtencion = new ModalidadObtencion();
 
-      $modalidad_obtencion->setId($_POST['id']);
+		$modalidad_obtencion->setId($_POST['id']);
 
-      $result = $modalidad_obtencion->activar();
+		$result = $modalidad_obtencion->activar();
 
-      echo json_encode($result);
+		echo json_encode($result);
 	}	
 	
 	public function desactivar(){
-	     $modalidad_obtencion = new ModalidadObtencion();
+	    $modalidad_obtencion = new ModalidadObtencion();
 
-      $modalidad_obtencion->setId($_POST['id']);      
+		$modalidad_obtencion->setId($_POST['id']);      
 
-      $result = $modalidad_obtencion->desactivar();
+		$result = $modalidad_obtencion->desactivar();
 
-      echo json_encode($result);   
+		echo json_encode($result);   
 	}	
 }

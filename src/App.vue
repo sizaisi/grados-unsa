@@ -1,4 +1,4 @@
-<template>
+<template>  
   <div id="app">
     <b-navbar toggleable="lg" type="dark" class="nav-unsa">
       <b-navbar-brand href="#">Grados y Títulos - UNSA</b-navbar-brand>

@@ -43,7 +43,7 @@
                   striped
                   bordered
                   primary-key="id"
-                  :tbody-transition-props="transProps"
+                  :tbody-transition-props="transProps"                      
                 >
                   <template v-slot:cell(condicion)="data">
                     <span class="badge" :class="data.item.condicion == 'Activo' ? 'badge-success' : 'badge-secondary'">
@@ -51,9 +51,9 @@
                     </span>
                   </template>
                   <template v-slot:cell(acciones)="data">
-                    <b-button variant="warning" size="sm" data-toggle="tooltip" data-placement="left" title="Editar" @click="abrirAddEditModal('actualizar', data.item)"><i class="fa fa-edit"></i></b-button>
-                    <b-button variant="danger" size="sm" data-toggle="tooltip" data-placement="left" title="Desactivar" @click="abrirDeleteModal('desactivar', data.item)" v-if="data.item.condicion == 'Activo'"><i class="fa fa-times"></i></b-button>
-                    <b-button variant="success" size="sm" data-toggle="tooltip" data-placement="left" title="Activar" @click="abrirDeleteModal('activar', data.item)" v-else><i class="fa fa-check"></i></b-button>
+                    <b-button variant="warning" size="sm" data-toggle="tooltip" data-placement="left" title="Editar" @click="abrirAddEditModal('actualizar', data.item)"><b-icon icon="pencil-square" aria-hidden="true"></b-icon></b-button>&nbsp;
+                    <b-button variant="danger" size="sm" data-toggle="tooltip" data-placement="left" title="Desactivar" @click="abrirDeleteModal('desactivar', data.item)" v-if="data.item.condicion == 'Activo'"><b-icon icon="x"></b-icon></b-button>
+                    <b-button variant="success" size="sm" data-toggle="tooltip" data-placement="left" title="Activar" @click="abrirDeleteModal('activar', data.item)" v-else><b-icon icon="check"></b-icon></b-button>
                   </template>
                 </b-table>
           </div>
@@ -152,12 +152,13 @@ export default {
 
             this.axios.get(`${this.url}/ProgramaEstudios/index`)
                 .then(function(response) {
-                if (response.data.error) {
-                    me.errorMsg = response.data.message
-                }
-                else {
-                    me.array_programa_estudios = response.data.array_programa_estudios
-                }
+                    if (response.data.error) {
+                        me.errorMsg = response.data.message
+                    }
+                    else {
+                        me.array_programa_estudios = response.data.array_programa_estudios
+                        console.log(me.array_programa_estudios)
+                    }
                 })
         },
         abrirAddEditModal(accion, data = []) {            
@@ -205,7 +206,7 @@ export default {
             let me = this            
             var formData = this._toFormData(this.programa_estudios)
 
-            this.axios.post(this.url+"ProgramaEstudiosController.php?action=update", formData)
+            this.axios.post(`${this.url}/ProgramaEstudios/update`, formData)
             .then(function(response) {
                 me.cerrarAddEditModal();
                 me.dismissCountDown = me.dismissSecs //contador para el alert
@@ -254,7 +255,7 @@ export default {
             let me = this
             var formData = this._toFormData(this.programa_estudios)
 
-            this.axios.post(this.url+"ProgramaEstudiosController.php?action="+this.tipoAccion, formData)
+            this.axios.post(`${this.url}/ProgramaEstudios/${this.tipoAccion}`, formData)
             .then(function(response) {
                 me.cerrarDeleteModal()
                 me.dismissCountDown = me.dismissSecs //contador para el alert
@@ -293,6 +294,12 @@ export default {
     },
 }
 </script>
+<style>  
+    table#tbl-programa-estudios .flip-list-move {
+        transition: transform 1s;
+    }
+</style>
+
 <style scoped>
     .overlay {
         position: fixed;
@@ -301,9 +308,5 @@ export default {
         left: 0;
         right: 0;
         background: rgba(0, 0, 0, 0.6);
-    }    
-    
-    table#tbl-programa-estudios .flip-list-move {
-        transition: transform 1s;
-    }    
+    }       
 </style>
