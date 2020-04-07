@@ -1,6 +1,6 @@
 <?php
 
-class ProgramaEstudios {
+class Movimiento {
 	private $id;
 	private $nombre;
 	

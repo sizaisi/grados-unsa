@@ -1,8 +1,11 @@
 <?php
 
-class ProgramaEstudios {
+class GradoTitulo {
 	private $id;
 	private $nombre;
+	private $codigo;
+    private $idprereq;
+    private $descripcion;
 	
 	public function __construct() {
 		$this->conexion = Database::conectar();
@@ -12,17 +15,41 @@ class ProgramaEstudios {
 		return $this->id;
 	}
 
-	function getNombre() {
-		return $this->nombre;
-	}
-
 	function setId($id) {
 		$this->id = $id;
+	}
+
+	function getNombre() {
+		return $this->nombre;
 	}
 
 	function setNombre($nombre) {
 		$this->nombre = $this->conexion->real_escape_string($nombre);
 	}	
+
+	function getCodigo() {
+		return $this->codigo;
+	}
+
+	function setCodigo($codigo) {
+		$this->codigo = $this->conexion->real_escape_string($codigo);
+	}
+
+	function getIdprereq() {
+		return $this->idprereq;
+	}
+
+	function setIdprereq($idprereq) {
+		$this->idprereq = $this->conexion->real_escape_string($idprereq);
+	}
+
+	function getDescripcion() {
+		return $this->descripcion;
+	}
+
+	function setDescripcion($descripcion) {
+		$this->descripcion = $this->conexion->real_escape_string($descripcion);
+	}
 	
 	public function getAllProgramaEstudios() {
 
