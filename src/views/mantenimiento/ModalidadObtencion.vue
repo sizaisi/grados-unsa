@@ -118,7 +118,7 @@ export default {
     name: 'modalidad-obtencion',  
     data() {
         return { 
-             url: 'http://localhost/backend/controlador/',
+             url: '//localhost/grados-unsa/backend2/controllers/',
             array_modalidad_obtencion : [],
             modalidad_obtencion : {
               id: '',
@@ -286,7 +286,7 @@ export default {
             var fd = new FormData()
 
             for (var i in obj) {
-              fd.meend(i, obj[i])
+              fd.append(i, obj[i])
             }
 
             return fd

@@ -45,9 +45,9 @@
                       <b-form-group label-cols-sm="3" label="Buscar: " class="mb-0">
                           <b-input-group>
                               <b-form-input v-model="filter" placeholder="Escriba el texto a buscar..."></b-form-input>
-                              <!--<b-input-group-meend>
+                              <!--<b-input-group-append>
                                   <b-button :disabled="!filter" @click="filter = ''">Clear</b-button>
-                              </b-input-group-meend>-->
+                              </b-input-group-append>-->
                           </b-input-group>
                       </b-form-group>
                   </b-col>                        
@@ -151,10 +151,10 @@
 <script>
 
 export default {
-    name: 'programa-estudios',  
+    name: 'procedimientos',  
     data() {
         return { 
-           url: 'http://10.50.1.33/sisacad_pruebas/graduacion/controlador/',
+           url: '//localhost/grados-unsa/backend2/controllers/',
         array_procedimiento : [],
         procedimiento : {
           id: '',
@@ -332,7 +332,7 @@ export default {
             var fd = new FormData()
 
             for (var i in obj) {
-              fd.meend(i, obj[i])
+              fd.append(i, obj[i])
             }
 
             return fd

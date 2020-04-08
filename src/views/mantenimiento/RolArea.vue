@@ -116,10 +116,10 @@
 <script>
 
 export default {
-    name: 'programa-estudios',  
+    name: 'rol-area',  
     data() {
         return { 
-            url: 'http://localhost/backend/controlador/',
+            url: '//localhost/grados-unsa/backend2/controllers/',
             array_rol_area : [],
             rol_area : {
               id: '',
@@ -286,7 +286,7 @@ export default {
             var fd = new FormData()
 
             for (var i in obj) {
-              fd.meend(i, obj[i])
+              fd.append(i, obj[i])
             }
 
             return fd

@@ -118,7 +118,7 @@ export default {
     name: 'programa-estudios',  
     data() {
         return { 
-            url : '//localhost/grados-unsa/backend2',
+            url : '//localhost/grados-unsa/backend2/controllers/',
             array_programa_estudios : [],
             programa_estudios : {
                 id: '',
@@ -150,7 +150,7 @@ export default {
         getAllProgramaEstudios() {
             let me = this
 
-            this.axios.get(`${this.url}/ProgramaEstudios/index`)
+            this.axios.get(me.url+"ProgramaEstudiosController.php?action=index")
                 .then(function(response) {
                 if (response.data.error) {
                     me.errorMsg = response.data.message
@@ -186,7 +186,7 @@ export default {
             let me = this            
             var formData = this._toFormData(this.programa_estudios);
 
-            this.axios.post(`${this.url}/ProgramaEstudios/store`, formData)
+            this.axios.post(me.url+"ProgramaEstudiosController.php?action=store", formData)
             .then(function(response) {
                 me.cerrarAddEditModal()
                 me.dismissCountDown = me.dismissSecs //contador para el alert
