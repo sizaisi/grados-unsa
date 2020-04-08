@@ -26,7 +26,7 @@ const routes = [
   },
   {
     path: '/grado-titulo',
-    name: 'grado-titulos',
+    name: 'grado-titulo',
     component: GradoTitulo
   },
   {

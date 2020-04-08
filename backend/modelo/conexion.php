@@ -3,7 +3,7 @@ class ConexionMySql
 {
   private $host = 'localhost';
   private $user = 'root';
-  private $pass = '';
+  private $pass = 'root';
   private $db = 'siac_pruebas';
   private $conexion;
 

@@ -3,6 +3,7 @@
 class ProgramaEstudios {
 	private $id;
 	private $nombre;
+	private $conexion;
 	
 	public function __construct() {
 		$this->conexion = Database::conectar();

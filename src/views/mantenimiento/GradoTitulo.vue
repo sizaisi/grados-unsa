@@ -74,8 +74,8 @@
                   <div class="form-group">
                     <div class="form-group">
                         <label for="grado_titulo">Grado o Título:</label>
-                        <input type="text" v-model="grado_titulo.nombre" name="grado_titulo" class="form-control" id="grado_titulo" v-validate="'required'"/>
-                        <span class="text-danger" v-if="errors.has('grado_titulo')">{{errors.first('grado_titulo')}}</span>
+                        <input type="text" v-model="grado_titulo.nombre" name="grado_titulo" class="form-control" id="grado_titulo"/>
+                        
                     </div>
                     <div class="form-group">
                         <label for="gt_codigo">Código:</label>
@@ -129,10 +129,10 @@
 <script>
 
 export default {
-    name: 'programa-estudios',  
+    name: 'grado-titulo',  
     data() {
         return { 
-            url: 'http://localhost/backend/controlador/',
+            url: '//localhost/grados-unsa/backend2/controllers',
             array_grado_titulo : [],
             select_grado_titulo: [],
             grado_titulo : {
@@ -170,7 +170,7 @@ export default {
     methods: {
         getAllGradoTitulos() {
             let me=this
-          this.axios.get(this.url+"GradoTituloController.php?action=read")
+          this.axios.get(`${this.url}/GradoTitulo/index`)
             .then(function(response) {
               if (response.data.error) {
                 me.errorMsg = response.data.message;
@@ -189,7 +189,6 @@ export default {
         },
         abrirAddEditModal(accion, data = []) {
           this.showAddEditModal = true
-          this.errors.clear()
 
           switch(accion) {
               case 'registrar':
@@ -216,7 +215,6 @@ export default {
         registrarGradoTitulo() {
           let me=this
 
-          if (!this.errors.any()) {
             var formData = this._toFormData(this.grado_titulo)
 
             this.axios.post(this.url+"GradoTituloController.php?action=store", formData)
@@ -232,12 +230,11 @@ export default {
                   me.getAllGradoTitulos()
                 }
             })
-          }
+          
         },
         actualizarGradoTitulo() {
           let me=this     
 
-          if (!this.errors.any()) {
             var formData = this._toFormData(this.grado_titulo)
 
             this.axios.post(this.url+"GradoTituloController.php?action=update", formData)
@@ -253,7 +250,7 @@ export default {
                   me.getAllGradoTitulos()
                 }
             })
-          }
+          
         },
         cerrarAddEditModal() {
           this.showAddEditModal = false
@@ -267,7 +264,6 @@ export default {
         },
         abrirDeleteModal(accion, data = []) {
           this.showDeleteModal = true
-          this.errors.clear()
 
           switch(accion) {
               case 'activar':
@@ -319,7 +315,7 @@ export default {
           var fd = new FormData()
 
           for (var i in obj) {
-            fd.meend(i, obj[i])
+            fd.append(i, obj[i])
           }
 
           return fd

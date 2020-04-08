@@ -118,10 +118,10 @@
 <script>
 
 export default {
-    name: 'programa-estudios',  
+    name: 'grado-modalidad',  
     data() {
         return { 
-            url: 'http://localhost/backend/controlador/',
+            url: '//localhost/grados-unsa/backend2/controllers/',
             array_grado_modalidad : [],
             array_grados: [],
             array_modalidades: [],
@@ -156,7 +156,7 @@ export default {
     methods: {
         getAllGradoModalidad() {
           let me=this
-          this.axios.get(this.url+"GradoModalidadController.php?action=read")
+          this.axios.get(this.url+"GradoModalidadController.php?action=index")
             .then(function(response) {
               if (response.data.error) {
                 me.errorMsg = response.data.message
@@ -321,7 +321,7 @@ export default {
             var fd = new FormData()
 
             for (var i in obj) {
-              fd.meend(i, obj[i])
+              fd.append(i, obj[i])
             }
 
             return fd

@@ -45,9 +45,9 @@
                       <b-form-group label-cols-sm="3" label="Buscar: " class="mb-0">
                           <b-input-group>
                               <b-form-input v-model="filter" placeholder="Escriba el texto a buscar..."></b-form-input>
-                              <!--<b-input-group-meend>
+                              <!--<b-input-group-append>
                                   <b-button :disabled="!filter" @click="filter = ''">Clear</b-button>
-                              </b-input-group-meend>-->
+                              </b-input-group-append>-->
                           </b-input-group>
                       </b-form-group>
                   </b-col>                        
@@ -160,10 +160,10 @@
 <script>
 
 export default {
-    name: 'programa-estudios',  
+    name: 'rutas',  
     data() {
         return { 
-            url: 'http://localhost/backend/controlador/',
+            url: '//localhost/grados-unsa/backend2/controllers/',
             array_ruta : [],
             select_grado_modalidad: [],
             select_grado_procedimiento_origen: [],
@@ -218,9 +218,9 @@ export default {
         }
     },
     watch: {
-        idgrado_modalidad: function(val) {    
+        idgrado_modalidad: function() {    
             let me=this
-          if (val != '') {
+       
             this.axios.get(this.url+"RutaController.php?action=getListGradProcedimientos", {
               params: {
                   'idgrado_modalidad': this.idgrado_modalidad
@@ -244,7 +244,7 @@ export default {
                 me.select_grado_procedimiento_destino.push({value: 0, text: 'Fin'}) //virtualizacion de proc fin
               }
             })
-          }               
+                      
         }
       },
       methods: {
@@ -277,7 +277,7 @@ export default {
         },
         abrirAddEditModal(accion, data = []) {
             this.showAddEditModal = true
-            this.errors.clear()
+          
 
             switch(accion) {
                 case 'registrar':
@@ -304,7 +304,6 @@ export default {
         registrarRuta() {
             let me=this
 
-            if (!this.errors.any()) {
               var formData = this._toFormData(this.ruta)
 
               this.axios.post(this.url+"RutaController.php?action=store", formData)
@@ -320,12 +319,11 @@ export default {
                     me.getAllRutas()
                   }
               })
-            }
         },
         actualizarRuta() {
             let me=this
 
-            if (!this.errors.any()) {
+            
               var formData = this._toFormData(this.ruta)
 
               this.axios.post(this.url+"RutaController.php?action=update", formData)
@@ -341,7 +339,7 @@ export default {
                     me.getAllRutas()
                   }
               })
-            }
+          
         },
         cerrarAddEditModal() {
           this.showAddEditModal = false
@@ -355,7 +353,7 @@ export default {
         },
         abrirDeleteModal(accion, data = []) {
           this.showDeleteModal = true
-          this.errors.clear()
+          
 
           switch(accion) {
               case 'activar':
@@ -408,7 +406,7 @@ export default {
             var fd = new FormData()
 
             for (var i in obj) {
-              fd.meend(i, obj[i])
+              fd.append(i, obj[i])
             }
 
             return fd

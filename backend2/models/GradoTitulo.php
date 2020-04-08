@@ -5,7 +5,8 @@ class GradoTitulo {
 	private $nombre;
 	private $codigo;
     private $idprereq;
-    private $descripcion;
+	private $descripcion;
+	private $conexion;
 	
 	public function __construct() {
 		$this->conexion = Database::conectar();

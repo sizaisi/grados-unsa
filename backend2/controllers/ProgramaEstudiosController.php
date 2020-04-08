@@ -1,5 +1,5 @@
 <?php
-require_once 'models/ProgramaEstudios.php';
+require_once '../models/ProgramaEstudios.php';
 
 class ProgramaEstudiosController {
 	
