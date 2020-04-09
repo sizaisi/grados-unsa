@@ -7,7 +7,7 @@
 
       <b-collapse id="nav-collapse" is-nav>
         <b-navbar-nav>
-          <b-nav-item href="#">Expedientes</b-nav-item>
+          <b-nav-item to="/inicio">Expedientes</b-nav-item>            
           <b-nav-item href="#">Reportes</b-nav-item>          
           <!-- Navbar dropdowns -->
           <b-nav-item-dropdown text="Mantenimiento" left>
