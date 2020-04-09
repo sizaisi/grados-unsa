@@ -1,6 +1,11 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
+
+/* Expedientes */
+import Inicio from '../views/expedientes/Inicio.vue'
+
+/* Mantenimiento */
 import ProgramaEstudios from '../views/mantenimiento/ProgramaEstudios.vue'
 import GradoProcedimiento from '../views/mantenimiento/GradoProcedimiento.vue'
 import GradoTitulo from '../views/mantenimiento/GradoTitulo.vue'
@@ -18,6 +23,11 @@ const routes = [
     path: '/',
     name: 'Home',
     component: Home
+  },
+  {
+    path: '/inicio',
+    name: 'inicio',
+    component: Inicio
   },
   {
     path: '/rutas',
