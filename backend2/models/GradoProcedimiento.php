@@ -8,9 +8,11 @@ class GradoProcedimiento {
     private $tipo_rol;    
     private $url;
     private $orden;
+
+    private $conn;
 	
 	public function __construct() {
-		$this->conexion = Database::conectar();
+		$this->conn = Database::conectar();
 	}
 	
 	function getId() {
@@ -21,36 +23,36 @@ class GradoProcedimiento {
 		$this->id = $id;
 	}
 
-	function getIdgrado_Modalidad() {
+	function getIdGradoModalidad() {
 		return $this->idgrado_modalidad;
 	}
 
-	function setIdgrado_Modalidad($idgrado_modalidad) {
-		$this->idgrado_modalidad = $this->conexion->real_escape_string($idgrado_modalidad);
+	function setIdGradoModalidad($idgrado_modalidad) {
+		$this->idgrado_modalidad = $idgrado_modalidad;
 	}	
 
-	function getIdprocedimiento() {
+	function getIdProcedimiento() {
 		return $this->idprocedimiento;
 	}
 
-	function setIdprocedimiento($idprocedimiento) {
-		$this->idprocedimiento = $this->conexion->real_escape_string($idprocedimiento);
+	function setIdProcedimiento($idprocedimiento) {
+		$this->idprocedimiento = $idprocedimiento;
 	}
 
 	function getIdrol() {
 		return $this->idrol;
 	}
 
-	function setIdrol($idrol) {
-		$this->idrol = $this->conexion->real_escape_string($idrol);
+	function setIdRol($idrol) {
+		$this->idrol = $idrol;
 	}
 
-	function getTipo_Rol() {
+	function getTipoRol() {
 		return $this->tipo_rol;
 	}
 
-	function setTipo_Rol($tipo_rol) {
-		$this->tipo_rol = $this->conexion->real_escape_string($tipo_rol);
+	function setTipoRol($tipo_rol) {
+		$this->tipo_rol = $tipo_rol;
 	}
 
 	function getUrl() {
@@ -58,7 +60,7 @@ class GradoProcedimiento {
 	}
 
 	function setUrl($url) {
-		$this->url = $this->conexion->real_escape_string($url);
+		$this->url = $url;
 	}
 
 	function getOrden() {
@@ -66,7 +68,7 @@ class GradoProcedimiento {
 	}
 
 	function setOrden($orden) {
-		$this->orden = $this->conexion->real_escape_string($orden);
+		$this->orden = $orden;
 	}
 	
 	public function getGradoProcedimiento(){

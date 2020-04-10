@@ -51,9 +51,9 @@
                   </span>
                 </template>            
                 <template v-slot:cell(acciones)="data">
-                  <b-button variant="warning" size="sm" data-toggle="tooltip" data-placement="left" title="Editar" @click="abrirAddEditModal('actualizar', data.item)"><i class="fa fa-edit"></i></b-button>
-                  <b-button variant="danger" size="sm" data-toggle="tooltip" data-placement="left" title="Desactivar" @click="abrirDeleteModal('desactivar', data.item)" v-if="data.item.condicion == 'Activo'"><i class="fa fa-times"></i></b-button>
-                  <b-button variant="success" size="sm" data-toggle="tooltip" data-placement="left" title="Activar" @click="abrirDeleteModal('activar', data.item)" v-else><i class="fa fa-check"></i></b-button>
+                  <b-button variant="warning" size="sm" data-toggle="tooltip" data-placement="left" title="Editar" @click="abrirAddEditModal('actualizar', data.item)"><b-icon icon="pencil-square"></b-icon></b-button>&nbsp;
+                  <b-button variant="danger" size="sm" data-toggle="tooltip" data-placement="left" title="Desactivar" @click="abrirDeleteModal('desactivar', data.item)" v-if="data.item.condicion == 'Activo'"><b-icon icon="x"></b-icon></b-button>
+                  <b-button variant="success" size="sm" data-toggle="tooltip" data-placement="left" title="Activar" @click="abrirDeleteModal('activar', data.item)" v-else><b-icon icon="check"></b-icon></b-button>
                 </template>
               </b-table>
         </div>
@@ -74,8 +74,7 @@
               <form role="form">
                   <div class="form-group">
                       <label for="rol_area">Rol-Area</label>
-                      <input type="text" v-model="rol_area.nombre" name="rol_area" class="form-control" id="rol_area" v-validate="'required'"/>
-                      <span class="text-danger" v-if="errors.has('rol_area')">{{errors.first('rol_area')}}</span>
+                      <input type="text" v-model="rol_area.nombre" name="rol_area" class="form-control" id="rol_area"/>                      
                   </div>
               </form>
             </div>
@@ -119,7 +118,7 @@ export default {
     name: 'rol-area',  
     data() {
         return { 
-            url: '//localhost/grados-unsa/backend2/controllers/',
+            url: '//localhost/grados-unsa/backend2',
             array_rol_area : [],
             rol_area : {
               id: '',
@@ -149,8 +148,9 @@ export default {
     },
     methods: {
         getAllRolArea() {
-          let me=this
-          this.axios.get(this.url+"RolAreaController.php?action=read")
+          let me = this
+
+          this.axios.get(`${this.url}/RolArea/index`)
             .then(function(response) {
               if (response.data.error) {
                 me.errorMsg = response.data.message
@@ -161,8 +161,7 @@ export default {
           })
         },
         abrirAddEditModal(accion, data = []) {
-          this.showAddEditModal = true;
-          this.errors.clear();
+          this.showAddEditModal = true;         
 
           switch(accion) {
               case 'registrar':
@@ -184,46 +183,41 @@ export default {
           }
         },
         registrarRolArea() {
-          let me=this
+          let me = this          
+          var formData = this._toFormData(this.rol_area)
 
-          if (!this.errors.any()) {
-            var formData = this._toFormData(this.rol_area)
+          this.axios.post(`${this.url}/RolArea/store`, formData)
+            .then(function(response) {
+              me.cerrarAddEditModal()
+              me.dismissCountDown = me.dismissSecs //contador para el alert
 
-            this.axios.post(this.url+"RolAreaController.php?action=store", formData)
-              .then(function(response) {
-                me.cerrarAddEditModal()
-                me.dismissCountDown = me.dismissSecs //contador para el alert
-
-                if (response.data.error) {
-                  me.errorMsg = response.data.message
-                }
-                else {
-                  me.successMsg = response.data.message
-                  me.getAllRolArea()
-                }
-            })
-          }
+              if (response.data.error) {
+                me.errorMsg = response.data.message
+              }
+              else {
+                me.successMsg = response.data.message
+                me.getAllRolArea()
+              }
+          })
+          
         },
         actualizarRolArea() {
-          let me=this
+          let me = this          
+          var formData = this._toFormData(this.rol_area)
 
-          if (!this.errors.any()) {
-            var formData = this._toFormData(this.rol_area)
+          this.axios.post(`${this.url}/RolArea/update`, formData)
+            .then(function(response) {
+              me.cerrarAddEditModal()
+              me.dismissCountDown = me.dismissSecs //contador para el alert
 
-            this.axios.post(this.url+"RolAreaController.php?action=update", formData)
-              .then(function(response) {
-                me.cerrarAddEditModal()
-                me.dismissCountDown = me.dismissSecs //contador para el alert
-
-                if (response.data.error) {
-                  me.errorMsg = response.data.message
-                }
-                else {
-                  me.successMsg = response.data.message
-                  me.getAllRolArea()
-                }
-            })
-          }
+              if (response.data.error) {
+                me.errorMsg = response.data.message
+              }
+              else {
+                me.successMsg = response.data.message
+                me.getAllRolArea()
+              }
+          })          
         },
         cerrarAddEditModal() {
           this.showAddEditModal = false
@@ -233,8 +227,7 @@ export default {
           this.successMsg = ''
         },
         abrirDeleteModal(accion, data = []) {
-          this.showDeleteModal = true
-          this.errors.clear()
+          this.showDeleteModal = true         
 
           switch(accion) {
               case 'activar':
@@ -258,10 +251,10 @@ export default {
           }
         },
         anularRolArea() {
-          let me=this
+          let me = this
           var formData = this._toFormData(this.rol_area)
 
-          this.axios.post(this.url+"RolAreaController.php?action="+this.tipoAccion, formData)
+          this.axios.post(`${this.url}/RolArea/${this.tipoAccion}`, formData)
           .then(function(response) {
             me.cerrarDeleteModal()
             me.dismissCountDown = me.dismissSecs //contador para el alert
@@ -300,17 +293,3 @@ export default {
       },
 }
 </script>
-<style scoped>
-    .overlay {
-        position: fixed;
-        top: 0;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        background: rgba(0, 0, 0, 0.6);
-    }    
-    
-    table#tbl-rol-area .flip-list-move {
-        transition: transform 1s;
-    }    
-</style>

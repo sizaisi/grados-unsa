@@ -50,9 +50,9 @@
                     <b-badge v-else variant='secondary'>Inactivo</b-badge>
                   </template>
                   <template v-slot:cell(acciones)="data">
-                    <b-button variant="warning" size="sm" data-toggle="tooltip" data-placement="left" title="Editar" @click="abrirAddEditModal('actualizar', data.item)"><i class="fa fa-edit"></i></b-button>
-                    <b-button variant="danger" size="sm" data-toggle="tooltip" data-placement="left" title="Desactivar" @click="abrirDeleteModal('desactivar', data.item)" v-if="data.item.condicion == 1"><i class="fa fa-times"></i></b-button>
-                    <b-button variant="success" size="sm" data-toggle="tooltip" data-placement="left" title="Activar" @click="abrirDeleteModal('activar', data.item)" v-else><i class="fa fa-check"></i></b-button>
+                    <b-button variant="warning" size="sm" data-toggle="tooltip" data-placement="left" title="Editar" @click="abrirAddEditModal('actualizar', data.item)"><b-icon icon="pencil-square"></b-icon></b-button>&nbsp;
+                    <b-button variant="danger" size="sm" data-toggle="tooltip" data-placement="left" title="Desactivar" @click="abrirDeleteModal('desactivar', data.item)" v-if="data.item.condicion == 1"><b-icon icon="x"></b-icon></b-button>
+                    <b-button variant="success" size="sm" data-toggle="tooltip" data-placement="left" title="Activar" @click="abrirDeleteModal('activar', data.item)" v-else><b-icon icon="check"></b-icon></b-button>
                   </template>
                 </b-table>
           </div>
@@ -132,7 +132,7 @@ export default {
     name: 'grado-titulo',  
     data() {
         return { 
-            url: '//localhost/grados-unsa/backend2/controllers',
+            url: '//localhost/grados-unsa/backend2',
             array_grado_titulo : [],
             select_grado_titulo: [],
             grado_titulo : {
@@ -169,7 +169,8 @@ export default {
     },
     methods: {
         getAllGradoTitulos() {
-            let me=this
+          let me = this
+
           this.axios.get(`${this.url}/GradoTitulo/index`)
             .then(function(response) {
               if (response.data.error) {
@@ -213,11 +214,11 @@ export default {
           }
         },
         registrarGradoTitulo() {
-          let me=this
+            let me = this
 
             var formData = this._toFormData(this.grado_titulo)
 
-            this.axios.post(this.url+"GradoTituloController.php?action=store", formData)
+            this.axios.post(`${this.url}/GradoTitulo/store`, formData)
               .then(function(response) {
                 me.cerrarAddEditModal()
                 me.dismissCountDown = me.dismissSecs //contador para el alert
@@ -233,11 +234,11 @@ export default {
           
         },
         actualizarGradoTitulo() {
-          let me=this     
+            let me = this     
 
             var formData = this._toFormData(this.grado_titulo)
 
-            this.axios.post(this.url+"GradoTituloController.php?action=update", formData)
+            this.axios.post(`${this.url}/GradoTitulo/update`, formData)
               .then(function(response) {
                 me.cerrarAddEditModal();
                 me.dismissCountDown = me.dismissSecs //contador para el alert
@@ -287,10 +288,10 @@ export default {
           }
         },
         anularGradoTitulo() {
-            let me=this
+          let me = this
           var formData = this._toFormData(this.grado_titulo)
 
-          this.axios.post(this.url+"GradoTituloController.php?action="+this.tipoAccion, formData)
+          this.axios.post(`${this.url}/GradoTitulo/${this.tipoAccion}`, formData)
           .then(function(response) {
             me.cerrarDeleteModal()
             me.dismissCountDown = me.dismissSecs //contador para el alert
@@ -329,17 +330,3 @@ export default {
       },
 }
 </script>
-<style scoped>
-    .overlay {
-        position: fixed;
-        top: 0;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        background: rgba(0, 0, 0, 0.6);
-    }    
-    
-    table#tbl-grado-titulo .flip-list-move {
-        transition: transform 1s;
-    }    
-</style>

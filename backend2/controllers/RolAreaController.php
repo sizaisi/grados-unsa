@@ -14,7 +14,7 @@ class RolAreaController {
 	public function store(){
 		$rol_area = new RolArea();
 
-		$rol_area->nombre = $_POST['nombre'];
+		$rol_area->setNombre($_POST['nombre']);
 
 		$result = $rol_area->insertar();
 
@@ -24,8 +24,8 @@ class RolAreaController {
 	public function update(){
 		$rol_area = new RolArea();
 
-		$rol_area->id = $_POST['id'];
-		$rol_area->nombre = $_POST['nombre'];
+		$rol_area->setId($_POST['id']);
+		$rol_area->setNombre($_POST['nombre']);
 		
 		$result = $rol_area->actualizar();
 
@@ -35,7 +35,7 @@ class RolAreaController {
 	public function activar(){
 		$rol_area = new RolArea();
 
-		$rol_area->id = $_POST['id'];      
+		$rol_area->setId($_POST['id']);      
 
 		$result = $rol_area->activar();
 		echo json_encode($result);           
@@ -44,7 +44,7 @@ class RolAreaController {
 	public function desactivar(){
 		$rol_area = new RolArea();
 
-		$rol_area->id = $_POST['id'];      
+		$rol_area->setId($_POST['id']);      
 
 		$result = $rol_area->desactivar();
 		echo json_encode($result);           

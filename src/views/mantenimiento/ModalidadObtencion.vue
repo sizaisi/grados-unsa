@@ -3,7 +3,7 @@
      <div class="container pt-2 pb-3" style="background-color: #fff;">
         <div class="row mt-3">
           <div class="col-lg-6">
-              <h3 class="text-info">Modalidades de Obtención</h3>
+            <h3 class="text-info">Modalidades de Obtención</h3>
           </div>
           <div class="col-lg-6">
               <button class="btn btn-info float-right" @click="abrirAddEditModal('registrar')">
@@ -50,9 +50,9 @@
                     <b-badge v-else variant='secondary'>Inactivo</b-badge>
                   </template>
                   <template v-slot:cell(acciones)="data">
-                    <b-button variant="warning" size="sm" data-toggle="tooltip" data-placement="left" title="Editar" @click="abrirAddEditModal('actualizar', data.item)"><i class="fa fa-edit"></i></b-button>
-                    <b-button variant="danger" size="sm" data-toggle="tooltip" data-placement="left" title="Desactivar" @click="abrirDeleteModal('desactivar', data.item)" v-if="data.item.condicion == 1"><i class="fa fa-times"></i></b-button>
-                    <b-button variant="success" size="sm" data-toggle="tooltip" data-placement="left" title="Activar" @click="abrirDeleteModal('activar', data.item)" v-else><i class="fa fa-check"></i></b-button>
+                    <b-button variant="warning" size="sm" data-toggle="tooltip" data-placement="left" title="Editar" @click="abrirAddEditModal('actualizar', data.item)"><b-icon icon="pencil-square"></b-icon></b-button>&nbsp;
+                    <b-button variant="danger" size="sm" data-toggle="tooltip" data-placement="left" title="Desactivar" @click="abrirDeleteModal('desactivar', data.item)" v-if="data.item.condicion == 1"><b-icon icon="x"></b-icon></b-button>
+                    <b-button variant="success" size="sm" data-toggle="tooltip" data-placement="left" title="Activar" @click="abrirDeleteModal('activar', data.item)" v-else><b-icon icon="check"></b-icon></b-button>
                   </template>
                 </b-table>
           </div>
@@ -73,8 +73,7 @@
                 <form role="form">
                     <div class="form-group">
                         <label for="modalidad_obtencion">Modalidad de Obtención:</label>
-                        <input type="text" v-model="modalidad_obtencion.nombre" name="modalidad_obtencion" class="form-control" id="modalidad_obtencion" v-validate="'required'"/>
-                        <span class="text-danger" v-if="errors.has('modalidad_obtencion')">{{errors.first('modalidad_obtencion')}}</span>
+                        <input type="text" v-model="modalidad_obtencion.nombre" name="modalidad_obtencion" class="form-control" id="modalidad_obtencion"/>                        
                     </div>
                 </form>
               </div>
@@ -118,7 +117,7 @@ export default {
     name: 'modalidad-obtencion',  
     data() {
         return { 
-             url: '//localhost/grados-unsa/backend2/controllers/',
+            url: '//localhost/grados-unsa/backend2',
             array_modalidad_obtencion : [],
             modalidad_obtencion : {
               id: '',
@@ -140,7 +139,7 @@ export default {
             },
             columnas: [
               { key: 'id', label: 'ID', sortable: true, class: 'text-center' },
-              { key: 'nombre', label: 'Nombre', sortable: true },
+              { key: 'nombre', label: 'Nombre', sortable: true, class: 'text-left' },
               { key: 'condicion', label: 'Condición', class: 'text-center' },
               { key: 'acciones', label: 'Acciones', class: 'text-center' }
             ]                                       
@@ -148,21 +147,20 @@ export default {
     },
      methods: {
         getAllModalidadObtencion() {
-            let me=this
-            this.axios.get(this.url+"ModalidadObtencionController.php?action=read")
+            let me = this
+
+            this.axios.get(`${this.url}/ModalidadObtencion/index`)
               .then(function(response) {
                 if (response.data.error) {
                   me.errorMsg = response.data.message
                 }
                 else {
-                  me.array_modalidad_obtencion = response.data.array_modalidad_obtencion
-                  //console.log(me.array_programa_estudios)
+                  me.array_modalidad_obtencion = response.data.array_modalidad_obtencion                  
                 }
               })
         },
         abrirAddEditModal(accion, data = []) {
-            this.showAddEditModal = true
-            this.errors.clear()
+            this.showAddEditModal = true            
 
             switch(accion) {
                 case 'registrar':
@@ -184,46 +182,42 @@ export default {
             }
         },
         registrarModalidadObtencion() {
-         let me=this
+            let me = this
 
-            if (!this.errors.any()) {
-              var formData = this._toFormData(this.modalidad_obtencion)
+            var formData = this._toFormData(this.modalidad_obtencion)
 
-              this.axios.post(this.url+"ModalidadObtencionController.php?action=store", formData)
-                .then(function(response) {
-                  me.cerrarAddEditModal();
-                  me.dismissCountDown = me.dismissSecs //contador para el alert
+            this.axios.post(`${this.url}/ModalidadObtencion/store`, formData)
+              .then(function(response) {
+                me.cerrarAddEditModal();
+                me.dismissCountDown = me.dismissSecs //contador para el alert
 
-                  if (response.data.error) {
-                    me.errorMsg = response.data.message
-                  }
-                  else {
-                    me.successMsg = response.data.message
-                    me.getAllModalidadObtencion()
-                  }
-              })
-            }
+                if (response.data.error) {
+                  me.errorMsg = response.data.message
+                }
+                else {
+                  me.successMsg = response.data.message
+                  me.getAllModalidadObtencion()
+                }
+            })            
         },
         actualizarModalidadObtencion() {
-            let me=this
+            let me = this
+            
+            var formData = this._toFormData(this.modalidad_obtencion)
 
-            if (!this.errors.any()) {
-              var formData = this._toFormData(this.modalidad_obtencion)
+            this.axios.post(`${this.url}/ModalidadObtencion/update`, formData)
+              .then(function(response) {
+                me.cerrarAddEditModal();
+                me.dismissCountDown = me.dismissSecs //contador para el alert
 
-              this.axios.post(this.url+"ModalidadObtencionController.php?action=update", formData)
-                .then(function(response) {
-                  me.cerrarAddEditModal();
-                  me.dismissCountDown = me.dismissSecs //contador para el alert
-
-                  if (response.data.error) {
-                    me.errorMsg = response.data.message
-                  }
-                  else {
-                    me.successMsg = response.data.message
-                    me.getAllModalidadObtencion()
-                  }
-              })
-            }
+                if (response.data.error) {
+                  me.errorMsg = response.data.message
+                }
+                else {
+                  me.successMsg = response.data.message
+                  me.getAllModalidadObtencion()
+                }
+            })            
         },
         cerrarAddEditModal() {
             this.showAddEditModal = false
@@ -233,8 +227,7 @@ export default {
             this.successMsg = ''
         },
         abrirDeleteModal(accion, data = []) {
-            this.showDeleteModal = true
-            this.errors.clear()
+            this.showDeleteModal = true           
 
             switch(accion) {
                 case 'activar':
@@ -258,10 +251,10 @@ export default {
             }
         },
         anularModalidadObtencion() {
-            let me=this
+            let me = this
             var formData = this._toFormData(this.modalidad_obtencion)
 
-            this.axios.post(this.url+"ModalidadObtencionController.php?action="+this.tipoAccion, formData)
+            this.axios.post(`${this.url}/ModalidadObtencion/${this.tipoAccion}`, formData)
             .then(function(response) {
               me.cerrarDeleteModal()
               me.dismissCountDown = me.dismissSecs //contador para el alert
@@ -300,17 +293,3 @@ export default {
       },
 }
 </script>
-<style scoped>
-    .overlay {
-        position: fixed;
-        top: 0;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        background: rgba(0, 0, 0, 0.6);
-    }    
-    
-    table#tbl-modalidad-obtencion .flip-list-move {
-        transition: transform 1s;
-    }    
-</style>

@@ -14,8 +14,8 @@ class ProcedimientoController {
 	public function store(){
 		$procedimiento = new Procedimiento();
 
-		$procedimiento->nombre = $_POST['nombre'];
-		$procedimiento->descripcion = $_POST['descripcion'];
+		$procedimiento->setNombre($_POST['nombre']);
+		$procedimiento->setDescripcion($_POST['descripcion']);
 
 		$result = $procedimiento->insertar();
 
@@ -25,9 +25,9 @@ class ProcedimientoController {
 	public function update(){
 		$procedimiento = new Procedimiento();
 
-		$procedimiento->id = $_POST['id'];
-		$procedimiento->nombre = $_POST['nombre'];
-		$procedimiento->descripcion = $_POST['descripcion'];
+		$procedimiento->setId($_POST['id']);
+		$procedimiento->setNombre($_POST['nombre']);
+		$procedimiento->setDescripcion($_POST['descripcion']);
 
 		$result = $procedimiento->actualizar();
 
@@ -37,7 +37,7 @@ class ProcedimientoController {
 	public function activar(){
 		$procedimiento = new Procedimiento();
 
-		$procedimiento->id = $_POST['id'];
+		$procedimiento->setId($_POST['id']);
 
 		$result = $procedimiento->activar();
 
@@ -47,7 +47,7 @@ class ProcedimientoController {
 	public function desactivar(){
 		$procedimiento = new Procedimiento();
 
-		$procedimiento->id = $_POST['id'];      
+		$procedimiento->setId($_POST['id']);      
 
 		$result = $procedimiento->desactivar();
 

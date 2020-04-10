@@ -50,9 +50,9 @@
                     <b-badge v-else variant='secondary'>Inactivo</b-badge>
                   </template>
                   <template v-slot:cell(acciones)="data">
-                    <b-button variant="warning" size="sm" data-toggle="tooltip" data-placement="left" title="Editar" @click="abrirAddEditModal('actualizar', data.item)"><i class="fa fa-edit"></i></b-button>
-                    <b-button variant="danger" size="sm" data-toggle="tooltip" data-placement="left" title="Desactivar" @click="abrirDeleteModal('desactivar', data.item)" v-if="data.item.condicion == 1"><i class="fa fa-times"></i></b-button>
-                    <b-button variant="success" size="sm" data-toggle="tooltip" data-placement="left" title="Activar" @click="abrirDeleteModal('activar', data.item)" v-else><i class="fa fa-check"></i></b-button>
+                    <b-button variant="warning" size="sm" data-toggle="tooltip" data-placement="left" title="Editar" @click="abrirAddEditModal('actualizar', data.item)"><b-icon icon="pencil-square"></b-icon></b-button>&nbsp;
+                    <b-button variant="danger" size="sm" data-toggle="tooltip" data-placement="left" title="Desactivar" @click="abrirDeleteModal('desactivar', data.item)" v-if="data.item.condicion == 1"><b-icon icon="x"></b-icon></b-button>
+                    <b-button variant="success" size="sm" data-toggle="tooltip" data-placement="left" title="Activar" @click="abrirDeleteModal('activar', data.item)" v-else><b-icon icon="check"></b-icon></b-button>
                   </template>
                 </b-table>
           </div>
@@ -77,8 +77,7 @@
                     </div>
                     <div class="form-group">
                         <label for="modalidad_select">Modalidad:</label>
-                        <b-form-select id="modalidad_select" :options="array_modalidades" v-model="grado_modalidad.idmodalidad_obtencion"></b-form-select>
-                        <span class="text-danger" v-if="errors.has('grado_modalidad')">{{errors.first('grado_modalidad')}}</span>
+                        <b-form-select id="modalidad_select" :options="array_modalidades" v-model="grado_modalidad.idmodalidad_obtencion"></b-form-select>                        
                     </div>
                 </form>
               </div>
@@ -121,7 +120,7 @@ export default {
     name: 'grado-modalidad',  
     data() {
         return { 
-            url: '//localhost/grados-unsa/backend2/controllers/',
+            url: '//localhost/grados-unsa/backend2',
             array_grado_modalidad : [],
             array_grados: [],
             array_modalidades: [],
@@ -155,8 +154,9 @@ export default {
     },
     methods: {
         getAllGradoModalidad() {
-          let me=this
-          this.axios.get(this.url+"GradoModalidadController.php?action=index")
+          let me = this
+
+          this.axios.get(`${this.url}/GradoModalidad/index`)
             .then(function(response) {
               if (response.data.error) {
                 me.errorMsg = response.data.message
@@ -167,13 +167,16 @@ export default {
           })
         },
         getGradoTitulos() {
-          let me=this
-          this.axios.post(this.url + "GradoModalidadController.php?action=readGradoTitulo")
+          let me = this
+
+          this.axios.post(`${this.url}/GradoModalidad/readGradoTitulo`)
             .then(function (response){
               if (response.data.error) {
                 me.errorMsg = response.data.message
               }
               else { 
+                me.array_grados.push({ value: '', text: 'Seleccione Grado/Título...', disabled: true })
+                
                 for(var grado of response.data.array_grado_titulo){
                   me.array_grados.push({value: grado.id, text: grado.nombre})
                 }
@@ -181,13 +184,16 @@ export default {
           })
         },
         getModalidadesObtencion() {
-          let me=this
-          this.axios.post(this.url + "GradoModalidadController.php?action=readModObtencion")
+          let me = this
+
+          this.axios.post(`${this.url}/GradoModalidad/readModObtencion`)
             .then(function (response){
               if (response.data.error) {
                 me.errorMsg = response.data.message
               }
               else {
+                me.array_modalidades.push({ value: '', text: 'Seleccione Modalidad Obtención...', disabled: true })
+
                 for(var mod of response.data.array_modalidad_obtencion){
                   me.array_modalidades.push({value: mod.id, text: mod.nombre})
                 }
@@ -195,8 +201,7 @@ export default {
           })
         },
         abrirAddEditModal(accion, data = []) {
-          this.showAddEditModal = true
-          this.errors.clear()
+          this.showAddEditModal = true         
 
           switch(accion) {
               case 'registrar':
@@ -218,47 +223,40 @@ export default {
           }
         },
         registrarGradoModalidad() {
-            let me=this
+            let me = this            
+            var formData = this._toFormData(this.grado_modalidad)
 
-            if (!this.errors.any()) {
-              var formData = this._toFormData(this.grado_modalidad)
+            this.axios.post(`${this.url}/GradoModalidad/store`, formData)
+              .then(function(response) {
+                me.cerrarAddEditModal()
+                me.dismissCountDown = me.dismissSecs; //contador para el alert
 
-              this.axios.post(this.url+"GradoModalidadController.php?action=store", formData)
-                .then(function(response) {
-                  me.cerrarAddEditModal()
-                  me.dismissCountDown = me.dismissSecs; //contador para el alert
-
-                  if (response.data.error) {
-                    me.errorMsg = response.data.message
-                  }
-                  else {
-                    me.successMsg = response.data.message
-                    me.getAllGradoModalidad()
-                  }
-              })
-            }
+                if (response.data.error) {
+                  me.errorMsg = response.data.message
+                }
+                else {
+                  me.successMsg = response.data.message
+                  me.getAllGradoModalidad()
+                }
+            })            
         },
         actualizarGradoModalidad() {
-            let me=this
+            let me = this            
+            var formData = this._toFormData(this.grado_modalidad)
+            
+            this.axios.post(`${this.url}/GradoModalidad/update`, formData)
+              .then(function(response) {
+                me.cerrarAddEditModal()
+                me.dismissCountDown = me.dismissSecs; //contador para el alert
 
-            if (!this.errors.any()) {
-              var formData = this._toFormData(this.grado_modalidad)
-              
-
-              this.axios.post(this.url+"GradoModalidadController.php?action=update", formData)
-                .then(function(response) {
-                  me.cerrarAddEditModal()
-                  me.dismissCountDown = me.dismissSecs; //contador para el alert
-
-                  if (response.data.error) {
-                    me.errorMsg = response.data.message
-                  }
-                  else {
-                    me.successMsg = response.data.message
-                    me.getAllGradoModalidad()
-                  }
-              })
-            }
+                if (response.data.error) {
+                  me.errorMsg = response.data.message
+                }
+                else {
+                  me.successMsg = response.data.message
+                  me.getAllGradoModalidad()
+                }
+            })            
         },
         cerrarAddEditModal() {
             this.showAddEditModal = false
@@ -269,8 +267,7 @@ export default {
             this.successMsg = ''
         },
         abrirDeleteModal(accion, data = []) {
-            this.showDeleteModal = true
-            this.errors.clear()
+            this.showDeleteModal = true            
 
             switch(accion) {
                 case 'activar':
@@ -292,10 +289,10 @@ export default {
             }
         },
         eliminarProgramaEstudios() {
-            let me=this
+            let me = this
             var formData = this._toFormData(this.grado_modalidad)
 
-            this.axios.post(this.url+"GradoModalidadController.php?action="+this.tipoAccion, formData)
+            this.axios.post(`${this.url}/GradoModalidad/${this.tipoAccion}`, formData)
             .then(function(response) {
               me.cerrarDeleteModal()
               me.dismissCountDown = me.dismissSecs //contador para el alert
@@ -337,17 +334,3 @@ export default {
       },
 }
 </script>
-<style scoped>
-    .overlay {
-        position: fixed;
-        top: 0;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        background: rgba(0, 0, 0, 0.6);
-    }    
-    
-    table#tbl-grado-modalidad .flip-list-move {
-        transition: transform 1s;
-    }    
-</style>

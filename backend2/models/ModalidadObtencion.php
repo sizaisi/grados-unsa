@@ -2,7 +2,9 @@
 
 class ModalidadObtencion {
 	private $id;
-	private $nombre;
+    private $nombre;
+    
+    private $conn;
 	
 	public function __construct() {
 		$this->conn = Database::conectar();
@@ -21,7 +23,7 @@ class ModalidadObtencion {
 	}
 
 	function setNombre($nombre) {
-		$this->nombre = $this->conn->real_escape_string($nombre); 
+		$this->nombre = $nombre; 
 	}	
 	
 	public function getAllModalidadObtencion(){
@@ -119,11 +121,11 @@ class ModalidadObtencion {
         $result_query = mysqli_query($this->conn, $sql);
 
         if ($result_query) {
-            $result['message'] = "Modalidad de obtencion activada con éxito.";
+            $result['message'] = "Modalidad de obtencion desactivada con éxito.";
         }
         else {
             $result['error'] = true;
-            $result['message'] = "No se pudo activar la modalidad de obtencion.";
+            $result['message'] = "No se pudo desactivar la modalidad de obtencion.";
         }
 
         return $result;

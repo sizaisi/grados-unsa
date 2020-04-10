@@ -1,5 +1,7 @@
 <?php
-require_once 'models/Ruta.php';
+require_once "models/Ruta.php";
+require_once "models/GradoModalidad.php";
+require_once "models/GradoProcedimiento.php";
 
 class RutaController {
 	
@@ -10,13 +12,40 @@ class RutaController {
 
 		echo json_encode($result);            
 	}
+
+	public function getRutasByProc() { // obtener rutas por cada procedimiento
+		$ruta = new Ruta();
+		$ruta->setIdGradProcOrigen($_GET['idgradproc_origen']);  
+
+		$result = $ruta->getRutasByIdProcOrigen();
+
+		echo json_encode($result);             
+	}
+
+	public function getListGradModalidad(){
+		$grado_modalidad = new GradoModalidad();
+
+		$result = $grado_modalidad->getActives();
+
+		echo json_encode($result);           
+	}
+
+	public function getListGradProcedimientos(){
+		$grado_procedimiento = new GradoProcedimiento();      
+		
+		$grado_procedimiento->setIdGradoModalidad($_POST['idgrado_modalidad']);      
+		
+		$result = $grado_procedimiento->getListByIdGradoModalidad();
+
+		echo json_encode($result);       					  
+	}
 	
 	public function store(){
 		$ruta = new Ruta();
 
-		$ruta->idgradproc_origen = $_POST['idgradproc_origen'];
-		$ruta->idgradproc_destino = $_POST['idgradproc_destino'];
-		$ruta->etiqueta = $_POST['etiqueta'];            
+		$ruta->setIdGradProcOrigen($_POST['idgradproc_origen']);
+		$ruta->setIdGradProcDestino($_POST['idgradproc_destino']);
+		$ruta->setEtiqueta($_POST['etiqueta']);            
 
 		$result = $ruta->insertar();
 
@@ -26,10 +55,10 @@ class RutaController {
 	public function update(){
 		$ruta = new Ruta();
 
-		$ruta->id = $_POST['id'];
-		$ruta->idgradproc_origen = $_POST['idgradproc_origen'];
-		$ruta->idgradproc_destino = $_POST['idgradproc_destino'];            
-		$ruta->etiqueta = $_POST['etiqueta'];
+		$ruta->setId($_POST['id']);
+		$ruta->setIdGradProcOrigen($_POST['idgradproc_origen']);
+		$ruta->setIdGradProcDestino($_POST['idgradproc_destino']);
+		$ruta->setEtiqueta($_POST['etiqueta']);            
 
 		$result = $ruta->actualizar();
 
@@ -39,7 +68,7 @@ class RutaController {
 	public function activar(){
 		$ruta = new Ruta();
 
-		$ruta->id = $_POST['id'];
+		$ruta->setId($_POST['id']);
 
 		$result = $ruta->activar();
 
@@ -49,7 +78,7 @@ class RutaController {
 	public function desactivar(){
 		$ruta = new Ruta();
 
-		$ruta->id = $_POST['id'];
+		$ruta->setId($_POST['id']);
   
 		$result = $ruta->desactivar();
   

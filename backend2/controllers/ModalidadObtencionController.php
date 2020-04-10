@@ -4,6 +4,7 @@ require_once 'models/ModalidadObtencion.php';
 class ModalidadObtencionController {
 	
 	public function index(){
+		
 		$modalidad_obtencion = new ModalidadObtencion();
 
 		$result = $modalidad_obtencion->getAllModalidadObtencion();

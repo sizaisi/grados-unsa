@@ -71,9 +71,9 @@
                     <b-badge v-else variant='secondary'>Inactivo</b-badge>
                   </template>
                   <template v-slot:cell(acciones)="data">
-                    <b-button variant="warning" size="sm" data-toggle="tooltip" data-placement="left" title="Editar" @click="abrirAddEditModal('actualizar', data.item)"><i class="fa fa-edit"></i></b-button>
-                    <b-button variant="danger" size="sm" data-toggle="tooltip" data-placement="left" title="Desactivar" @click="abrirDeleteModal('desactivar', data.item)" v-if="data.item.condicion == 1"><i class="fa fa-times"></i></b-button>
-                    <b-button variant="success" size="sm" data-toggle="tooltip" data-placement="left" title="Activar" @click="abrirDeleteModal('activar', data.item)" v-else><i class="fa fa-check"></i></b-button>
+                    <b-button variant="warning" size="sm" data-toggle="tooltip" data-placement="left" title="Editar" @click="abrirAddEditModal('actualizar', data.item)"><b-icon icon="pencil-square"></b-icon></b-button>&nbsp;
+                    <b-button variant="danger" size="sm" data-toggle="tooltip" data-placement="left" title="Desactivar" @click="abrirDeleteModal('desactivar', data.item)" v-if="data.item.condicion == 1"><b-icon icon="x"></b-icon></b-button>
+                    <b-button variant="success" size="sm" data-toggle="tooltip" data-placement="left" title="Activar" @click="abrirDeleteModal('activar', data.item)" v-else><b-icon icon="check"></b-icon></b-button>
                   </template>
                 </b-table>
                 <b-row>
@@ -105,8 +105,7 @@
                 <form role="form">
                     <div class="form-group">
                         <label for="procedimiento">Procedimiento:</label>
-                        <input type="text" v-model="procedimiento.nombre" name="procedimiento" class="form-control" id="procedimiento" v-validate="'required'"/>
-                        <span class="text-danger" v-if="errors.has('procedimiento')">{{errors.first('procedimiento')}}</span>
+                        <input type="text" v-model="procedimiento.nombre" name="procedimiento" class="form-control" id="procedimiento"/>                        
                     </div>
                     <div class="form-group">
                         <label for="proc_desc">Descripción:</label>
@@ -154,45 +153,46 @@ export default {
     name: 'procedimientos',  
     data() {
         return { 
-           url: '//localhost/grados-unsa/backend2/controllers/',
-        array_procedimiento : [],
-        procedimiento : {
-          id: '',
-          nombre: '',
-          descripcion: '',
-        },
-        titleAddEditModal : '',
-        titleDeleteModal : '',
-        messageDeleteModal : '',
-        showAddEditModal : false,
-        showDeleteModal : false,
-        tipoAccion : '',
-        errorMsg : "",
-        successMsg : "",
-        dismissSecs: 3,
-        dismissCountDown: 0,
-        transProps: {
-          // Transition name
-          name: 'flip-list'
-        },
-        columnas: [
-          { key: 'id', label: 'ID', sortable: true, class: 'text-center' },
-          { key: 'nombre', label: 'Nombre', sortable: true },
-          { key: 'descripcion', label: 'Descripción', sortable: true},
-          { key: 'condicion', label: 'Condición', class: 'text-center' },
-          { key: 'acciones', label: 'Acciones', class: 'text-center' }
-        ],
-        totalRows: 1,
-        currentPage: 1,
-        perPage: 5,
-        pageOptions: [5, 10, 15],
-        filter: null,                                           
+          url: '//localhost/grados-unsa/backend2',
+          array_procedimiento : [],
+          procedimiento : {
+            id: '',
+            nombre: '',
+            descripcion: '',
+          },
+          titleAddEditModal : '',
+          titleDeleteModal : '',
+          messageDeleteModal : '',
+          showAddEditModal : false,
+          showDeleteModal : false,
+          tipoAccion : '',
+          errorMsg : "",
+          successMsg : "",
+          dismissSecs: 3,
+          dismissCountDown: 0,
+          transProps: {
+            // Transition name
+            name: 'flip-list'
+          },
+          columnas: [
+            { key: 'id', label: 'ID', sortable: true, class: 'text-center' },
+            { key: 'nombre', label: 'Nombre', sortable: true, class: 'text-left' },
+            { key: 'descripcion', label: 'Descripción', sortable: true, class: 'text-left' },
+            { key: 'condicion', label: 'Condición', class: 'text-center' },
+            { key: 'acciones', label: 'Acciones', class: 'text-center' }
+          ],
+          totalRows: 1,
+          currentPage: 1,
+          perPage: 5,
+          pageOptions: [5, 10, 15],
+          filter: null,                                           
         }
     },
     methods: {
         getAllProcedimientos() {
-          let me=this
-            this.axios.get(this.url+"ProcedimientoController.php?action=read")
+          let me = this
+
+            this.axios.get(`${this.url}/Procedimiento/index`)
               .then(function(response) {
                 if (response.data.error) {
                   me.errorMsg = response.data.message
@@ -204,8 +204,7 @@ export default {
               })
         },
         abrirAddEditModal(accion, data = []) {
-            this.showAddEditModal = true
-            this.errors.clear()
+            this.showAddEditModal = true            
 
             switch(accion) {
                 case 'registrar':
@@ -228,46 +227,45 @@ export default {
             }
         },
         registrarProcedimiento() {
-            let me=this
+            let me = this            
+            var formData = this._toFormData(this.procedimiento)
 
-            if (!this.errors.any()) {
-              var formData = this._toFormData(this.procedimiento)
+            this.axios.post(`${this.url}/Procedimiento/store`, formData)
+              .then(function(response) {
+                console.log(response.data)
+                me.cerrarAddEditModal();
+                me.dismissCountDown = me.dismissSecs //contador para el alert
 
-              this.axios.post(this.url+"ProcedimientoController.php?action=store", formData)
-                .then(function(response) {
-                  me.cerrarAddEditModal();
-                  me.dismissCountDown = me.dismissSecs //contador para el alert
-
-                  if (response.data.error) {
-                    me.errorMsg = response.data.message
-                  }
-                  else {
-                    me.successMsg = response.data.message
-                    me.getAllProcedimientos()
-                  }
-              })
-            }
+                if (response.data.error) {
+                  me.errorMsg = response.data.message
+                }
+                else {
+                  me.successMsg = response.data.message
+                  me.getAllProcedimientos()
+                }
+              }).catch(function (error) {                       
+                console.log(error)                  
+              })            
         },
         actualizarProcedimiento() {
-            let me=this
+            let me = this            
+            var formData = this._toFormData(this.procedimiento)
 
-            if (!this.errors.any()) {
-              var formData = this._toFormData(this.procedimiento)
+            this.axios.post(`${this.url}/Procedimiento/update`, formData)
+              .then(function(response) {
+                me.cerrarAddEditModal();
+                me.dismissCountDown = me.dismissSecs //contador para el alert
 
-              this.axios.post(this.url+"ProcedimientoController.php?action=update", formData)
-                .then(function(response) {
-                  me.cerrarAddEditModal();
-                  me.dismissCountDown = me.dismissSecs //contador para el alert
-
-                  if (response.data.error) {
-                    me.errorMsg = response.data.message
-                  }
-                  else {
-                    me.successMsg = response.data.message
-                    me.getAllProcedimientos()
-                  }
-              })
-            }
+                if (response.data.error) {
+                  me.errorMsg = response.data.message
+                }
+                else {
+                  me.successMsg = response.data.message
+                  me.getAllProcedimientos()
+                }
+              }).catch(function (error) {                       
+                console.log(error)                  
+              })                         
         },
         cerrarAddEditModal() {
             this.showAddEditModal = false
@@ -278,8 +276,7 @@ export default {
             this.successMsg = ''
         },
         abrirDeleteModal(accion, data = []) {
-            this.showDeleteModal = true
-            this.errors.clear()
+            this.showDeleteModal = true           
 
             switch(accion) {
                 case 'activar':
@@ -303,10 +300,10 @@ export default {
             }
         },
         eliminarProcedimiento() {
-            let me=this
+            let me = this
             var formData = this._toFormData(this.procedimiento)
 
-            this.axios.post(this.url+"ProcedimientoController.php?action="+this.tipoAccion, formData)
+            this.axios.post(`${this.url}/Procedimiento/${this.tipoAccion}`, formData)
             .then(function(response) {
               me.cerrarDeleteModal()
               me.dismissCountDown = me.dismissSecs //contador para el alert
@@ -351,17 +348,3 @@ export default {
       },
 }
 </script>
-<style scoped>
-    .overlay {
-        position: fixed;
-        top: 0;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        background: rgba(0, 0, 0, 0.6);
-    }    
-    
-    table#tbl-procedimientos .flip-list-move {
-        transition: transform 1s;
-    }    
-</style>

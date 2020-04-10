@@ -71,9 +71,9 @@
                     <b-badge v-else variant='secondary'>Inactivo</b-badge>
                   </template>
                   <template v-slot:cell(acciones)="data">
-                    <b-button variant="warning" size="sm" data-toggle="tooltip" data-placement="left" title="Editar" @click="abrirAddEditModal('actualizar', data.item)"><i class="fa fa-edit"></i></b-button>
-                    <b-button variant="danger" size="sm" data-toggle="tooltip" data-placement="left" title="Desactivar" @click="abrirDeleteModal('desactivar', data.item)" v-if="data.item.condicion == 1"><i class="fa fa-times"></i></b-button>
-                    <b-button variant="success" size="sm" data-toggle="tooltip" data-placement="left" title="Activar" @click="abrirDeleteModal('activar', data.item)" v-else><i class="fa fa-check"></i></b-button>
+                    <b-button variant="warning" size="sm" data-toggle="tooltip" data-placement="left" title="Editar" @click="abrirAddEditModal('actualizar', data.item)"><b-icon icon="pencil-square"></b-icon></b-button>&nbsp;
+                    <b-button variant="danger" size="sm" data-toggle="tooltip" data-placement="left" title="Desactivar" @click="abrirDeleteModal('desactivar', data.item)" v-if="data.item.condicion == 1"><b-icon icon="x"></b-icon></b-button>
+                    <b-button variant="success" size="sm" data-toggle="tooltip" data-placement="left" title="Activar" @click="abrirDeleteModal('activar', data.item)" v-else><b-icon icon="check"></b-icon></b-button>
                   </template>
                 </b-table>
                 <b-row>
@@ -163,7 +163,7 @@ export default {
     name: 'rutas',  
     data() {
         return { 
-            url: '//localhost/grados-unsa/backend2/controllers/',
+            url: '//localhost/grados-unsa/backend2',
             array_ruta : [],
             select_grado_modalidad: [],
             select_grado_procedimiento_origen: [],
@@ -219,20 +219,20 @@ export default {
     },
     watch: {
         idgrado_modalidad: function() {    
-            let me=this
+            let me = this
+            var formData = this._toFormData({ 'idgrado_modalidad': this.idgrado_modalidad })
        
-            this.axios.get(this.url+"RutaController.php?action=getListGradProcedimientos", {
-              params: {
-                  'idgrado_modalidad': this.idgrado_modalidad
-              }
-            })
+            this.axios.post(`${this.url}/Ruta/getListGradProcedimientos`, formData)
             .then(function(response) {
               if (response.data.error) {
                 me.errorMsg = response.data.message
               }
-              else {
+              else {                
                 me.select_grado_procedimiento_origen = [] //reiniciamos el arreglo
-                me.select_grado_procedimiento_destino = [] //reiniciamos el arreglo                
+                me.select_grado_procedimiento_destino = [] //reiniciamos el arreglo          
+                
+                me.select_grado_procedimiento_origen.push({ value: '', text: 'Seleccione Procedimiento Origen...', disabled: true })
+                me.select_grado_procedimiento_destino.push({ value: '', text: 'Seleccione Procedimiento Destino...', disabled: true })
 
                 me.select_grado_procedimiento_origen.push({value: 0, text: 'Inicio'}) //virtualizacion de proc inicio
 
@@ -249,8 +249,9 @@ export default {
       },
       methods: {
         getAllRutas() {
-            let me=this
-            this.axios.get(this.url+"RutaController.php?action=read")
+            let me = this
+
+            this.axios.get(`${this.url}/Ruta/index`)
               .then(function(response) {
                 if (response.data.error) {
                   me.errorMsg = response.data.message;
@@ -262,13 +263,16 @@ export default {
             });
         },
         getListGradModalidad() {
-            let me=this
-            this.axios.post(this.url+ "RutaController.php?action=getListGradModalidad")
+            let me = this
+
+            this.axios.post(`${this.url}/Ruta/getListGradModalidad`)
               .then(function (response){
                 if (response.data.error) {
                   me.errorMsg = response.data.message;
                 }
                 else{
+                  me.select_grado_modalidad.push({ value: '', text: 'Seleccione Grado / Modalidad de Obtención...', disabled: true })
+
                   for(var gradmod of response.data.array_grado_modalidad){
                       me.select_grado_modalidad.push({value: gradmod.id, text: gradmod.gradname + ' / ' + gradmod.movname})
                   }
@@ -276,8 +280,7 @@ export default {
             });
         },
         abrirAddEditModal(accion, data = []) {
-            this.showAddEditModal = true
-          
+            this.showAddEditModal = true          
 
             switch(accion) {
                 case 'registrar':
@@ -302,44 +305,40 @@ export default {
             }
         },
         registrarRuta() {
-            let me=this
+            let me = this
+            var formData = this._toFormData(this.ruta)
 
-              var formData = this._toFormData(this.ruta)
+            this.axios.post(`${this.url}/Ruta/store`, formData)
+              .then(function(response) {
+                me.cerrarAddEditModal();
+                me.dismissCountDown = me.dismissSecs //contador para el alert
 
-              this.axios.post(this.url+"RutaController.php?action=store", formData)
-                .then(function(response) {
-                  me.cerrarAddEditModal();
-                  me.dismissCountDown = me.dismissSecs //contador para el alert
-
-                  if (response.data.error) {
-                    me.errorMsg = response.data.message
-                  }
-                  else {
-                    me.successMsg = response.data.message
-                    me.getAllRutas()
-                  }
-              })
+                if (response.data.error) {
+                  me.errorMsg = response.data.message
+                }
+                else {
+                  me.successMsg = response.data.message
+                  me.getAllRutas()
+                }
+            })
         },
         actualizarRuta() {
-            let me=this
+            let me = this            
+            var formData = this._toFormData(this.ruta)
 
-            
-              var formData = this._toFormData(this.ruta)
+            this.axios.post(`${this.url}/Ruta/update`, formData)
+              .then(function(response) {
+                me.cerrarAddEditModal();
+                me.dismissCountDown = me.dismissSecs //contador para el alert
 
-              this.axios.post(this.url+"RutaController.php?action=update", formData)
-                .then(function(response) {
-                  me.cerrarAddEditModal();
-                  me.dismissCountDown = me.dismissSecs //contador para el alert
-
-                  if (response.data.error) {
-                    me.errorMsg = response.data.message
-                  }
-                  else {
-                    me.successMsg = response.data.message
-                    me.getAllRutas()
-                  }
-              })
-          
+                if (response.data.error) {
+                  me.errorMsg = response.data.message
+                }
+                else {
+                  me.successMsg = response.data.message
+                  me.getAllRutas()
+                }
+            })          
         },
         cerrarAddEditModal() {
           this.showAddEditModal = false
@@ -352,8 +351,7 @@ export default {
           this.successMsg = ''
         },
         abrirDeleteModal(accion, data = []) {
-          this.showDeleteModal = true
-          
+          this.showDeleteModal = true          
 
           switch(accion) {
               case 'activar':
@@ -375,10 +373,10 @@ export default {
           }
         },
         anularRuta() {
-            let me=this
+          let me = this
           var formData = this._toFormData(this.ruta)
 
-          this.this.axios.post(this.url+"RutaController.php?action="+this.tipoAccion, formData)
+          this.axios.post(`${this.url}/Ruta/${this.tipoAccion}`, formData)
           .then(function(response) {
             me.cerrarDeleteModal()
             me.dismissCountDown = me.dismissSecs //contador para el alert
@@ -426,17 +424,3 @@ export default {
       },
 }
 </script>
-<style scoped>
-    .overlay {
-        position: fixed;
-        top: 0;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        background: rgba(0, 0, 0, 0.6);
-    }    
-    
-    table#tbl-rutas .flip-list-move {
-        transition: transform 1s;
-    }    
-</style>

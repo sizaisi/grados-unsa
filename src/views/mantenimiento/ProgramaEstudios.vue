@@ -3,7 +3,7 @@
     <div class="container pt-2 pb-3" style="background-color: #fff;">
         <div class="row mt-3">
           <div class="col-lg-6">
-              <h3 class="text-info text-left">Programa de Estudios Académicos</h3>
+              <h3 class="text-info">Programa de Estudios Académicos</h3>
           </div>
           <div class="col-lg-6">
               <button class="btn btn-info float-right" @click="abrirAddEditModal('registrar')">
@@ -51,7 +51,7 @@
                     </span>
                   </template>
                   <template v-slot:cell(acciones)="data">
-                    <b-button variant="warning" size="sm" data-toggle="tooltip" data-placement="left" title="Editar" @click="abrirAddEditModal('actualizar', data.item)"><b-icon icon="pencil-square" aria-hidden="true"></b-icon></b-button>&nbsp;
+                    <b-button variant="warning" size="sm" data-toggle="tooltip" data-placement="left" title="Editar" @click="abrirAddEditModal('actualizar', data.item)"><b-icon icon="pencil-square"></b-icon></b-button>&nbsp;
                     <b-button variant="danger" size="sm" data-toggle="tooltip" data-placement="left" title="Desactivar" @click="abrirDeleteModal('desactivar', data.item)" v-if="data.item.condicion == 'Activo'"><b-icon icon="x"></b-icon></b-button>
                     <b-button variant="success" size="sm" data-toggle="tooltip" data-placement="left" title="Activar" @click="abrirDeleteModal('activar', data.item)" v-else><b-icon icon="check"></b-icon></b-button>
                   </template>
@@ -140,7 +140,7 @@ export default {
             },
             columnas: [
                 { key: 'id', label: 'ID', sortable: true, class: 'text-center' },
-                { key: 'nombre', label: 'Nombre', sortable: true },
+                { key: 'nombre', label: 'Nombre', sortable: true, class: 'text-left' },
                 { key: 'condicion', label: 'Condición', class: 'text-center' },
                 { key: 'acciones', label: 'Acciones', class: 'text-center' }
             ]                                        
@@ -156,8 +156,7 @@ export default {
                         me.errorMsg = response.data.message
                     }
                     else {
-                        me.array_programa_estudios = response.data.array_programa_estudios
-                        console.log(me.array_programa_estudios)
+                        me.array_programa_estudios = response.data.array_programa_estudios                        
                     }
                 })
         },
@@ -294,19 +293,3 @@ export default {
     },
 }
 </script>
-<style>  
-    table#tbl-programa-estudios .flip-list-move {
-        transition: transform 1s;
-    }
-</style>
-
-<style scoped>
-    .overlay {
-        position: fixed;
-        top: 0;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        background: rgba(0, 0, 0, 0.6);
-    }       
-</style>

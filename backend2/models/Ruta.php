@@ -5,10 +5,12 @@ class Ruta {
 	private $nombre;
 	private $idgradproc_origen;
     private $idgradproc_destino;
-    private $etiqueta;
+	private $etiqueta;
+	
+	private $conn;
 	
 	public function __construct() {
-		$this->conexion = Database::conectar();
+		$this->conn = Database::conectar();
 	}
 	
 	function getId() {
@@ -24,23 +26,23 @@ class Ruta {
 	}
 
 	function setNombre($nombre) {
-		$this->nombre = $this->conexion->real_escape_string($nombre);
+		$this->nombre = $nombre;
 	}	
 
-	function getIdgradproc_Origen() {
+	function getIdGradProcOrigen() {
 		return $this->idgradproc_origen;
 	}
 
-	function setIdgradproc_Origen($idgradproc_origen) {
-		$this->idgradproc_origen = $this->conexion->real_escape_string($idgradproc_origen);
+	function setIdGradProcOrigen($idgradproc_origen) {
+		$this->idgradproc_origen = $idgradproc_origen;
 	}
 
-	function getidgradproc_Destino() {
+	function getIdGradProcDestino() {
 		return $this->idgradproc_destino;
 	}
 
-	function setIdgradproc_Destino($idgradproc_destino) {
-		$this->idgradproc_destino = $this->conexion->real_escape_string($idgradproc_destino);
+	function setIdGradProcDestino($idgradproc_destino) {
+		$this->idgradproc_destino = $idgradproc_destino;
 	}
 
 	function getEtiqueta() {
@@ -48,7 +50,7 @@ class Ruta {
 	}
 
 	function setEtiqueta($etiqueta) {
-		$this->etiqueta = $this->conexion->real_escape_string($etiqueta);
+		$this->etiqueta = $etiqueta;
 	}
 	
 	public function getAllRutas(){

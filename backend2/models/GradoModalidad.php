@@ -4,9 +4,11 @@ class GradoModalidad {
 	private $id;
 	private $idgrado_titulo;
     private $idmodalidad_obtencion;
+
+    private $conn;
 	
 	public function __construct() {
-		$this->conexion = Database::conectar();
+		$this->conn = Database::conectar();
 	}
 	
 	function getId() {
@@ -17,20 +19,20 @@ class GradoModalidad {
 		$this->id = $id;
 	}
 
-	function getIdgrado_Titulo() {
+	function getIdGradoTitulo() {
 		return $this->idgrado_titulo;
 	}
 
-	function setIdgrado_Titulo($idgrado_titulo) {
-		$this->idgrado_titulo = $this->conexion->real_escape_string($idgrado_titulo);
+	function setIdGradoTitulo($idgrado_titulo) {
+		$this->idgrado_titulo = $idgrado_titulo;
 	}	
 
-	function getIdmodalidad_Obtencion() {
+	function getIdModalidadObtencion() {
 		return $this->idmodalidad_obtencion;
 	}
 
-	function setIdmodalidad_Obtencion($idmodalidad_obtencion) {
-		$this->idmodalidad_obtencion = $this->conexion->real_escape_string($idmodalidad_obtencion);
+	function setIdModalidadObtencion($idmodalidad_obtencion) {
+		$this->idmodalidad_obtencion = $idmodalidad_obtencion;
 	}
 	
 	public function getAllModalidadEscritorio($codi_usuario) {
@@ -200,7 +202,7 @@ class GradoModalidad {
         $result_query = mysqli_query($this->conn, $sql);
 
         if ($result_query) {
-            $result['message'] = "Grado modalidad activadio con éxito.";
+            $result['message'] = "Grado modalidad activado con éxito.";
         }
         else {
             $result['error'] = true;
@@ -218,7 +220,7 @@ class GradoModalidad {
         $result_query = mysqli_query($this->conn, $sql);
 
         if ($result_query) {
-            $result['message'] = "Grado modalidad desactivada con éxito.";
+            $result['message'] = "Grado modalidad desactivado con éxito.";
         }
         else {
             $result['error'] = true;

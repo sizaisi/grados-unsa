@@ -4,9 +4,11 @@ class Procedimiento {
 	private $id;
 	private $nombre;
 	private $descripcion;
-	
+    
+    private $conn;
+
 	public function __construct() {
-		$this->conexion = Database::conectar();
+		$this->conn = Database::conectar();
 	}
 	
 	function getId() {
@@ -22,7 +24,7 @@ class Procedimiento {
 	}
 
 	function setNombre($nombre) {
-		$this->nombre = $this->conexion->real_escape_string($nombre);
+		$this->nombre = $nombre;
 	}	
 
 	function getDescripcion() {
@@ -30,7 +32,7 @@ class Procedimiento {
 	}
 
 	function setDescripcion($descripcion) {
-		$this->descripcion = $this->conexion->real_escape_string($descripcion);
+		$this->descripcion = $descripcion;
 	}
 	
 	public function getAllProcedimiento(){
@@ -79,8 +81,8 @@ class Procedimiento {
         }
         else {
             $result['error'] = true;
-            //$result['message'] = "No se pudo agregar el procedimiento.";
-            $result['message'] = $sql;
+            $result['message'] = "No se pudo agregar el procedimiento.";
+            
         }      
 
         return $result;
@@ -131,11 +133,11 @@ class Procedimiento {
         $result_query = mysqli_query($this->conn, $sql);
 
         if ($result_query) {
-            $result['message'] = "Procedimiento activado con éxito.";
+            $result['message'] = "Procedimiento desactivado con éxito.";
         }
         else {
             $result['error'] = true;
-            $result['message'] = "No se pudo activar el procedimiento.";
+            $result['message'] = "No se pudo desactivar el procedimiento.";
         }
 
         return $result;

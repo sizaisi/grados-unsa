@@ -22,7 +22,7 @@ class ProgramaEstudios {
 	}
 
 	function setNombre($nombre) {
-		$this->nombre = $this->conexion->real_escape_string($nombre);
+		$this->nombre = $nombre;
 	}	
 	
 	public function getAllProgramaEstudios() {

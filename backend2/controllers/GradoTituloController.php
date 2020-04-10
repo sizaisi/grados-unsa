@@ -15,10 +15,10 @@ class GradoTituloController {
 	public function store(){
 		$grado_titulo = new GradoTitulo();
 
-		$grado_titulo->nombre = $_POST['nombre'];
-		$grado_titulo->codigo = $_POST['codigo'];
-		$grado_titulo->idprereq = $_POST['idprereq'];
-		$grado_titulo->descripcion = $_POST['descripcion'];
+		$grado_titulo->setNombre($_POST['nombre']);
+		$grado_titulo->setCodigo($_POST['codigo']);
+		$grado_titulo->setIdprereq($_POST['idprereq']);
+		$grado_titulo->setDescripcion($_POST['descripcion']);
 
 		$result = $grado_titulo->insertar();
 
@@ -28,11 +28,11 @@ class GradoTituloController {
 	public function update(){
 		$grado_titulo = new GradoTitulo();
 
-		$grado_titulo->id = $_POST['id'];
-		$grado_titulo->nombre = $_POST['nombre'];
-		$grado_titulo->codigo = $_POST['codigo'];
-		$grado_titulo->idprereq = $_POST['idprereq'];
-		$grado_titulo->descripcion = $_POST['descripcion'];
+		$grado_titulo->setId($_POST['id']);
+		$grado_titulo->setNombre($_POST['nombre']);
+		$grado_titulo->setCodigo($_POST['codigo']);
+		$grado_titulo->setIdprereq($_POST['idprereq']);
+		$grado_titulo->setDescripcion($_POST['descripcion']);
 
 
 		$result = $grado_titulo->actualizar();
@@ -43,7 +43,7 @@ class GradoTituloController {
 	public function activar(){
 		$grado_titulo = new GradoTitulo();
 
-		$grado_titulo->id = $_POST['id'];
+		$grado_titulo->setId($_POST['id']);
 
 		$result = $grado_titulo->activar();
 
@@ -53,7 +53,7 @@ class GradoTituloController {
 	public function desactivar(){
 		$grado_titulo = new GradoTitulo();
 
-		$grado_titulo->id = $_POST['id'];      
+		$grado_titulo->setId($_POST['id']);      
 
 		$result = $grado_titulo->desactivar();
 

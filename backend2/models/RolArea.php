@@ -2,10 +2,12 @@
 
 class RolArea {
 	private $id;
-	private $nombre;
+    private $nombre;
+
+    private $conn;
 	
 	public function __construct() {
-		$this->conexion = Database::conectar();
+		$this->conn = Database::conectar();
 	}
 	
 	function getId() {
@@ -21,7 +23,7 @@ class RolArea {
 	}
 
 	function setNombre($nombre) {
-		$this->nombre = $this->conexion->real_escape_string($nombre);
+		$this->nombre = $nombre;
 	}	
 	
 	public function getAllRolArea(){

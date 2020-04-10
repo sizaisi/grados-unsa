@@ -61,7 +61,7 @@
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
+  /*text-align: center;*/
   color: #2c3e50;
 }
 
@@ -81,5 +81,37 @@
 .nav-unsa {
   background-color: #990537;
   color: #fff;
+}
+table#tbl-programa-estudios .flip-list-move {
+    transition: transform 1s;
+}
+table#tbl-modalidad-obtencion .flip-list-move {
+    transition: transform 1s;
+}  
+/*table#tbl-procedimientos .flip-list-move {
+    transition: transform 1s;
+  }*/ 
+table#tbl-rol-area .flip-list-move {
+    transition: transform 1s;
+}    
+table#tbl-grado-titulo .flip-list-move {
+    transition: transform 1s;
+}
+table#tbl-grado-modalidad .flip-list-move {
+    transition: transform 1s;
+}
+/*table#tbl-grado-procedimiento .flip-list-move {
+    transition: transform 1s;
+}
+table#tbl-rutas .flip-list-move {
+    transition: transform 1s;
+}*/ 
+.overlay {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.6);
 }
 </style>

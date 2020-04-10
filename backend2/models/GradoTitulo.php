@@ -6,10 +6,11 @@ class GradoTitulo {
 	private $codigo;
     private $idprereq;
 	private $descripcion;
-	private $conexion;
+
+	private $conn;
 	
 	public function __construct() {
-		$this->conexion = Database::conectar();
+		$this->conn = Database::conectar();
 	}
 	
 	function getId() {
@@ -25,7 +26,7 @@ class GradoTitulo {
 	}
 
 	function setNombre($nombre) {
-		$this->nombre = $this->conexion->real_escape_string($nombre);
+		$this->nombre = $nombre;
 	}	
 
 	function getCodigo() {
@@ -33,7 +34,7 @@ class GradoTitulo {
 	}
 
 	function setCodigo($codigo) {
-		$this->codigo = $this->conexion->real_escape_string($codigo);
+		$this->codigo = $codigo;
 	}
 
 	function getIdprereq() {
@@ -41,7 +42,7 @@ class GradoTitulo {
 	}
 
 	function setIdprereq($idprereq) {
-		$this->idprereq = $this->conexion->real_escape_string($idprereq);
+		$this->idprereq = $idprereq;
 	}
 
 	function getDescripcion() {
@@ -49,100 +50,136 @@ class GradoTitulo {
 	}
 
 	function setDescripcion($descripcion) {
-		$this->descripcion = $this->conexion->real_escape_string($descripcion);
+		$this->descripcion = $descripcion;
 	}
 	
-	public function getAllProgramaEstudios() {
+	public function getAllGradoTitulo(){
+        $result = array('error' => false);
 
-		$result = array('error' => false);
+        $sql = "SELECT * FROM GT_GRADO_TITULO";
+        $result_query = mysqli_query($this->conn, $sql);
 
-		$sql = "SELECT * FROM grad_programa_estudios";
+        $array_grado_titulo = array();
 
-		$result_query = $this->conexion->query($sql);
+        while ($row = $result_query->fetch_assoc()) {
+            $gt = new GradoTitulo();
+            $gt->id = $row['idprereq'];
+            $gt->getById();
+            $row['prerequisito'] = $gt->nombre;
+            array_push($array_grado_titulo, $row);
+        }
 
-		$array_programa_estudios = array();
+        $result['array_grado_titulo'] = $array_grado_titulo;
 
-		while ($row = $result_query->fetch_assoc()) {         
-			array_push($array_programa_estudios, $row);
-		}
+        return $result;
+    }
 
-		$result['array_programa_estudios'] = $array_programa_estudios;      
+    public function getActives(){
+        $result = array('error' => false);
 
-		return $result;
-	}
+        $sql = "SELECT * FROM GT_GRADO_TITULO where condicion = 1";
+        $result_query = mysqli_query($this->conn, $sql);
 
-	public function insertar() {      
+        $array_grado_titulo = array();
 
-		$result = array('error' => false);
+        while ($row = $result_query->fetch_assoc()) {
+            $gt = new GradoTitulo();
+            $gt->id = $row['idprereq'];
+            $gt->getById();
+            $row['prerequisito'] = $gt->nombre;
+            array_push($array_grado_titulo, $row);
+        }
 
-		$sql = "INSERT INTO grad_programa_estudios(nombre) VALUES ('$this->nombre')";
-      
-		$result_query = $this->conexion->query($sql);
+        $result['array_grado_titulo'] = $array_grado_titulo;
 
-		if ($result_query) {
-			$result['message'] = "Programa de estudios agregado correctamente.";
-		}
-		else {
-			$result['error'] = true;
-			$result['message'] = "No se pudo agregar el programa de estudios.";
-		}      
+        return $result;
+    }
 
-		return $result;
-	}
+    public function getById(){
+        $result = array('error' => false);
 
-	public function actualizar() {      
+        $sql = "SELECT * FROM GT_GRADO_TITULO WHERE id = $this->id";
+        $result_query = mysqli_query($this->conn, $sql);
+        $row = $result_query->fetch_assoc();
+        $this->nombre = $row['nombre'];
+        $this->codigo = $row['codigo'];
+        $this->idprereq = $row['idprereq'];
+        $this->descripcion = $row['descripcion'];
 
-		$result = array('error' => false);
+        return $result;
+    }
 
-		$sql = "UPDATE grad_programa_estudios SET nombre = '$this->nombre' WHERE id = $this->id";
-		$result_query = $this->conexion->query($sql);
+    public function insertar(){
+        $result = array('error' => false);
 
-		if ($result_query) {
-			$result['message'] = "Programa de estudios actualizado con éxito.";
-		}
-		else {
-			$result['error'] = true;
-			$result['message'] = "No se pudo actualizar el programa de estudios.";
-		}
+        $sql = "INSERT INTO GT_GRADO_TITULO VALUES (0, '$this->nombre', '$this->codigo'," .
+                  " $this->idprereq, '$this->descripcion', 1)";
+        $result_query = mysqli_query($this->conn, $sql);
 
-		return $result;
-	}   
+        if ($result_query) {
+            $result['message'] = "Grado-Titulo agregado correctamente.";
+        }
+        else {
+            $result['error'] = true;
+            $result['message'] = "No se pudo agregar el Grado-Titulo.";
+        }      
 
-	public function activar() {      
+        return $result;
+    }
+ 
+    public function actualizar(){
+        $result = array('error' => false);
 
-		$result = array('error' => false);
+        $sql = "UPDATE GT_GRADO_TITULO SET nombre = '$this->nombre', " . 
+            "codigo = '$this->codigo', idprereq = '$this->idprereq', " .
+            "descripcion = '$this->descripcion' WHERE id = $this->id";
 
-		$sql = "UPDATE grad_programa_estudios SET condicion = 'Activo' WHERE id = $this->id";
+        $result_query = mysqli_query($this->conn, $sql);
 
-		$result_query = $this->conexion->query($sql);
+        if ($result_query) {
+            $result['message'] = "Grado-Titulo actualizado con éxito.";
+        }
+        else {
+            $result['error'] = true;
+            $result['message'] = "No se pudo actualizar el Grado-Titulo.";
+        }
 
-		if ($result_query) {
-			$result['message'] = "Programa de estudios activado con éxito.";
-		}
-		else {
-			$result['error'] = true;
-			$result['message'] = "No se pudo activar el programa de estudios.";
-		}
+        return $result;   
+    }
 
-		return $result;
-	}
+    public function activar(){
+        $result = array('error' => false);
 
-	public function desactivar() {      
+        $sql = "UPDATE GT_GRADO_TITULO SET condicion = '1' WHERE id = $this->id";
 
-		$result = array('error' => false);
+        $result_query = mysqli_query($this->conn, $sql);
 
-		$sql = "UPDATE grad_programa_estudios SET condicion = 'Inactivo' WHERE id = $this->id";
+        if ($result_query) {
+            $result['message'] = "Grado-Titulo activado con éxito.";
+        }
+        else {
+            $result['error'] = true;
+            $result['message'] = "No se pudo activar el Grado-Titulo.";
+        }
 
-		$result_query = $this->conexion->query($sql);
+        return $result;
+    }
 
-		if ($result_query) {
-			$result['message'] = "Programa de estudios desactivado con éxito.";
-		}
-		else {
-			$result['error'] = true;
-			$result['message'] = "No se pudo desactivar el programa de estudios.";
-		}
+    public function desactivar(){
+        $result = array('error' => false);
 
-		return $result;
-	}	
+        $sql = "UPDATE GT_GRADO_TITULO SET condicion = '0' WHERE id = $this->id";
+
+        $result_query = mysqli_query($this->conn, $sql);
+
+        if ($result_query) {
+            $result['message'] = "Grado-Titulo desactivado con éxito.";
+        }
+        else {
+            $result['error'] = true;
+            $result['message'] = "No se pudo desactivar el Grado-Titulo.";
+        }
+
+        return $result;
+    }
 }
