@@ -64,17 +64,17 @@ class CargoAutoridadController {
 	}	
 
 	public function readCargo(){
-		$cargo = new Cargo();
+		$cargo = new CargoAutoridad();
 
-      	$result = $cargo->getActives();
+      	$result = $cargo->getActivesCargo();
 
       	echo json_encode($result);          
 	}
 
 	public function readAutoridad(){
-		$autoridad = new Autoridad();
+		$autoridad = new CargoAutoridad();
 
-      	$result = $autoridad->getActives();
+      	$result = $autoridad->getActivesAutoridad();
 
       	echo json_encode($result);          
 	}
