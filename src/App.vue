@@ -19,6 +19,10 @@
             <b-dropdown-item to="/grado-modalidad">Grado Modalidad</b-dropdown-item>
             <b-dropdown-item to="/rol-area">Rol Area</b-dropdown-item>
             <b-dropdown-item to="/procedimientos">Procedimiento</b-dropdown-item>
+            <b-dropdown-item to="/cargo">Cargo</b-dropdown-item>
+            <b-dropdown-item to="/autoridad">Autoridad</b-dropdown-item>
+            <b-dropdown-item to="/cargo-autoridad">Cargo Autoridad</b-dropdown-item>
+
           </b-nav-item-dropdown>
           <b-nav-item href="#">Configuración</b-nav-item>          
         </b-navbar-nav>
