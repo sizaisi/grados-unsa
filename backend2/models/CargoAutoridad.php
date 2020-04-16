@@ -56,7 +56,12 @@ class CargoAutoridad {
 	public function getAllCargoAutoridad(){
         $result = array('error' => false);
 
-        $sql = "SELECT * FROM GT_CARGO_AUTORIDAD";
+        $sql = "SELECT gt_ca.*, gt_car.nombre AS cargoname, gt_aut.nombre AS autoridadname 
+                FROM GT_CARGO_AUTORIDAD as gt_ca 
+                INNER JOIN GT_CARGO AS gt_car ON gt_ca.idcargo = gt_car.id 
+                INNER JOIN GT_AUTORIDAD AS gt_aut ON gt_ca.idautoridad = gt_aut.id 
+                WHERE gt_car.condicion = 1 OR gt_aut.condicion = 1
+                ORDER BY gt_ca.id";
         $result_query = mysqli_query($this->conn, $sql);
 
         $array_cargo_autoridad = array();
@@ -141,15 +146,49 @@ class CargoAutoridad {
         return $result;
     }
 
+    public function getActivesCargo(){
+        $result = array('error' => false);
+
+        $sql = "SELECT * FROM GT_CARGO WHERE condicion = 1";
+        $result_query = mysqli_query($this->conn, $sql);
+
+        $array_actives_cargo = array();
+
+        while ($row = $result_query->fetch_assoc()) {
+            array_push($array_actives_cargo, $row);
+        }
+
+        $result['array_actives_cargo'] = $array_actives_cargo;
+
+        return $result;
+    }
+
+    public function getActivesAutoridad(){
+        $result = array('error' => false);
+
+        $sql = "SELECT * FROM GT_AUTORIDAD WHERE condicion = 1";
+        $result_query = mysqli_query($this->conn, $sql);
+
+        $array_actives_autoridad = array();
+
+        while ($row = $result_query->fetch_assoc()) {
+            array_push($array_actives_autoridad, $row);
+        }
+
+        $result['array_actives_autoridad'] = $array_actives_autoridad;
+
+        return $result;
+    }
+
     public function getActives(){
         $result = array('error' => false);
 
-        $sql = "SELECT gt_ca.*, gt_car.id AS cargoid, gt_car.nombre AS cargoname, gt_aut.id AS autoridadid, gt_aut.nombre AS autoridadname 
+        $sql = "SELECT gt_ca.*, gt_car.nombre AS cargoname, gt_aut.nombre AS autoridadname 
                 FROM GT_CARGO_AUTORIDAD as gt_ca 
                 INNER JOIN GT_CARGO AS gt_car ON gt_ca.idcargo = gt_car.id 
                 INNER JOIN GT_AUTORIDAD AS gt_aut ON gt_ca.idautoridad = gt_aut.id 
-                WHERE gt_ca.condicion = 1
-                ORDER BY gt_car.nombre";
+                WHERE gt_car.condicion = 1 OR gt_aut.condicion = 1
+                ORDER BY gt_ca.id";
         $result_query = mysqli_query($this->conn, $sql);
 
         $array_cargo_autoridades = array();
@@ -162,4 +201,5 @@ class CargoAutoridad {
 
         return $result;
     }
+    
 }

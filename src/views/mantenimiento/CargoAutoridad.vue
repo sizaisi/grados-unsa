@@ -156,8 +156,8 @@ export default {
             },
             columnas: [
               { key: 'id', label: 'ID', sortable: true, class: 'text-center' },
-              { key: 'idcargo', label: 'Cargo', sortable: true, class: 'text-left' },
-              { key: 'idautoridad', label: 'Autoridad', class: 'text-center' },
+              { key: 'cargoname', label: 'Cargo', sortable: true, class: 'text-left' },
+              { key: 'autoridadname', label: 'Autoridad', class: 'text-center' },
               { key: 'fecha_inicio', label: 'Fecha Inicio', class: 'text-center' },
               { key: 'fecha_fin', label: 'Fecha Fin', class: 'text-center' },
               { key: 'acciones', label: 'Acciones', class: 'text-center' }
@@ -176,8 +176,8 @@ export default {
               else { 
                 me.array_cargos.push({ value: '', text: 'Seleccione Cargo...', disabled: true })
                 
-                for(var cargo of response.data.array_cargo_autoridades){
-                  me.array_cargos.push({value: cargo.cargoid, text: cargo.cargoname})
+                for(var cargo of response.data.array_actives_cargo){
+                  me.array_cargos.push({value: cargo.id, text: cargo.nombre})
                 }
               }
           })
