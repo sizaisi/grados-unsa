@@ -16,6 +16,9 @@ import Rutas from '../views/mantenimiento/Rutas.vue'
 import GradoModalidad from '../views/mantenimiento/GradoModalidad.vue'
 import RolArea from '../views/mantenimiento/RolArea.vue'
 import Procedimientos from '../views/mantenimiento/Procedimientos.vue'
+import Cargo from '../views/mantenimiento/Cargo.vue'
+import Autoridad from '../views/mantenimiento/Autoridad.vue'
+import CargoAutoridad from '../views/mantenimiento/CargoAutoridad.vue'
 //import About from '../views/About.vue'
 
 Vue.use(VueRouter)
@@ -82,6 +85,21 @@ const routes = [
     path: '/mantenimiento/grado-modalidad',
     name: 'grado-modalidad',
     component: GradoModalidad
+  },
+  {
+    path: '/mantenimiento/cargo',
+    name: 'cargo',
+    component: Cargo
+  },
+  {
+    path: '/mantenimiento/autoridad',
+    name: 'autoridad',
+    component: Autoridad
+  },
+  {
+    path: '/mantenimiento/cargo-autoridad',
+    name: 'cargo-autoridad',
+    component: CargoAutoridad
   },
 ]
 
