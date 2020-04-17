@@ -4,7 +4,7 @@
       <div class="row">         
          <div class="col text-center">         
             <h3 class="text-info" v-if="codi_usuario == null" v-text="'No existe sesión de usuario'"></h3>		
-            <h3 class="text-info" v-else-if="array_grado_modalidad > 0" v-text="'Solicitudes pendientes'"></h3>		
+            <h3 class="text-info" v-else-if="array_grado_modalidad.length > 0" v-text="'Solicitudes pendientes'"></h3>		
             <h3 class="text-info" v-else v-text="'No existen solicitudes pendientes'"></h3>		
          </div>          		
       </div>
@@ -13,8 +13,18 @@
             <div class="counter">
                <h5 class="count-text-title" v-text="grado_modalidad.nombre_grado_titulo+' - '+grado_modalidad.nombre_modalidad_obtencion"></h5>               
                <h2 class="timer count-title count-number" v-text="grado_modalidad.total_expedientes"></h2>      
-               <p class="count-text">Solicitudes pendientes</p><br>
-               <b-button pill variant="info" :href="'vista_menu.php?idgrado_modalidad='+grado_modalidad.idgrado_modalidad+'&codi_usuario=<?=$codi_oper?>'">
+               <p class="count-text">Solicitudes pendientes</p><br>               
+               <b-button 
+                  pill 
+                  variant="info" 
+                  :to="{ name: 'menu-procedimientos', 
+                         params: { 
+                            idgrado_modalidad: grado_modalidad.idgrado_modalidad, 
+                            idusuario: usuario.id,
+                            codi_usuario: usuario.codi_usuario,
+                            idrol_area: usuario.idrol_area,
+                         } 
+                    }">
                   Ver lista
                </b-button>
             </div>
@@ -30,9 +40,10 @@ export default {
     name: 'inicio', 
     data() {
         return {                               
-            //url: url_controller,
-            array_grado_modalidad : [],                 
-            codi_usuario: null,
+            url: this.$root.API_URL,
+            array_grado_modalidad : [],  
+            codi_usuario: null,                
+            usuario : {},      
             itemsPerRow: 3, //mostrar nro de items por fila
         }
     },
@@ -42,22 +53,46 @@ export default {
         }
     },
     methods: {
+        getIdUsuario() {            
+            let me = this        
+
+            var formData = this._toFormData({
+                codi_usuario: this.codi_usuario
+            })
+
+            this.axios.post(`${this.url}/Usuario/getIdUsuario`, formData)
+            .then(function(response) {
+                if (!response.data.error) {
+                    me.usuario = response.data.usuario                        
+                    me.getAllModadalidadObtencion()                
+                }
+                else {                                        
+                    me.$bvToast.toast(response.data.message, {
+                        title: 'Error!',
+                        variant: 'danger',
+                        toaster: 'b-toaster-bottom-right',                    
+                    })              
+                }
+            })
+        },     
         getAllModadalidadObtencion() {    
             let me = this           
 
-            this.axios.get(this.url+"GradoModalidadController.php?action=read_escritorio", {
-                params: {                           
-                    codi_usuario: this.codi_usuario,                         
-                }
-            })
-            .then(function(response) {
-                if (response.data.error) {
-                    me.errorMsg = response.data.message
-                }
-                else {
-                    me.array_grado_modalidad = response.data.array_grado_modalidad                       
-                }
-            })
+            var formData = this._toFormData({                           
+                    codi_usuario: this.usuario.codi_usuario,                         
+                    idrol_area: this.usuario.idrol_area,                         
+                })
+
+            this.axios.post(`${this.url}/GradoModalidad/read_escritorio`, formData)
+                .then(function(response) {
+                    
+                    if (!response.data.error) {
+                        me.array_grado_modalidad = response.data.array_grado_modalidad                                                                       
+                    }
+                    else {
+                       console.log(response.data.message)
+                    }
+                })
         },   
         getCodiOper() {
             let me = this
@@ -69,13 +104,22 @@ export default {
                     }
                     else {
                         me.codi_usuario = response.data.codi_oper                        
-                        //me.getAllModadalidadObtencion()
+                        me.getIdUsuario()                        
                     }                  
                 })
-        },            
+        },   
+        _toFormData(obj) {
+            var fd = new FormData()
+
+            for (var i in obj) {
+              fd.append(i, obj[i])
+            }
+
+            return fd
+        },         
     },
     mounted: function() {
-        this.getCodiOper()    
+        this.getCodiOper()            
     },
 }
 </script>

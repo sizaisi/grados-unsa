@@ -16,8 +16,8 @@ class GradoProcedimientoController {
 
 	public function getGradoProcedimiento(){
 		$grado_procedimiento = new GradoProcedimiento();
-
-		$grado_procedimiento->id = $_GET['idgrado_procedimiento'];
+		//$grado_procedimiento->id = $_GET['idgrado_procedimiento'];
+		$grado_procedimiento->setId($_POST['idgrado_procedimiento']);
 
 		$result = $grado_procedimiento->getGradoProcedimiento();
 
@@ -25,12 +25,14 @@ class GradoProcedimientoController {
 	}
 
 	public function getListByIds(){
-		$idgrado_modalidad = $_GET['idgrado_modalidad'];
-		$codi_usuario = $_GET['codi_usuario'];
+		//$idgrado_modalidad = $_GET['idgrado_modalidad'];
+		//$codi_usuario = $_GET['codi_usuario'];
+		$idgrado_modalidad = $_POST['idgrado_modalidad'];
+		$idrol_area = $_POST['idrol_area'];
 		
 		$grado_procedimiento = new GradoProcedimiento();      
 
-		$result = $grado_procedimiento->getListByIds($idgrado_modalidad, $codi_usuario);
+		$result = $grado_procedimiento->getListByIds($idgrado_modalidad, $idrol_area);
 
 		echo json_encode($result);           
 	}

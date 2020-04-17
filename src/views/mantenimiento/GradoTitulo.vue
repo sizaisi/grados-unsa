@@ -132,7 +132,7 @@ export default {
     name: 'grado-titulo',  
     data() {
         return { 
-            url: '//localhost/grados-unsa/backend2',
+            url: this.$root.API_URL,
             array_grado_titulo : [],
             select_grado_titulo: [],
             grado_titulo : {

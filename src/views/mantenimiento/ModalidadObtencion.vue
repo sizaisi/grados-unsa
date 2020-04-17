@@ -117,7 +117,7 @@ export default {
     name: 'modalidad-obtencion',  
     data() {
         return { 
-            url: '//localhost/grados-unsa/backend2',
+            url: this.$root.API_URL,
             array_modalidad_obtencion : [],
             modalidad_obtencion : {
               id: '',

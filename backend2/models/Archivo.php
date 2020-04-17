@@ -8,9 +8,11 @@ class Archivo {
 	private $idgrado_proc;
 	private $idusuario;
 	private $idexpediente; 
+
+	private $conn;
 	
 	public function __construct() {
-		$this->conexion = Database::conectar();
+		$this->conn = Database::conectar();
 	}
 	
 	function getId() {
@@ -26,7 +28,7 @@ class Archivo {
 	}
 
 	function setNombre($nombre) {
-		$this->nombre = $this->conexion->real_escape_string($nombre);
+		$this->nombre = $nombre;
 	}	
 
 	function getData() {
@@ -34,7 +36,7 @@ class Archivo {
 	}
 
 	function setData($data) {
-		$this->data = $this->conexion->real_escape_string($data);
+		$this->data = $data;
 	}
 
 	function getExtension() {
@@ -42,7 +44,7 @@ class Archivo {
 	}
 
 	function setExtension($extension) {
-		$this->extension = $this->conexion->real_escape_string($extension);
+		$this->extension = $extension;
 	}
 
 	function getIdgrado_Proc() {
@@ -50,7 +52,7 @@ class Archivo {
 	}
 
 	function setIdgrado_Proc($idgrado_proc) {
-		$this->idgrado_proc = $this->conexion->real_escape_string($idgrado_proc);
+		$this->idgrado_proc = $idgrado_proc;
 	}
 
 	function getIdusuario() {
@@ -58,7 +60,7 @@ class Archivo {
 	}
 
 	function setIdusuario($idusuario) {
-		$this->idusuario = $this->conexion->real_escape_string($idusuario);
+		$this->idusuario = $idusuario;
 	}
 
 	function getIdexpediente() {
@@ -66,14 +68,14 @@ class Archivo {
 	}
 
 	function setIdexpediente($idexpediente) {
-		$this->idexpediente = $this->conexion->real_escape_string($idexpediente);
+		$this->idexpediente = $idexpediente;
 	}
 
 	public function getTodosArchivos() {
 
 		$result = array('error' => false);
   
-		$sql = "SELECT GT_A.*, GT_P.nombre AS procedimiento, GT_RA.nombre AS area FROM 
+		$sql = "SELECT GT_A.id, GT_A.nombre, GT_P.nombre AS procedimiento, GT_RA.nombre AS area FROM 
 				GT_ARCHIVO AS GT_A 
 				INNER JOIN GT_GRADO_PROCEDIMIENTO GT_GP ON GT_A.idgrado_proc = GT_GP.id
 				INNER JOIN GT_PROCEDIMIENTO GT_P ON GT_GP.idprocedimiento = GT_P.id

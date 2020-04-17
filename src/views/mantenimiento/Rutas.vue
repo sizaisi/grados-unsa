@@ -163,7 +163,7 @@ export default {
     name: 'rutas',  
     data() {
         return { 
-            url: '//localhost/grados-unsa/backend2',
+            url: this.$root.API_URL,
             array_ruta : [],
             select_grado_modalidad: [],
             select_grado_procedimiento_origen: [],

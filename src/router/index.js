@@ -4,6 +4,8 @@ import Home from '../views/Home.vue'
 
 /* Expedientes */
 import Inicio from '../views/expedientes/Inicio.vue'
+import Menu from '../views/expedientes/Menu.vue'
+import InfoExpediente from '../views/expedientes/InfoExpediente.vue'
 
 /* Mantenimiento */
 import ProgramaEstudios from '../views/mantenimiento/ProgramaEstudios.vue'
@@ -21,64 +23,66 @@ Vue.use(VueRouter)
 const routes = [
   {
     path: '/',
-    name: 'Home',
+    name: 'home',
     component: Home
   },
   {
-    path: '/inicio',
+    path: '/expedientes/inicio',
     name: 'inicio',
     component: Inicio
   },
   {
-    path: '/rutas',
+    path: '/expedientes/menu',
+    name: 'menu-procedimientos',
+    component: Menu,
+    props: true
+  },
+  {
+    path: '/expedientes/info-expediente',
+    name: 'info-expediente',
+    component: InfoExpediente,
+    props: true
+  },
+  {
+    path: '/mantenimiento/rutas',
     name: 'rutas',
     component: Rutas
   },
   {
-    path: '/grado-titulo',
+    path: '/mantenimiento/grado-titulo',
     name: 'grado-titulo',
     component: GradoTitulo
   },
   {
-    path: '/programa-estudios',
+    path: '/mantenimiento/programa-estudios',
     name: 'programa-estudios',
     component: ProgramaEstudios
   },
   {
-    path: '/modalidad-obtencion',
+    path: '/mantenimiento/modalidad-obtencion',
     name: 'modalidad-obtencion',
     component: ModalidadObtencion
   },
   {
-    path: '/grado-procedimiento',
+    path: '/mantenimiento/grado-procedimiento',
     name: 'grado-procedimiento',
     component: GradoProcedimiento
   },
   {
-    path: '/rol-area',
+    path: '/mantenimiento/rol-area',
     name: 'rol-area',
     component: RolArea
   },
   {
-    path: '/procedimientos',
+    path: '/mantenimiento/procedimientos',
     name: 'procedimientos',
     component: Procedimientos
   },
   {
-    path: '/grado-modalidad',
+    path: '/mantenimiento/grado-modalidad',
     name: 'grado-modalidad',
     component: GradoModalidad
   },
-  {
-    path: '/about',
-    name: 'About',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
-  }
-
-
 ]
 
 const router = new VueRouter({

@@ -170,7 +170,7 @@ export default {
     name: 'grado-procedimiento',  
     data() {
         return { 
-            url: '//localhost/grados-unsa/backend2',
+            url: this.$root.API_URL,
             array_grado_procedimiento : [],
             select_grado_modalidad: [],
             select_procedimiento: [],

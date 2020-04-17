@@ -111,18 +111,9 @@ class GradoProcedimiento {
         return $result;
     }
 
-    public function getListByIds($idgrado_modalidad, $codi_usuario){
+    public function getListByIds($idgrado_modalidad, $idrol_area){
 
-        $result = array('error' => false);        
-
-        $sql = "SELECT idrol_area
-                 FROM GT_USUARIO                                  
-                 WHERE codi_usuario = '$codi_usuario'"; 
-
-        $result_query = mysqli_query($this->conn, $sql);
-
-        $row = $result_query->fetch_assoc();
-        $idrol_area = $row['idrol_area'] != null ? $row['idrol_area'] : 0;        
+        $result = array('error' => false);                
 
         $sql = "SELECT gt_gp.*, gt_p.id AS idproc, gt_p.nombre AS proc_nombre, gt_p.descripcion AS proc_descripcion " .
                "FROM GT_GRADO_PROCEDIMIENTO AS gt_gp " .                

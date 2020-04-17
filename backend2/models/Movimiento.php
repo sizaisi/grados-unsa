@@ -1,120 +1,123 @@
 <?php
 
 class Movimiento {
-	private $id;
-	private $nombre;
+	public $id;
+	public $idexpediente;
+	public $idusuario;
+	public $idruta;   
+
+	private $conn;
 	
 	public function __construct() {
-		$this->conexion = Database::conectar();
+		$this->conn = Database::conectar();
 	}
 	
 	function getId() {
 		return $this->id;
 	}
 
-	function getNombre() {
-		return $this->nombre;
+	function getIdExpediente() {
+		return $this->idexpediente;
+	}
+
+	function getIdUsuario() {
+		return $this->idusuario;
+	}
+
+	function getIdRuta() {
+		return $this->idruta;
 	}
 
 	function setId($id) {
 		$this->id = $id;
 	}
 
-	function setNombre($nombre) {
-		$this->nombre = $this->conexion->real_escape_string($nombre);
+	function setIdExpediente($idexpediente) {
+		$this->idexpediente = $idexpediente;
+	}	
+
+	function setIdUsuario($idusuario) {
+		$this->idusuario = $idusuario;
+	}	
+
+	function setIdRuta($idruta) {
+		$this->idruta = $idruta;
 	}	
 	
-	public function getAllProgramaEstudios() {
-
-		$result = array('error' => false);
-
-		$sql = "SELECT * FROM grad_programa_estudios";
-
-		$result_query = $this->conexion->query($sql);
-
-		$array_programa_estudios = array();
-
-		while ($row = $result_query->fetch_assoc()) {         
-			array_push($array_programa_estudios, $row);
-		}
-
-		$result['array_programa_estudios'] = $array_programa_estudios;      
-
-		return $result;
-	}
-
-	public function insertar() {      
-
-		$result = array('error' => false);
-
-		$sql = "INSERT INTO grad_programa_estudios(nombre) VALUES ('$this->nombre')";
+	// registrar movimiento y actualizar procedimiento del expediente con el idgradprod_destino
+	public function mover($idgradproc_destino) {      
       
-		$result_query = $this->conexion->query($sql);
-
-		if ($result_query) {
-			$result['message'] = "Programa de estudios agregado correctamente.";
+		$result = array('error' => false);                
+		$this->conn->autocommit(FALSE); //iniciar transaccion
+		
+		//realizar movimiento con la ruta seleccionada
+		$sql = "INSERT INTO GT_MOVIMIENTO(idexpediente, idusuario, idruta) 
+				VALUES ($this->idexpediente, $this->idusuario, $this->idruta)";      
+		$result_query = mysqli_query($this->conn, $sql);     
+  
+		if (!$result_query) {
+		   $result['error'] = true;                    
+		}     
+  
+		//actualizar expediente para conocer en que procedimiento se encuentra
+		$sql = "UPDATE GT_EXPEDIENTE SET idgrado_procedimiento = $idgradproc_destino
+				WHERE id = $this->idexpediente";        
+		$result_query = mysqli_query($this->conn, $sql);
+  
+		if (!$result_query) {
+		   $result['error'] = true;                    
+		}
+  
+		//verificar y realizar transaccion
+		if($result['error'] == false) { //si no hay ningun error en querys
+		   $this->conn->commit();          
+		   $result['message'] = "El expediente fue derivado satisfactoriamente.";
 		}
 		else {
-			$result['error'] = true;
-			$result['message'] = "No se pudo agregar el programa de estudios.";
-		}      
-
-		return $result;
-	}
-
-	public function actualizar() {      
-
-		$result = array('error' => false);
-
-		$sql = "UPDATE grad_programa_estudios SET nombre = '$this->nombre' WHERE id = $this->id";
-		$result_query = $this->conexion->query($sql);
-
-		if ($result_query) {
-			$result['message'] = "Programa de estudios actualizado con éxito.";
+		   $this->conn->rollback(); // deshacer transaccion
+		   $result['message'] = "No se pudo derivar el expediente.";
+		}
+  
+		$this->conn->autocommit(TRUE); //finalizar transaccion
+  
+		return $result;     
+	 }      
+  
+	 // eliminar movimiento y actualizar procedimiento del expediente con el idgradprod_origen
+	 public function deshacer($idgradproc_origen) {      
+		
+		$result = array('error' => false);                
+		$this->conn->autocommit(FALSE); //iniciar transaccion
+		
+		//eliminar el ultimo movimiento realizado
+		$sql = "DELETE FROM GT_MOVIMIENTO WHERE id = $this->id";      
+		$result_query = mysqli_query($this->conn, $sql);     
+  
+		if (!$result_query) {
+		   $result['error'] = true;                    
+		}     
+  
+		//actualizar expediente para conocer en que procedimiento se encuentra
+		$sql = "UPDATE GT_EXPEDIENTE SET idgrado_procedimiento = $idgradproc_origen
+				WHERE id = $this->idexpediente";        
+		$result_query = mysqli_query($this->conn, $sql);
+  
+		if (!$result_query) {
+		   $result['error'] = true;                    
+		}
+  
+		//verificar y realizar transaccion
+		if($result['error'] == false) { //si no hay ningun error en querys
+		   $this->conn->commit();          
+		   $result['message'] = "El movimiento fue eliminado satisfactoriamente.";
 		}
 		else {
-			$result['error'] = true;
-			$result['message'] = "No se pudo actualizar el programa de estudios.";
+		   $this->conn->rollback(); // deshacer transaccion
+		   $result['message'] = "No se pudo eliminar el movimiento.";
 		}
-
-		return $result;
-	}   
-
-	public function activar() {      
-
-		$result = array('error' => false);
-
-		$sql = "UPDATE grad_programa_estudios SET condicion = 'Activo' WHERE id = $this->id";
-
-		$result_query = $this->conexion->query($sql);
-
-		if ($result_query) {
-			$result['message'] = "Programa de estudios activado con éxito.";
-		}
-		else {
-			$result['error'] = true;
-			$result['message'] = "No se pudo activar el programa de estudios.";
-		}
-
-		return $result;
-	}
-
-	public function desactivar() {      
-
-		$result = array('error' => false);
-
-		$sql = "UPDATE grad_programa_estudios SET condicion = 'Inactivo' WHERE id = $this->id";
-
-		$result_query = $this->conexion->query($sql);
-
-		if ($result_query) {
-			$result['message'] = "Programa de estudios desactivado con éxito.";
-		}
-		else {
-			$result['error'] = true;
-			$result['message'] = "No se pudo desactivar el programa de estudios.";
-		}
-
-		return $result;
-	}	
+  
+		$this->conn->autocommit(TRUE); //finalizar transaccion
+  
+		return $result;     
+	 }      
 }

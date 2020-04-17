@@ -118,7 +118,7 @@ export default {
     name: 'programa-estudios',  
     data() {
         return { 
-            url : '//localhost/grados-unsa/backend2',
+            url: this.$root.API_URL,
             array_programa_estudios : [],
             programa_estudios : {
                 id: '',

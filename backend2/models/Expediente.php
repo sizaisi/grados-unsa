@@ -1,9 +1,20 @@
 <?php
 
 class Expediente {
+	private $id;
+
+	private $conn;
+
+	function getId() {
+		return $this->id;
+	}
+
+	function setId($id) {
+		$this->id = $id;
+	}
 
 	public function __construct() {
-		$this->conexion = Database::conectar();
+		$this->conn = Database::conectar();
 	}
 	
 	public function getListByIds($idgrado_procedimiento, $codi_usuario) {
@@ -88,14 +99,14 @@ class Expediente {
 		return $result;
 	 }
   
-	 public function getExpById($idexpediente) {
+	 public function getExpediente() {
   
 		$result = array('error' => false);
   
 		$sql = "SELECT gt_e.*, ac_a.nesc " .             
 			   "FROM GT_EXPEDIENTE AS gt_e " .
 			   "INNER JOIN actescu AS ac_a ON gt_e.nues = ac_a.nues " .
-			   "WHERE gt_e.id = $idexpediente";
+			   "WHERE gt_e.id = $this->id";
   
 		$result_query = mysqli_query($this->conn, $sql);
   

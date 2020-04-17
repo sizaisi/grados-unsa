@@ -15,7 +15,9 @@ class RutaController {
 
 	public function getRutasByProc() { // obtener rutas por cada procedimiento
 		$ruta = new Ruta();
-		$ruta->setIdGradProcOrigen($_GET['idgradproc_origen']);  
+
+		//$ruta->setIdGradProcOrigen($_GET['idgradproc_origen']);
+		$ruta->setIdGradProcOrigen($_POST['idgradproc_origen']);  		  
 
 		$result = $ruta->getRutasByIdProcOrigen();
 

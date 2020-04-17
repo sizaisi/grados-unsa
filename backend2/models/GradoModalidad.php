@@ -35,17 +35,8 @@ class GradoModalidad {
 		$this->idmodalidad_obtencion = $idmodalidad_obtencion;
 	}
 	
-	public function getAllModalidadEscritorio($codi_usuario) {
+	public function getAllModalidadEscritorio($codi_usuario, $idrol_area) {
         $result = array('error' => false);
-
-        $sql = "SELECT idrol_area
-                 FROM GT_USUARIO                                  
-                 WHERE codi_usuario = '$codi_usuario'"; 
-
-        $result_query = mysqli_query($this->conn, $sql);
-
-        $row = $result_query->fetch_assoc();
-        $idrol_area = $row['idrol_area'] != null ? $row['idrol_area'] : 0;
 
         $sql = "SELECT GM.id AS idgrado_modalidad, GT.nombre AS nombre_grado_titulo, GMO.nombre AS nombre_modalidad_obtencion
                 FROM GT_GRADO_MODALIDAD AS GM 

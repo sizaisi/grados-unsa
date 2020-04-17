@@ -115,41 +115,40 @@
 </template>
 
 <script>
-
 export default {
     name: 'grado-modalidad',  
     data() {
         return { 
-            url: '//localhost/grados-unsa/backend2',
-            array_grado_modalidad : [],
-            array_grados: [],
-            array_modalidades: [],
-            grado_modalidad : {
-              id: '',
-              idgrado_titulo: '',
-              idmodalidad_obtencion: '',
-            },
-            titleAddEditModal : '',
-            titleDeleteModal : '',
-            messageDeleteModal : '',
-            showAddEditModal : false,
-            showDeleteModal : false,
-            tipoAccion : '',
-            errorMsg : "",
-            successMsg : "",
-            dismissSecs: 3,
-            dismissCountDown: 0,
-            transProps: {
-              // Transition name
-              name: 'flip-list'
-            },
-            columnas: [
-              { key: 'id', label: 'ID', sortable: true, class: 'text-center' },
-              { key: 'gradname', label: 'Nombre del Grado/Título', sortable: true },
-              { key: 'movname', label: 'Nombre de la modalidad', sortable: true },
-              { key: 'condicion', label: 'Condición', class: 'text-center' },
-              { key: 'acciones', label: 'Acciones', class: 'text-center' }
-            ]                                           
+          url: this.$root.API_URL,
+          array_grado_modalidad : [],
+          array_grados: [],
+          array_modalidades: [],
+          grado_modalidad : {
+            id: '',
+            idgrado_titulo: '',
+            idmodalidad_obtencion: '',
+          },
+          titleAddEditModal : '',
+          titleDeleteModal : '',
+          messageDeleteModal : '',
+          showAddEditModal : false,
+          showDeleteModal : false,
+          tipoAccion : '',
+          errorMsg : "",
+          successMsg : "",
+          dismissSecs: 3,
+          dismissCountDown: 0,
+          transProps: {
+            // Transition name
+            name: 'flip-list'
+          },
+          columnas: [
+            { key: 'id', label: 'ID', sortable: true, class: 'text-center' },
+            { key: 'gradname', label: 'Nombre del Grado/Título', sortable: true },
+            { key: 'movname', label: 'Nombre de la modalidad', sortable: true },
+            { key: 'condicion', label: 'Condición', class: 'text-center' },
+            { key: 'acciones', label: 'Acciones', class: 'text-center' }
+          ]                                           
         }
     },
     methods: {

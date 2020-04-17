@@ -4,9 +4,11 @@ class Usuario {
 	private $id;
 	private $codi_usuario;
 	private $tipo;
+
+	private $conn;
 	
 	public function __construct() {
-		$this->conexion = Database::conectar();
+		$this->conn = Database::conectar();
 	}
 	
 	function getId() {
@@ -17,12 +19,12 @@ class Usuario {
 		$this->id = $id;
 	}
 
-	function getCodi_Usuario() {
+	function getCodiUsuario() {
 		return $this->codi_usuario;
 	}
 
-	function setCodi_Usuario($codi_usuario) {
-		$this->codi_usuario = $this->conexion->real_escape_string($codi_usuario);
+	function setCodiUsuario($codi_usuario) {
+		$this->codi_usuario = $codi_usuario;
 	}	
 
 	function getTipo() {
@@ -30,7 +32,7 @@ class Usuario {
 	}
 
 	function setTipo($tipo) {
-		$this->tipo = $this->conexion->real_escape_string($tipo);
+		$this->tipo = $tipo;
 	}
 	
 	public function getGradByIdExp($idexpediente) {
@@ -59,21 +61,21 @@ class Usuario {
 	 }   
   
 	 public function getIdUsuario() {
-		$result = array('error' => false);
-		//seleccionar idusuario
-		$sql = "SELECT id AS idusuario
+		$result = array('error' => false);		
+
+		$sql = "SELECT * 
 				FROM GT_USUARIO
 				WHERE codi_usuario = '$this->codi_usuario'";
-		$result_query = mysqli_query($this->conn, $sql);
-		$row = $result_query->fetch_assoc();
+		$result_query = mysqli_query($this->conn, $sql);		
   
-		if ($row['idusuario'] == null) {
-		   $result['error'] = true;
-		   $result['message'] = "No se pudo encontrar el usuario.";
+		if ($result_query && mysqli_num_rows($result_query) > 0) {
+			$row = $result_query->fetch_assoc();		   
+			$result['usuario'] = $row;       
 		}
-		
-		$result['idusuario'] = $row['idusuario'];       
-  
+		else {
+			$result['error'] = true;
+		   	$result['message'] = "No se pudo encontrar el usuario.";
+		} 
 		return $result;
 	 }
   

@@ -118,7 +118,7 @@ export default {
     name: 'rol-area',  
     data() {
         return { 
-            url: '//localhost/grados-unsa/backend2',
+            url: this.$root.API_URL,
             array_rol_area : [],
             rol_area : {
               id: '',

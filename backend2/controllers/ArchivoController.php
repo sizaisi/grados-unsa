@@ -6,7 +6,8 @@ class ArchivoController {
 	public function index(){
 		$archivo = new Archivo();        
 
-        $archivo->idexpediente = $_GET['idexpediente'];
+		//$archivo->idexpediente = $_GET['idexpediente'];
+		$archivo->setIdexpediente($_POST['idexpediente']);
 
         $result = $archivo->getTodosArchivos();
 
