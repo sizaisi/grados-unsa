@@ -9,6 +9,7 @@
    header("Content-Type: text/json");        
    
    $codi_oper = 'fips';
+   //$codi_oper = 'uifips';
 
    $result = array('error' => false);    
 

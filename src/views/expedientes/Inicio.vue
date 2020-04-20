@@ -100,10 +100,11 @@ export default {
             this.axios.get("//localhost/grados-unsa/backend2/codi_oper.php")
                 .then(function(response) {                  
                     if (response.data.error) {
-                        me.codi_usuario = null                     
+                        me.codi_usuario = null                                             
                     }
                     else {
-                        me.codi_usuario = response.data.codi_oper                        
+                        //me.codi_usuario = response.data.codi_oper                        
+                        me.codi_usuario = 'uifips'
                         me.getIdUsuario()                        
                     }                  
                 })

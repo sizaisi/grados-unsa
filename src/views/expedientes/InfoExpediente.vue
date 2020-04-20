@@ -97,11 +97,12 @@
             <!-- Compoenente del procedimiento -->                
             <component :is="nombre_componente"                          
                         :idgrado_modalidad="grado_procedimiento.idgrado_modalidad"
-                        :idgrado_proc="idgrado_proc"
-                        :idexpediente="idexpediente"
+                        :idgrado_proc="idgrado_proc"                        
                         :idusuario="idusuario"
                         :codi_usuario="codi_usuario"
                         :idrol_area="idrol_area"
+                        :expediente="expediente"
+                        :array_graduando="array_graduando"
             />                              
           </b-tab>
         </b-tabs>
@@ -131,6 +132,7 @@
 <script>
 /**************** Titulo Profesional - Sustentación de Tesis *****************************/
 import tp_st_verificar_requisitos_grado from '@/components/titulo_profesional_sustentacion_tesis/verificar_requisitos_grado.vue'
+import tp_st_verificar_pertenencia_tema from '@/components/titulo_profesional_sustentacion_tesis/verificar_pertinencia_tema.vue'
 
 
 
@@ -140,7 +142,8 @@ export default {
   name: 'info-expediente',
   props: ['nombre_componente', 'idgrado_proc', 'idexpediente', 'idusuario', 'codi_usuario', 'idrol_area'],
   components: {
-    tp_st_verificar_requisitos_grado
+    tp_st_verificar_requisitos_grado,
+    tp_st_verificar_pertenencia_tema
   },
   data() {
     return {     
