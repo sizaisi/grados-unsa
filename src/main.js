@@ -9,7 +9,6 @@ import VueAxios from 'vue-axios'
 import { BootstrapVueIcons } from 'bootstrap-vue'
 import vSelect from 'vue-select'
 import Multiselect from 'vue-multiselect'
-import { ValidationProvider } from 'vee-validate'
 
 Vue.use(BootstrapVueIcons) 
 Vue.use(VueAxios, axios)
@@ -21,13 +20,13 @@ Vue.use(IconsPlugin)
 
 Vue.component('v-select', vSelect)
 Vue.component('multiselect', Multiselect)
-Vue.component('ValidationProvider', ValidationProvider)
 
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 import 'bootstrap-vue/dist/bootstrap-vue-icons.min.css'
 import 'vue-select/dist/vue-select.css';
 import 'vue-multiselect/dist/vue-multiselect.min.css'
+import './assets/css/main.css';
 
 Vue.config.productionTip = false
 

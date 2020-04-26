@@ -1,13 +1,5 @@
 <template>
-  <div class="container text-center">  
-    <form ref="frm_datos_pdf" :action="url_pdf" target="_blank" method="post">
-      <input type="hidden" name="codigo_expediente" :value="expediente.codigo">            
-      <input type="hidden" name="titulo_proyecto" :value="expediente.titulo">                  
-      <template v-for="(graduando, index) in array_graduando">
-          <input type="hidden" name="array_nombres[]" :value="graduando.apell_nombres" :key="index">
-      </template>                        
-    </form>                   
-    <b-button @click="generarPdf">Generar pdf</b-button>
+  <div class="container text-center">      
     <template v-for="(ruta, index) in array_ruta">                     
       <b-button class="m-1" :variant="btn_color[ruta.etiqueta]" @click="mover(ruta)" :key="index">
         {{ ruta.etiqueta | capitalize }}
@@ -17,18 +9,6 @@
 </template>
 
 <script>
-import { extend } from 'vee-validate';
-import { required, email } from 'vee-validate/dist/rules';
-
-// No message specified.
-extend('email', email);
-
-// Override the default message.
-extend('required', {
-  ...required,
-  message: 'This field is required'
-});
-
 export default {      
   props: {
     idgrado_modalidad: String,
@@ -41,8 +21,7 @@ export default {
   },
   data() {
     return {             
-      url: this.$root.API_URL,
-      url_pdf : `${this.$root.API_URL}/pdfs/titulo_profesional_sustentacion_tesis/pdf_emitir_resolucion_asesor_tema.php`,
+      url: this.$root.API_URL,      
       array_ruta : [],
       btn_color : this.$root.btn_colors,           
       movimiento : {
@@ -53,10 +32,7 @@ export default {
       },                                   
     }
   },
-  methods: {
-    generarPdf() {              
-      this.$refs.frm_datos_pdf.submit();   
-    },
+  methods: {    
     getRutas() { // rutas del procedimiento
         let me = this
         var formData = this._toFormData({

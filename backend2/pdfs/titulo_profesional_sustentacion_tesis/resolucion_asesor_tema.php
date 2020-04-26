@@ -108,3 +108,5 @@ $pdf->writeHTMLCell(170, '', 20, '', 'c.c. asesor, interesado y archivo', 0, 0, 
 $pdf->Ln();
 
 $pdf->Output('Documento_designacion_asesor_'.$dia.'-'.$mes1.'-'.$codigo_expediente.'_'.'codigo'.'.pdf', 'I');
+
+?>

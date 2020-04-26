@@ -96,14 +96,20 @@ class Usuario {
 			   "ORDER BY ac_doc.apn ASC";
   
 		$result_query = mysqli_query($this->conn, $sql);
+
+		if ($result_query) {
+			$array_docente = array();
   
-		$array_docente = array();
-  
-		while ($row = $result_query->fetch_assoc()) {         
-		   array_push($array_docente, $row);
+			while ($row = $result_query->fetch_assoc()) {         
+			array_push($array_docente, $row);
+			}
+	
+			$result['array_docente'] = $array_docente;
 		}
-  
-		$result['array_docente'] = $array_docente;      
+		else {
+			$result['error'] = true;
+			$result['message'] = "No se pudo obtener los docentes.";    
+		}	      
   
 		return $result;
 	 }      

@@ -114,15 +114,21 @@ class Ruta {
   
 		$sql = "SELECT * FROM GT_RUTA WHERE idgradproc_origen = $this->idgradproc_origen AND condicion = 1";
 		$result_query = mysqli_query($this->conn, $sql);
+
+		if ($result_query) {			
+			$array_ruta = array();
   
-		$array_ruta = array();
-  
-		while ($row = $result_query->fetch_assoc()) {
-		   array_push($array_ruta, $row);
+			while ($row = $result_query->fetch_assoc()) {
+				array_push($array_ruta, $row);
+			}
+	
+			$result['array_ruta'] = $array_ruta;  			
 		}
-  
-		$result['array_ruta'] = $array_ruta;
-  
+		else {
+			$result['error'] = true;
+			$result['message'] = "No se pudo obtener las rutas.";            
+		}		  
+		
 		return $result;
 	  }
   

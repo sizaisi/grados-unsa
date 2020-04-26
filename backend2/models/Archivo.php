@@ -105,13 +105,19 @@ class Archivo {
 				AND idexpediente = $this->idexpediente";
 		$result_query = mysqli_query($this->conn, $sql);
   
-		$array_documento = array();
+		if ($result_query) {
+			$array_documento = array();
   
-		while ($row = $result_query->fetch_assoc()) {         
-		   array_push($array_documento, $row);
+			while ($row = $result_query->fetch_assoc()) {         
+				array_push($array_documento, $row);
+			}
+	
+			$result['array_documento'] = $array_documento;
 		}
-  
-		$result['array_documento'] = $array_documento;      
+		else {
+			$result['error'] = true;
+			$result['message'] = "No se pudo obtener los documentos o archivos.";
+		}		      
   
 		return $result;
 	 }

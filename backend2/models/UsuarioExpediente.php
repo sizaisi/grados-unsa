@@ -5,9 +5,11 @@ class UsuarioExpediente {
 	private $idexpediente;
 	private $idusuario;
 	private $tipo;
+
+	private $conn;
 	
 	public function __construct() {
-		$this->conexion = Database::conectar();
+		$this->conn = Database::conectar();
 	}
 	
 	function getId() {
@@ -23,7 +25,7 @@ class UsuarioExpediente {
 	}
 
 	function setIdexpediente($idexpediente) {
-		$this->idexpediente = $this->conexion->real_escape_string($idexpediente);
+		$this->idexpediente = $idexpediente;
 	}	
 
 	function getIdusuario() {
@@ -31,7 +33,7 @@ class UsuarioExpediente {
 	}
 
 	function setIdusuario($idusuario) {
-		$this->idusuario = $this->conexion->real_escape_string($idusuario);
+		$this->idusuario = $idusuario;
 	}
 
 	function getTipo() {
@@ -39,7 +41,7 @@ class UsuarioExpediente {
 	}
 
 	function setTipo($tipo) {
-		$this->tipo = $this->conexion->real_escape_string($tipo);
+		$this->tipo = $tipo;
 	}
 	
 	public function getAsesor($idexpediente) {
@@ -75,10 +77,23 @@ class UsuarioExpediente {
 				INNER JOIN GT_USUARIO AS GT_U ON GT_UE.idusuario = GT_U.id                
 				INNER JOIN SIAC_DOC AS AC_D ON GT_U.codi_usuario = AC_D.codper
 				WHERE GT_UE.idexpediente = $idexpediente AND GT_UE.tipo = 'asesor'";
+
 		$result_query = mysqli_query($this->conn, $sql);
-		$row = $result_query->fetch_assoc();      
-  
-		$result['nombre_asesor'] = $row['nombre_docente'] != null ? $row['nombre_docente'] : '';
+
+		if ($result_query) {			
+			if (mysqli_num_rows($result_query) > 0) {
+				$row = $result_query->fetch_assoc();        
+				$result['nombre_asesor'] = $row['nombre_docente'];
+			}			
+			else {
+				$result['error'] = true;
+				$result['message'] = "No se pudo encontrar el nombre de asesor.";            
+			}			
+		}
+		else {
+			$result['error'] = true;
+			$result['message'] = "No se pudo obtener el nombre de asesor.";            
+		}		
   
 		return $result;
 	 }       
@@ -86,7 +101,7 @@ class UsuarioExpediente {
 	 public function getExpJurados($idexpediente) {
   
 		$result = array('error' => false);
-  
+		
 		$sql = "SELECT GT_UE.id, GT_UE.idexpediente, GT_UE.idusuario, GT_UE.tipo, REPLACE(AC_D.apn, '/', ' ') AS nombre
 				FROM GT_USUARIO_EXPEDIENTE AS GT_UE
 				INNER JOIN GT_USUARIO AS GT_U ON GT_UE.idusuario = GT_U.id                
@@ -94,16 +109,22 @@ class UsuarioExpediente {
 				WHERE GT_UE.tipo <> 'granduado' AND  GT_UE.tipo <> 'asesor' 
 				AND GT_UE.idexpediente = $idexpediente
 				ORDER BY GT_UE.id ASC";
-  
+
 		$result_query = mysqli_query($this->conn, $sql);
-  
-		$array_expediente_jurado = array();
-  
-		while ($row = $result_query->fetch_assoc()) {         
-		   array_push($array_expediente_jurado, $row);
+
+		if ($result_query) {			
+			$array_expediente_jurado = array();
+	
+			while ($row = $result_query->fetch_assoc()) {         
+				array_push($array_expediente_jurado, $row);
+			}
+	
+			$result['array_expediente_jurado'] = $array_expediente_jurado;   			
 		}
-  
-		$result['array_expediente_jurado'] = $array_expediente_jurado;   
+		else {  
+			$result['error'] = true;
+			$result['message'] = "No se pudo obtener los nombres de jurados.";            
+		}					
   
 		return $result;
 	 }    
@@ -122,7 +143,7 @@ class UsuarioExpediente {
 		}
 		else {
 		   $result['error'] = true;
-		   $result['message'] = $sql;
+		   $result['message'] = "No se pudo agregar el asesor.";;
 		}      
   
 		return $result;

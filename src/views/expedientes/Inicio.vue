@@ -103,8 +103,7 @@ export default {
                         me.codi_usuario = null                                             
                     }
                     else {
-                        //me.codi_usuario = response.data.codi_oper                        
-                        me.codi_usuario = 'uifips'
+                        me.codi_usuario = response.data.codi_oper                                                
                         me.getIdUsuario()                        
                     }                  
                 })
