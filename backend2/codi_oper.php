@@ -8,7 +8,9 @@
 
    header("Content-Type: text/json");        
    
-   $codi_oper = 'fips';
+   $codi_oper = 'fips';   
+   //$codi_oper = '4563_1';
+   //$codi_oper = '3739_1';
 
    $result = array('error' => false);    
 

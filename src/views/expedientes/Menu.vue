@@ -8,7 +8,7 @@
          <b-tab 
             v-for="(grado_proc, index) in array_grado_procedimiento" 
             :key="index" :title="grado_proc.proc_nombre"
-            @click="getExpedientesByIds(grado_proc.id)" 
+            @click="getExpedientesByIds(grado_proc.id, grado_proc.tipo_rol)" 
             v-bind="activarTabGradoProcedimiento(grado_proc.id)"
          >         
             <div class="row">
@@ -54,7 +54,9 @@
                                             idexpediente: data.item.id,  
                                             idusuario: idusuario, 
                                             codi_usuario: codi_usuario,  
-                                            idrol_area: idrol_area,  
+                                            idrol_area: idrol_area, 
+                                            tipo_rol: grado_proc.tipo_rol,
+                                            tipo_usuario: tipo_usuario, 
                                           } 
                                 }"
                         >
@@ -84,7 +86,7 @@
 <script>
 export default {
   name: 'menu-procedimiento', 
-  props: ['idgrado_modalidad', 'idgrado_proc', 'idusuario', 'codi_usuario', 'idrol_area'],  
+  props: ['idgrado_modalidad', 'idgrado_proc', 'idusuario', 'codi_usuario', 'idrol_area', 'tipo_rol', 'tipo_usuario'],  
   data() {
     return {                               
         url: this.$root.API_URL, 
@@ -149,11 +151,12 @@ export default {
                 
                 if (me.idgrado_proc == null) {
                     //obtener los expedientes del primer grado-procedimiento (por defecto)
-                    me.getExpedientesByIds(me.array_grado_procedimiento[0].id) 
+                    let grado_proc_inicio = me.array_grado_procedimiento[0]
+                    me.getExpedientesByIds(grado_proc_inicio.id, grado_proc_inicio.tipo_rol)
                 }                   
-                else {                                        
+                else {                                                            
                     //obtener los expedientes del grado-procedimiento devuelto
-                    me.getExpedientesByIds(me.idgrado_proc)
+                    me.getExpedientesByIds(me.idgrado_proc, me.tipo_rol)
                 }                                
             }
             else {                
@@ -161,13 +164,15 @@ export default {
             }
         })
     },   
-    getExpedientesByIds(idgrado_procedimiento) {     
+    getExpedientesByIds(idgrado_procedimiento, tipo_rol) {     
         let me = this                           
 
         var formData = this._toFormData({
-                idgrado_procedimiento: idgrado_procedimiento,                         
-                codi_usuario: me.codi_usuario,              
-            })
+            idgrado_procedimiento: idgrado_procedimiento,                         
+            codi_usuario: this.codi_usuario,
+            tipo_usuario: this.tipo_usuario,
+            tipo_rol: tipo_rol
+        })
 
         this.axios.post(`${this.url}/Expediente/getListByIds`, formData)
         .then(function(response) {

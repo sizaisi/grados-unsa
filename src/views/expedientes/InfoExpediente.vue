@@ -127,6 +127,8 @@
                    idusuario: idusuario,
                    codi_usuario: codi_usuario,
                    idrol_area: idrol_area,
+                   tipo_rol: tipo_rol,
+                   tipo_usuario: tipo_usuario
                  } 
               }" 
           variant="outline-warning"
@@ -151,7 +153,7 @@ import tp_st_nombrar_jurado_adjuntar_resolucion from '@/components/titulo_profes
 
 export default {
   name: 'info-expediente',
-  props: ['nombre_componente', 'idgrado_proc', 'idexpediente', 'idusuario', 'codi_usuario', 'idrol_area'],
+  props: ['nombre_componente', 'idgrado_proc', 'idexpediente', 'idusuario', 'codi_usuario', 'idrol_area', 'tipo_rol', 'tipo_usuario'],
   components: {
     tp_st_verificar_requisitos_grado,
     tp_st_verificar_pertenencia_tema,

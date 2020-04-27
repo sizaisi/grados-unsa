@@ -23,6 +23,7 @@
                             idusuario: usuario.id,
                             codi_usuario: usuario.codi_usuario,
                             idrol_area: usuario.idrol_area,
+                            tipo_usuario: usuario.tipo,
                          } 
                     }">
                   Ver lista
@@ -54,8 +55,7 @@ export default {
     },
     methods: {
         getIdUsuario() {            
-            let me = this        
-
+            let me = this       
             var formData = this._toFormData({
                 codi_usuario: this.codi_usuario
             })
@@ -63,8 +63,14 @@ export default {
             this.axios.post(`${this.url}/Usuario/getIdUsuario`, formData)
             .then(function(response) {
                 if (!response.data.error) {
-                    me.usuario = response.data.usuario                        
-                    me.getAllModadalidadObtencion()                
+                    me.usuario = response.data.usuario
+                    
+                    if (me.usuario.tipo == 'Administrativo') {
+                        me.getAllGradoModadalidadAdminitrativo()
+                    }
+                    else if(me.usuario.tipo == 'Docente') {
+                        me.getAllGradoModadalidadDocente()
+                    }                    
                 }
                 else {                                        
                     me.$bvToast.toast(response.data.message, {
@@ -75,17 +81,32 @@ export default {
                 }
             })
         },     
-        getAllModadalidadObtencion() {    
-            let me = this           
-
+        getAllGradoModadalidadAdminitrativo() {    
+            let me = this        
             var formData = this._toFormData({                           
                     codi_usuario: this.usuario.codi_usuario,                         
                     idrol_area: this.usuario.idrol_area,                         
                 })
 
-            this.axios.post(`${this.url}/GradoModalidad/read_escritorio`, formData)
-                .then(function(response) {
-                    
+            this.axios.post(`${this.url}/GradoModalidad/inicioAdminitrativo`, formData)
+                .then(function(response) {                   
+                    if (!response.data.error) {
+                        me.array_grado_modalidad = response.data.array_grado_modalidad                                                                       
+                    }
+                    else {
+                       console.log(response.data.message)
+                    }
+                })
+        }, 
+        getAllGradoModadalidadDocente() {                
+            let me = this        
+            var formData = this._toFormData({                           
+                    codi_usuario: this.usuario.codi_usuario,                         
+                    idrol_area: this.usuario.idrol_area,                         
+                })
+
+            this.axios.post(`${this.url}/GradoModalidad/inicioDocente`, formData)
+                .then(function(response) {                   
                     if (!response.data.error) {
                         me.array_grado_modalidad = response.data.array_grado_modalidad                                                                       
                     }

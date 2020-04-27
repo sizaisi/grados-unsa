@@ -5,14 +5,24 @@ require_once "models/ModalidadObtencion.php";
 
 class GradoModalidadController {
 
-	public function read_escritorio(){
-		//$codi_usuario = $_GET['codi_usuario'];
+	public function inicioAdminitrativo() {		
 		$codi_usuario = $_POST['codi_usuario'];
 		$idrol_area = $_POST['idrol_area'];		
 
       	$grado_modalidad = new GradoModalidad();
 
-      	$result = $grado_modalidad->getAllModalidadEscritorio($codi_usuario, $idrol_area);
+      	$result = $grado_modalidad->getAllGradoModalidadAdministrativo($codi_usuario, $idrol_area);
+
+      	echo json_encode($result);          
+	}
+
+	public function inicioDocente() {		
+		$codi_usuario = $_POST['codi_usuario'];
+		$idrol_area = $_POST['idrol_area'];		
+
+      	$grado_modalidad = new GradoModalidad();
+
+      	$result = $grado_modalidad->getAllGradoModalidadDocente($codi_usuario, $idrol_area);
 
       	echo json_encode($result);          
 	}

@@ -301,7 +301,7 @@ export default {
                     this.grado_procedimiento.orden = data.orden
                     this.grado_procedimiento.url_formulario = data.url_formulario
                     this.grado_procedimiento.idrol_area = data.idrol_area
-                    this.grado_procedimiento.tipo_rol = data.tipo_rol
+                    this.grado_procedimiento.tipo_rol = data.idrol_area == 4 ? data.idrol_area : null
                     this.tipoAccion = 'actualizar'
                     break
                 }

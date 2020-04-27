@@ -17,17 +17,43 @@ class Expediente {
 		$this->conn = Database::conectar();
 	}
 	
-	public function getListByIds($idgrado_procedimiento, $codi_usuario) {
-
+	public function getListExpByIds($idgrado_procedimiento, $codi_usuario, $tipo_usuario, $tipo_rol) {
 		$result = array('error' => false);
   
-		$sql = "SELECT gt_e.*, a.nesc               
-			   FROM GT_EXPEDIENTE AS gt_e
-			   INNER JOIN actescu AS a ON gt_e.nues = a.nues
-			   WHERE gt_e.estado_expediente = 'En proceso' AND gt_e.idgrado_procedimiento=$idgrado_procedimiento
-			   AND gt_e.nues IN (SELECT codi_depe FROM SIAC_OPER_DEPE WHERE codi_oper='$codi_usuario')
-			   ORDER BY gt_e.fecha_inicio ASC";
-  
+		if ($tipo_usuario == 'Administrativo') {
+			$sql = "SELECT gt_e.*, a.nesc               
+					FROM GT_EXPEDIENTE AS gt_e
+					INNER JOIN actescu AS a ON gt_e.nues = a.nues
+					WHERE gt_e.estado_expediente = 'En proceso' AND gt_e.idgrado_procedimiento=$idgrado_procedimiento
+					AND gt_e.nues IN (SELECT codi_depe FROM SIAC_OPER_DEPE WHERE codi_oper='$codi_usuario')
+					ORDER BY gt_e.fecha_inicio ASC";
+		}
+		else if ($tipo_usuario == 'Docente') {			
+
+			if ($tipo_rol == 'asesor') {
+				$sql = "SELECT *             
+						FROM GT_EXPEDIENTE 
+						WHERE estado_expediente = 'En proceso' AND idgrado_procedimiento=$idgrado_procedimiento
+						AND id IN (SELECT UE.idexpediente
+									FROM GT_USUARIO_EXPEDIENTE UE INNER JOIN GT_USUARIO U
+									ON UE.idusuario = U.id
+									WHERE UE.tipo = '$tipo_rol' 
+									AND U.codi_usuario='$codi_usuario')
+						ORDER BY fecha_inicio ASC";
+			}
+			else if ($tipo_rol == 'jurado') {
+				$sql = "SELECT *             
+						FROM GT_EXPEDIENTE 
+						WHERE estado_expediente = 'En proceso' AND idgrado_procedimiento=$idgrado_procedimiento
+						AND id IN (SELECT UE.idexpediente
+									FROM GT_USUARIO_EXPEDIENTE UE INNER JOIN GT_USUARIO U
+									ON UE.idusuario = U.id
+									WHERE UE.tipo IN ('presidente', 'secretario', 'suplente') 
+									AND U.codi_usuario='$codi_usuario')
+						ORDER BY fecha_inicio ASC";
+			}			
+		}
+
 		$result_query = mysqli_query($this->conn, $sql);
   
 		$array_expediente = array();

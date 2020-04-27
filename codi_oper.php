@@ -8,8 +8,8 @@
 
    header("Content-Type: text/json");        
    
-   $codi_oper = 'fips';
-   //$codi_oper = 'uifips';
+   //$codi_oper = 'fips';
+   $codi_oper = '4563_1'; //paz valderrama
 
    $result = array('error' => false);    
 
