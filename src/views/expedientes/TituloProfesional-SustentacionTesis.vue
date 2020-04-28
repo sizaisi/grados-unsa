@@ -109,6 +109,8 @@
                         :idusuario="idusuario"
                         :codi_usuario="codi_usuario"
                         :idrol_area="idrol_area"
+                        :tipo_rol="tipo_rol"
+                        :tipo_usuario="tipo_usuario"
                         :expediente="expediente"
                         :array_graduando="array_graduando"                       
                         v-if="array_graduando.length > 0"
@@ -140,16 +142,39 @@
    </div>   
 </div>   
 </template>
-
 <script>
-/**************** Titulo Profesional - Sustentación de Tesis *****************************/
-import tp_st_verificar_requisitos_grado from '@/components/titulo_profesional_sustentacion_tesis/verificar_requisitos_grado.vue'
-import tp_st_verificar_pertenencia_tema from '@/components/titulo_profesional_sustentacion_tesis/verificar_pertinencia_tema.vue'
-import tp_st_nombrar_jurado_adjuntar_resolucion from '@/components/titulo_profesional_sustentacion_tesis/nombrar_jurado_adjuntar_resolucion.vue'
-
-
-
-/*****************************************************************************************/
+import tp_st_verificar_requisitos_grado 
+  from '@/components/titulo_profesional_sustentacion_tesis/verificar_requisitos_grado.vue'
+import tp_st_verificar_pertenencia_tema 
+  from '@/components/titulo_profesional_sustentacion_tesis/verificar_pertinencia_tema.vue'
+import tp_st_nombrar_jurado_adjuntar_resolucion 
+  from '@/components/titulo_profesional_sustentacion_tesis/nombrar_jurado_adjuntar_resolucion.vue'
+import tp_st_designar_docente_asesor_comision_calificacion_borrador
+  from '@/components/titulo_profesional_sustentacion_tesis/designar_docente_asesor_comision_calificacion_borrador.vue'
+import tp_st_resolver_asignacion_asesoria_proyecto
+  from '@/components/titulo_profesional_sustentacion_tesis/resolver_asignacion_asesoria_proyecto.vue'
+import tp_st_emitir_resolucion_asignacion_asesor_tema
+  from '@/components/titulo_profesional_sustentacion_tesis/emitir_resolucion_asignacion_asesor_tema.vue'
+import tp_st_dar_conformidad_asesoramiento_proyecto
+  from '@/components/titulo_profesional_sustentacion_tesis/dar_conformidad_asesoramiento_proyecto.vue'
+import tp_st_revisar_documentacion_proyecto
+  from '@/components/titulo_profesional_sustentacion_tesis/revisar_documentacion_proyecto.vue'
+import tp_st_dictaminar_aprobacion_proyecto
+  from '@/components/titulo_profesional_sustentacion_tesis/dictaminar_aprobacion_proyecto.vue'
+import tp_st_verificar_pagos_adjuntar_documentos
+  from '@/components/titulo_profesional_sustentacion_tesis/verificar_pagos_adjuntar_documentos.vue'
+import tp_st_emitir_acta_sustentacion
+  from '@/components/titulo_profesional_sustentacion_tesis/emitir_acta_sustentacion.vue'
+import tp_st_dictaminar_resultado_sustentacion
+  from '@/components/titulo_profesional_sustentacion_tesis/dictaminar_resultado_sustentacion.vue'
+import tp_st_emitir_acta_conformidad_redaccion_trabajo
+  from '@/components/titulo_profesional_sustentacion_tesis/emitir_acta_conformidad_redaccion_trabajo.vue'
+import tp_st_mostrar_tesis_pdf_copiar_url_repositorio
+  from '@/components/titulo_profesional_sustentacion_tesis/mostrar_tesis_pdf_copiar_url_repositorio.vue'
+import tp_st_aprobar_consejo_facultad_autorizar_emision_diploma
+  from '@/components/titulo_profesional_sustentacion_tesis/aprobar_consejo_facultad_autorizar_emision_diploma.vue'
+import tp_st_generar_imprimir_diploma
+  from '@/components/titulo_profesional_sustentacion_tesis/generar_imprimir_diploma.vue'
 
 export default {
   name: 'info-expediente',
@@ -157,7 +182,20 @@ export default {
   components: {
     tp_st_verificar_requisitos_grado,
     tp_st_verificar_pertenencia_tema,
-    tp_st_nombrar_jurado_adjuntar_resolucion
+    tp_st_nombrar_jurado_adjuntar_resolucion,
+    tp_st_designar_docente_asesor_comision_calificacion_borrador,
+    tp_st_resolver_asignacion_asesoria_proyecto,
+    tp_st_emitir_resolucion_asignacion_asesor_tema,
+    tp_st_dar_conformidad_asesoramiento_proyecto,
+    tp_st_revisar_documentacion_proyecto,
+    tp_st_dictaminar_aprobacion_proyecto,
+    tp_st_verificar_pagos_adjuntar_documentos,
+    tp_st_emitir_acta_sustentacion,
+    tp_st_dictaminar_resultado_sustentacion,
+    tp_st_emitir_acta_conformidad_redaccion_trabajo,
+    tp_st_mostrar_tesis_pdf_copiar_url_repositorio,
+    tp_st_aprobar_consejo_facultad_autorizar_emision_diploma,
+    tp_st_generar_imprimir_diploma
   },
   data() {
     return {     

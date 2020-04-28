@@ -8,9 +8,12 @@
 
    header("Content-Type: text/json");        
    
-   $codi_oper = 'fips';   
-   //$codi_oper = '4563_1';
-   //$codi_oper = '3739_1';
+   //$codi_oper = 'fips';   //facultad
+   $codi_oper = 'uifips';   //unid de investigacion
+   //$codi_oper = '4563_1'; //presidente de jurado
+   //$codi_oper = '3739_1';  //asesor
+   //$codi_oper = 'grad3';  //grados y titulos
+   //$codi_oper = 'repo';  //repositorio institucional
 
    $result = array('error' => false);    
 

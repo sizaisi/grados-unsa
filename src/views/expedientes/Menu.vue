@@ -48,7 +48,7 @@
                      </template> 
                      <template v-slot:cell(acciones)="data">                                 
                         <b-button variant="success" size="sm" data-toggle="tooltip" data-placement="left" title="Evaluar" 
-                           :to="{ name: 'info-expediente', 
+                           :to="{ name: 'info-expediente'+idgrado_modalidad, 
                                   params: { nombre_componente: grado_proc.url_formulario, 
                                             idgrado_proc: grado_proc.id,  
                                             idexpediente: data.item.id,  

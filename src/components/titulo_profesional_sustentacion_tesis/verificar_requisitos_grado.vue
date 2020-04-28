@@ -1,5 +1,5 @@
 <template>
-  <div class="container text-center">            
+  <div class="p-3 text-center">         
     <template v-for="(ruta, index) in array_ruta">                     
       <b-button class="m-1" :variant="btn_color[ruta.etiqueta]" @click="mover(ruta)" :key="index">
         {{ ruta.etiqueta | capitalize }}
@@ -16,6 +16,8 @@ export default {
     idusuario: String,
     codi_usuario: String,
     idrol_area: String,
+    tipo_rol: String,
+    tipo_usuario: String,
     expediente: Object,
     array_graduando: Array,
   },
@@ -84,6 +86,8 @@ export default {
                                         idusuario: me.idusuario,
                                         codi_usuario: me.codi_usuario,
                                         idrol_area: me.idrol_area,
+                                        tipo_rol: me.tipo_rol,
+                                        tipo_usuario: me.tipo_usuario,
                                       }
                                   })                  
                 }

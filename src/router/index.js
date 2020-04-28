@@ -5,7 +5,8 @@ import Home from '../views/Home.vue'
 /* Expedientes */
 import Inicio from '../views/expedientes/Inicio.vue'
 import Menu from '../views/expedientes/Menu.vue'
-import InfoExpediente from '../views/expedientes/InfoExpediente.vue'
+import TituloProfesionalSustentacionTesis 
+  from '../views/expedientes/TituloProfesional-SustentacionTesis.vue'
 
 /* Mantenimiento */
 import ProgramaEstudios from '../views/mantenimiento/ProgramaEstudios.vue'
@@ -19,7 +20,6 @@ import Procedimientos from '../views/mantenimiento/Procedimientos.vue'
 import Cargo from '../views/mantenimiento/Cargo.vue'
 import Autoridad from '../views/mantenimiento/Autoridad.vue'
 import CargoAutoridad from '../views/mantenimiento/CargoAutoridad.vue'
-//import About from '../views/About.vue'
 
 Vue.use(VueRouter)
 
@@ -41,9 +41,9 @@ const routes = [
     props: true
   },
   {
-    path: '/expedientes/info-expediente',
-    name: 'info-expediente',
-    component: InfoExpediente,
+    path: '/expedientes/info-expediente4',
+    name: 'info-expediente4', //4=>id grado modalidad (titulo profesional - sustentacion tesis)
+    component: TituloProfesionalSustentacionTesis,
     props: true
   },
   {

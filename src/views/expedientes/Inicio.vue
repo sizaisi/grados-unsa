@@ -16,7 +16,7 @@
                <p class="count-text">Solicitudes pendientes</p><br>               
                <b-button 
                   pill 
-                  variant="info" 
+                  variant="info"                   
                   :to="{ name: 'menu-procedimientos', 
                          params: { 
                             idgrado_modalidad: grado_modalidad.idgrado_modalidad, 
@@ -26,7 +26,7 @@
                             tipo_usuario: usuario.tipo,
                          } 
                     }">
-                  Ver lista
+                  Ver expedientes
                </b-button>
             </div>
          </div>                            
