@@ -198,24 +198,17 @@ export default {
   data() {
     return {    
         tabIndex: 0,         
-        tabIndex2: 0,      
-        name : '',
+        tabIndex2: 0,              
         url: this.$root.API_URL,      
         url_pdf : `${this.$root.API_URL}/pdfs/titulo_profesional_sustentacion_tesis/resolucion_designacion_jurado.php`,      
-        url_show_file : `${this.$root.API_URL}/utils/show_file.php`,      
+        url_show_file : this.$root.FILE_URL,   
         array_ruta : [],
         btn_color : this.$root.btn_colors,              
         fecha_sorteo : null, 
         array_expediente_jurado : [],
         array_jurado : [],
         array_documento : [],
-        nombre_asesor : '',               
-        movimiento : {
-            idexpediente : '',
-            idusuario : '',
-            idruta : '',
-            idgradproc_destino : '',               
-        },                 
+        nombre_asesor : '',                                
         columnas_jurado: [               
             { key: 'tipo', label: 'Tipo / Cargo', class: 'text-center' },
             { key: 'nombre', label: 'Docente', class: 'text-left' },
@@ -236,19 +229,13 @@ export default {
             idexpediente: null,
             iddocente: null,
             tipo: null,
-        },  
-        documento : {
-            id : '',
-        },
+        },          
         file: null,
         estaOcupado: false,
         errors: [],        
     }
   },
-  methods: {
-    mostrarArchivo() {                           
-        this.$refs.show_file.submit()
-    },
+  methods: {    
     prevTab() {
         this.tabIndex2--       
         this.tabIndex--        
@@ -334,18 +321,17 @@ export default {
         })
           .then(value => {
             if (value) {
-              let me = this                               
-              this.movimiento.idexpediente = this.expediente.id
-              this.movimiento.idusuario = this.idusuario
-              this.movimiento.idruta = ruta.id
-              this.movimiento.idgradproc_destino = ruta.idgradproc_destino                     
-
-              var formData = this._toFormData(this.movimiento)
+              let me = this        
+              let formData = this._toFormData({
+                    idexpediente: this.expediente.id,
+                    idusuario: this.idusuario,
+                    idruta: ruta.id,
+                    idgradproc_destino: ruta.idgradproc_destino                     
+                })                                      
 
               this.axios.post(`${this.url}/Movimiento/mover`, formData)
               .then(function(response) {                                          
-                if (!response.data.error) { //si no hay error
-                  me.movimiento.iddocente = ''                                     
+                if (!response.data.error) { //si no hay error                                                       
                   me.$root.$bvToast.toast(response.data.message, {
                     title: 'Éxito!',
                     variant: 'success',
@@ -372,14 +358,11 @@ export default {
                 }
               }) 
             }                   
-          })
-          .catch(err => {
-            console.log(err)
-          })        
+          })              
     },
     getNombreAsesor() { //para asignar al jurado
         let me = this      
-        var formData = this._toFormData({
+        let formData = this._toFormData({
             idexpediente: this.expediente.id
         })
 
@@ -430,24 +413,6 @@ export default {
                 console.log(response.data.message)
             }
         })
-    },   
-    getDocumento() { // para mostrar una lista de documentos del procedimiento
-        let me = this       
-        let formData = this._toFormData({
-            idgrado_proc: this.idgrado_proc,
-            idusuario: this.idusuario,
-            idexpediente: this.expediente.id
-        })
-
-        this.axios.post(`${this.url}/Archivo/getDocumento`, formData)
-        .then(function(response) {
-            if (!response.data.error) {
-                me.array_documento = response.data.array_documento                
-            }
-            else {
-                console.log(response.data.message)
-            }
-        })   
     },           
     registrarJurado() {                        
         let me = this
@@ -528,7 +493,25 @@ export default {
                 })                
             }
         })                  
-    },    
+    },
+    getDocumento() { // para mostrar una lista de documentos del procedimiento
+        let me = this       
+        let formData = this._toFormData({
+            idgrado_proc: this.idgrado_proc,
+            idusuario: this.idusuario,
+            idexpediente: this.expediente.id
+        })
+
+        this.axios.post(`${this.url}/Archivo/getDocumento`, formData)
+        .then(function(response) {
+            if (!response.data.error) {
+                me.array_documento = response.data.array_documento                
+            }
+            else {
+                console.log(response.data.message)
+            }
+        })   
+    },       
     registrarDocumento() {         
         let me = this                      
         let formData = this._toFormData({
@@ -565,10 +548,11 @@ export default {
                 }
         })         
     },          
-    eliminarDocumento(id) {
-        let me = this                  
-        this.documento.id = id                            
-        var formData = this._toFormData(this.documento)
+    eliminarDocumento(iddocumento) {
+        let me = this               
+        let formData = this._toFormData({
+            id: iddocumento
+        })       
 
         this.$bvModal.msgBoxConfirm(
           '¿Esta seguro de eliminar el documento?', {
@@ -610,6 +594,9 @@ export default {
         this.file = null   
         this.errors = []   
         this.estaOcupado = false                     
+    },
+    mostrarArchivo() {                           
+        this.$refs.show_file.submit()
     },
     _toFormData(obj) {
         var fd = new FormData()

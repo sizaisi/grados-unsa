@@ -63,7 +63,7 @@ export default {
             this.axios.post(`${this.url}/Usuario/getIdUsuario`, formData)
             .then(function(response) {
                 if (!response.data.error) {
-                    me.usuario = response.data.usuario
+                    me.usuario = response.data.usuario                   
                     
                     if (me.usuario.tipo == 'Administrativo') {
                         me.getAllGradoModadalidadAdminitrativo()
@@ -118,13 +118,13 @@ export default {
         getCodiOper() {
             let me = this
 
-            this.axios.get("//localhost/grados-unsa/backend2/codi_oper.php")
+            this.axios.get(`${this.url}/codi_oper.php`)
                 .then(function(response) {                  
                     if (response.data.error) {
-                        me.codi_usuario = null                                             
+                        me.codi_usuario = null                                                                   
                     }
                     else {
-                        me.codi_usuario = response.data.codi_oper                                                
+                        me.codi_usuario = response.data.codi_oper                                                                        
                         me.getIdUsuario()                        
                     }                  
                 })
