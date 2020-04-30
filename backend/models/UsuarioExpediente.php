@@ -44,7 +44,7 @@ class UsuarioExpediente {
 		$this->tipo = $tipo;
 	}
 	
-	public function getAsesor($idexpediente) {
+	public function getListAsesor($idexpediente) {
 
 		$result = array('error' => false);
   
@@ -68,11 +68,11 @@ class UsuarioExpediente {
 		return $result;
 	 }    
   
-	 public function getNombreAsesor($idexpediente) {
+	 public function getAsesor($idexpediente) {
   
 		$result = array('error' => false);
   
-		$sql = "SELECT REPLACE(AC_D.apn, '/', ' ') as nombre_docente
+		$sql = "SELECT REPLACE(AC_D.apn, '/', ' ') as apn, dic	
 				FROM GT_USUARIO_EXPEDIENTE AS GT_UE
 				INNER JOIN GT_USUARIO AS GT_U ON GT_UE.idusuario = GT_U.id                
 				INNER JOIN SIAC_DOC AS AC_D ON GT_U.codi_usuario = AC_D.codper
@@ -83,22 +83,22 @@ class UsuarioExpediente {
 		if ($result_query) {			
 			if (mysqli_num_rows($result_query) > 0) {
 				$row = $result_query->fetch_assoc();        
-				$result['nombre_asesor'] = $row['nombre_docente'];
+				$result['asesor'] = $row;
 			}			
 			else {
 				$result['error'] = true;
-				$result['message'] = "No se pudo encontrar el nombre de asesor.";            
+				$result['message'] = "No se pudo encontrar el asesor.";            
 			}			
 		}
 		else {
 			$result['error'] = true;
-			$result['message'] = "No se pudo obtener el nombre de asesor.";            
+			$result['message'] = "No se pudo obtener el asesor.";            
 		}		
   
 		return $result;
 	 }       
   
-	 public function getExpJurados($idexpediente) {
+	 public function getJurados($idexpediente) {
   
 		$result = array('error' => false);
 		
@@ -113,13 +113,13 @@ class UsuarioExpediente {
 		$result_query = mysqli_query($this->conn, $sql);
 
 		if ($result_query) {			
-			$array_expediente_jurado = array();
+			$array_jurado = array();
 	
 			while ($row = $result_query->fetch_assoc()) {         
-				array_push($array_expediente_jurado, $row);
+				array_push($array_jurado, $row);
 			}
 	
-			$result['array_expediente_jurado'] = $array_expediente_jurado;   			
+			$result['array_jurado'] = $array_jurado;   			
 		}
 		else {  
 			$result['error'] = true;

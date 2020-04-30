@@ -7,20 +7,56 @@
             active-nav-item-class="font-weight-bold text-uppercase text-danger"   
             style="min-height: 250px"                        
         >           
-            <b-tab title="1. Generar resolución" title-item-class="disabledTab" :disabled="tabIndex2 < 0">
-                <form ref="frm_datos_pdf" :action="url_pdf" target="_blank" method="post">
+            <b-tab title="1. Generar acta" title-item-class="disabledTab" :disabled="tabIndex2 < 0">                                
+                <b-form @submit.prevent="generarPdf"  ref="frm_datos_pdf" :action="url_pdf" target="_blank" method="post">
                     <input type="hidden" name="titulo_proyecto" :value="expediente.titulo">      
-                    <input type="hidden" name="codigo_expediente" :value="expediente.codigo">                      
-                    <input type="hidden" name="nombre_asesor" :value="nombre_asesor">                                   
+                    <input type="hidden" name="codigo_expediente" :value="expediente.codigo">                                          
+                    <input type="hidden" name="fecha_sesion" :value="fecha_sesion">                       
+                    <input type="hidden" name="fecha_sustentacion" :value="fecha_sustentacion">
+                    <input type="hidden" name="hora_sustentacion" :value="hora_sustentacion">
                     <input type="hidden" name="apell_nombres" :value="array_graduando[0].apell_nombres">
-                </form>                   
-                <div class="row">
-                    <div class="mx-auto"> 
-                        <b-button @click="generarPdf" variant="success">
-                            <b-icon icon="file-earmark-text"></b-icon> Generar resolución
-                        </b-button> 
+                    <input type="hidden" name="array_jurado">   
+
+                    <b-row class="justify-content-lg-center">
+                        <b-col col lg="3">
+                            <b-form-group label="Fecha sesión:" label-for="fecha_sesion">
+                                <b-form-input
+                                    v-model="fecha_sesion"
+                                    id="fecha_sesion"
+                                    type="date"                                
+                                    required                                
+                                ></b-form-input>
+                            </b-form-group>
+                        </b-col>                        
+                        <b-col col lg="3">
+                            <b-form-group label="Fecha sustentación:" label-for="fecha_sustentacion">
+                                <b-form-input
+                                    v-model="fecha_sustentacion"
+                                    id="fecha_sustentacion"                               
+                                    type="date"                                 
+                                    required                                
+                                ></b-form-input>
+                            </b-form-group>
+                        </b-col>
+                        <b-col col lg="3">
+                            <b-form-group label="Hora sustentación:" label-for="hora_sustentacion">
+                                <b-form-input
+                                    v-model="hora_sustentacion"
+                                    id="hora_sustentacion"                               
+                                    type="time"                                 
+                                    required                                
+                                ></b-form-input>
+                            </b-form-group>
+                        </b-col>
+                    </b-row>                                  
+                    <div class="row mt-3">
+                        <div class="mx-auto"> 
+                            <b-button type="submit" variant="success">
+                                <b-icon icon="file-earmark-text"></b-icon> Generar acta
+                            </b-button> 
+                        </div>
                     </div>
-                </div>
+                </b-form>    
             </b-tab>      
             <b-tab title="2. Adjuntar documento" title-item-class="disabledTab" :disabled="tabIndex2 < 1">
                 <b-form @submit.prevent="registrarDocumento" class="mb-3">                  
@@ -121,8 +157,11 @@ export default {
         url_pdf : `${this.$root.API_URL}/pdfs/titulo_profesional_sustentacion_tesis/acta_dictamen.php`,              
         url_show_file : this.$root.FILE_URL,
         array_ruta : [],
-        btn_color : this.$root.btn_colors,                              
-        nombre_asesor : '',  
+        btn_color : this.$root.btn_colors,                                      
+        fecha_sesion: null,
+        fecha_sustentacion: null,
+        hora_sustentacion: null,
+        array_jurado : [],
         array_documento : [],
         columnas_documento: [               
             { key: 'nombre', label: 'Nombre' },                        
@@ -168,7 +207,8 @@ export default {
 
         return false
     },
-    generarPdf() {                              
+    generarPdf() {                               
+        this.$refs.frm_datos_pdf.array_jurado.value = JSON.stringify(this.array_jurado)               
         this.$refs.frm_datos_pdf.submit()
     },
     getRutas() { // rutas del procedimiento
@@ -236,23 +276,23 @@ export default {
               }) 
             }                   
           })              
-    },
-    getNombreAsesor() { //para asignar al jurado
+    },    
+    getJurados() { // para obtener los jurados de la tabla usuario_expediente
         let me = this      
-        var formData = this._toFormData({
+        let formData = this._toFormData({
             idexpediente: this.expediente.id
         })
 
-        this.axios.post(`${this.url}/Usuario/getNombreAsesor`, formData)
-        .then(function(response) {
-            if (!response.data.error) {                
-                me.nombre_asesor = response.data.nombre_asesor                                                        
+        this.axios.post(`${this.url}/Usuario/getJurados`, formData)
+        .then(function(response) {            
+            if (!response.data.error) {
+                me.array_jurado = response.data.array_jurado                                 
             }
-            else {                
+            else {
                 console.log(response.data.message)      
             }
-        })    
-    },    
+        })   
+    },      
     getDocumento() { // para mostrar una lista de documentos del procedimiento
         let me = this       
         let formData = this._toFormData({
@@ -371,8 +411,8 @@ export default {
     }
   },
   mounted: function() {        
-    this.getRutas()               
-    this.getNombreAsesor()        
+    this.getRutas()                   
+    this.getJurados()
     this.getDocumento()       
   },
 }

@@ -35,8 +35,8 @@
                             <div class="col-lg-7">
                                 <v-select   
                                     v-model="jurado.iddocente"                                                                                                                                              
-                                    :options="array_jurado"                                              
-                                    :reduce="jurado => jurado.iddocente" 
+                                    :options="array_docente"                                              
+                                    :reduce="docente => docente.iddocente" 
                                     label="apell_nombres"
                                     placeholder="-- Elija Jurado --"                                                                                                             
                                 > 
@@ -63,7 +63,7 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <b-table                              
-                            :items="array_expediente_jurado"
+                            :items="array_jurado"
                             :fields="columnas_jurado"                              
                             striped
                             bordered  
@@ -90,7 +90,7 @@
                 <form ref="frm_datos_pdf" :action="url_pdf" target="_blank" method="post">
                     <input type="hidden" name="expediente">      
                     <input type="hidden" name="array_jurado">                      
-                    <input type="hidden" name="nombre_asesor" :value="nombre_asesor">   
+                    <input type="hidden" name="asesor">   
                     <input type="hidden" name="fecha_sorteo" :value="fecha_sorteo">            
                     <template v-for="(graduando, index) in array_graduando">
                         <input type="hidden" name="array_nombres[]" :value="graduando.apell_nombres" :key="index">
@@ -205,10 +205,10 @@ export default {
         array_ruta : [],
         btn_color : this.$root.btn_colors,              
         fecha_sorteo : null, 
-        array_expediente_jurado : [],
         array_jurado : [],
+        array_docente : [],
         array_documento : [],
-        nombre_asesor : '',                                
+        asesor : null,                                
         columnas_jurado: [               
             { key: 'tipo', label: 'Tipo / Cargo', class: 'text-center' },
             { key: 'nombre', label: 'Docente', class: 'text-left' },
@@ -266,7 +266,7 @@ export default {
         if (!this.fecha_sorteo) {
             this.errors.push("El campo fecha de sorteo es requerido")
         }
-        if (!this.array_expediente_jurado.length) {
+        if (!this.array_jurado.length) {
             this.errors.push("La lista de jurados debe contener 1 o más elementos.")
         }             
 
@@ -291,7 +291,8 @@ export default {
     },
     generarPdf() {                      
         this.$refs.frm_datos_pdf.expediente.value = JSON.stringify(this.expediente)
-        this.$refs.frm_datos_pdf.array_jurado.value = JSON.stringify(this.array_expediente_jurado)        
+        this.$refs.frm_datos_pdf.array_jurado.value = JSON.stringify(this.array_jurado)        
+        this.$refs.frm_datos_pdf.asesor.value = JSON.stringify(this.asesor)
         this.$refs.frm_datos_pdf.submit()
     },
     getRutas() { // rutas del procedimiento
@@ -360,37 +361,36 @@ export default {
             }                   
           })              
     },
-    getNombreAsesor() { //para asignar al jurado
+    getAsesor() { //para asignar al jurado
         let me = this      
         let formData = this._toFormData({
             idexpediente: this.expediente.id
         })
 
-        this.axios.post(`${this.url}/Usuario/getNombreAsesor`, formData)
+        this.axios.post(`${this.url}/Usuario/getAsesor`, formData)
         .then(function(response) {
             if (!response.data.error) {                
-                me.nombre_asesor = response.data.nombre_asesor                                                        
+                me.asesor = response.data.asesor
             }
             else {                
                 console.log(response.data.message)      
             }
         })    
     },
-    getExpedienteJurados() { // para obtener los jurados de la tabla usuario_expediente
+    getJurados() { // para obtener los jurados de la tabla usuario_expediente
         let me = this      
         let formData = this._toFormData({
             idexpediente: this.expediente.id
         })
 
-        this.axios.post(`${this.url}/Usuario/getExpJurados`, formData)
-        .then(function(response) {
-            console.log(response)
+        this.axios.post(`${this.url}/Usuario/getJurados`, formData)
+        .then(function(response) {            
             if (!response.data.error) {
-                me.array_expediente_jurado = response.data.array_expediente_jurado  
+                me.array_jurado = response.data.array_jurado  
 
-                for (var i in me.array_expediente_jurado) {                        
+                for (var i in me.array_jurado) {                        
                     //deshabilitar los tipos jurados registrados 
-                    me.deshabilitarTipoJurado(me.array_expediente_jurado[i].tipo) 
+                    me.deshabilitarTipoJurado(me.array_jurado[i].tipo) 
                 }                                   
             }
             else {
@@ -407,7 +407,7 @@ export default {
         this.axios.post(`${this.url}/Usuario/getDocentes`, formData)
         .then(function(response) {
             if (!response.data.error) {
-                me.array_jurado = response.data.array_docente                                                                                                
+                me.array_docente = response.data.array_docente                                                                                                
             }
             else {
                 console.log(response.data.message)
@@ -617,9 +617,9 @@ export default {
   },
   mounted: function() {        
     this.getRutas()           
-    this.getExpedienteJurados()
+    this.getJurados()
     this.getCandidatosJurados()  
-    this.getNombreAsesor()          
+    this.getAsesor()          
     this.getDocumento()
   },
 }

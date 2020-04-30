@@ -1,13 +1,14 @@
 <?php
 // Include the main TCPDF library (search for installation path).
-require_once('../../librerias/tcpdf/tcpdf.php');
+require_once '../../librerias/tcpdf/tcpdf.php';
+require_once '../../utils/functions.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	/************************ VARIABLES DE FORMULARIO *********************/
 	$titulo_proyecto = $_POST['titulo_proyecto'];
 	$codigo_expediente = $_POST['codigo_expediente'];
 	$array_nombres = $_POST['array_nombres'];
-	$nombre_asesor = $_POST['nombre_asesor'];
+	$asesor = json_decode($_POST['asesor']);
 	/**********************************************************************/
 
 	// create new PDF document
@@ -68,7 +69,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	$texto3 = '<b>PRIMERO.- </b>Tener por presentado el Proyecto del Trabajo de Investigación titulado: <b>'.$titulo_proyecto.
 				'</b><br><br>Presentado por el(los) graduando(s):<br>';
 	$texto4 = '<br><b>SEGUNDO.- </b>Designar como Asesor del Proyecto del Trabajo de investigación al docente de la facultad: '.
-				'<b>'.$nombre_asesor.'</b><br><br><br><br>';
+				'<b>'.$asesor->apn.'</b><br><br><br><br>';
 	$pdf->SetFont('helvetica', '', 12);
 	//$pdf->writeHTMLCell(180, '', '', '', $parrafo2, 0, 0, 0, true, 'J', true);
 	$pdf->writeHTMLCell(170, '', 20, '', $texto3, 0, 0, 0, true, 'J', true);
@@ -78,29 +79,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	$pdf->Ln(); 
 	$pdf->writeHTMLCell(170, '', 20, '', $texto4, 0, 0, 0, true, 'J', true);
 	$pdf->Ln(); 
-
-	//lugar y fecha
-	$dia = date("d");
-	$mes1 = date("m");
-	$anio_actual = date("Y");
-
-	switch($mes1)
-	{
-		case "01": $mes='enero';   break;
-		case "02": $mes='febrero'; break;
-		case "03": $mes='marzo';   break;
-		case "04": $mes='abril';   break;
-		case "05": $mes='mayo';    break;
-		case "06": $mes='junio';   break;
-		case "07": $mes='julio';   break;
-		case "08": $mes='agosto';  break;
-		case "09": $mes='setiembre'; break;
-		case "10": $mes='octubre'; 	 break;
-		case "11": $mes='noviembre'; break;
-		case "12": $mes='diciembre'; break;
-	}
+	
 	$pdf->SetFont('helvetica','',12);
-	$pdf->writeHTMLCell(170, '', 20, '', 'Arequipa, '.$dia.' de '.$mes.' del '.$anio_actual.'<br><br><br><br><br><br><br>', 0, 0, 0, true, 'L', true); 
+	$pdf->writeHTMLCell(170, '', 20, '', 'Arequipa, '.dia_actual().' de '.mes_actual().' del '.anio_actual().'<br><br><br><br><br><br><br>', 0, 0, 0, true, 'L', true); 
 	$pdf->Ln();
 	$pdf->SetFont('helvetica','B',12);
 	$pdf->writeHTMLCell(170, '', 20, '', '<span style="text-decoration:overline">DECANO DE LA FACULTAD DE ADMINISTRACIÓN</span><br><br>', 0, 0, 0, true, 'L', true); 
@@ -109,7 +90,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	$pdf->writeHTMLCell(170, '', 20, '', 'c.c. asesor, interesado y archivo', 0, 0, 0, true, 'L', true); 
 	$pdf->Ln();
 
-	$pdf->Output('Resolucion_designacion_asesor_tema_'.$dia.'-'.$mes1.'-'.$anio_actual.'_'.$codigo_expediente.'.pdf', 'I');
+	$pdf->Output('Resolucion_designacion_asesor_tema_'.$codigo_expediente.'.pdf', 'I');
 }
 else {
 	echo "<h3>No tiene permiso de acceso para mostrar el archivo</h3>";

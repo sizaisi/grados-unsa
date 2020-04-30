@@ -34,32 +34,32 @@ class UsuarioController {
                 echo json_encode($result);   
 	}
 	
-	public function getExpJurados() {
+	public function getJurados() {
 		$idexpediente = $_POST['idexpediente'];        
 
                 $usuario_expediente = new UsuarioExpediente();
 
-                $result = $usuario_expediente->getExpJurados($idexpediente);
+                $result = $usuario_expediente->getJurados($idexpediente);
 
                 echo json_encode($result);             
 	}
 	
-	public function getAsesor() {
+	public function getListAsesor() {
 		$idexpediente = $_GET['idexpediente'];        
 
                 $usuario_expediente = new UsuarioExpediente();
 
-                $result = $usuario_expediente->getAsesor($idexpediente);
+                $result = $usuario_expediente->getListAsesor($idexpediente);
         
                 echo json_encode($result);                
 	}	
 	
-	public function getNombreAsesor() {
+	public function getAsesor() {
 		$idexpediente = $_POST['idexpediente'];        
 
                 $usuario_expediente = new UsuarioExpediente();
 
-                $result = $usuario_expediente->getNombreAsesor($idexpediente);
+                $result = $usuario_expediente->getAsesor($idexpediente);
         
                 echo json_encode($result);           
 	}	

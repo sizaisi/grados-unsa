@@ -1,6 +1,7 @@
 <?php
 // Include the main TCPDF library (search for installation path).
-require_once('../../librerias/tcpdf/tcpdf.php');
+require_once '../../librerias/tcpdf/tcpdf.php';
+require_once '../../utils/functions.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	/************************ VARIABLES DE FORMULARIO *********************/
@@ -12,7 +13,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	$array_nombres = $_POST['array_nombres'];
 	$apell_nombres = $array_nombres[0]; //nombres y apellidos del primer graduando
 	$array_jurado = $_POST['array_jurado'];
-	$nombre_asesor = $_POST['nombre_asesor'];
+	$asesor = json_decode($_POST['asesor']);
 	$fecha_sorteo = $_POST['fecha_sorteo'];
 	/**********************************************************************/
 
@@ -47,28 +48,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	$pdf->Ln(); 
 	$pdf->writeHTMLCell(170, '', 20, '', '<u>RESOLUCIÓN DECANAL N° &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u><br>', 0, 0, 0, true, 'L', true); 
 	$pdf->Ln();
-	//lugar y fecha
-	$dia = date("d");
-	$mes1 = date("m");
-	$anio_actual = date("Y");
-
-	switch($mes1)
-	{
-		case "01": $mes='enero';   break;
-		case "02": $mes='febrero'; break;
-		case "03": $mes='marzo';   break;
-		case "04": $mes='abril';   break;
-		case "05": $mes='mayo';    break;
-		case "06": $mes='junio';   break;
-		case "07": $mes='julio';   break;
-		case "08": $mes='agosto';  break;
-		case "09": $mes='setiembre'; break;
-		case "10": $mes='octubre'; 	 break;
-		case "11": $mes='noviembre'; break;
-		case "12": $mes='diciembre'; break;
-	}
+	
 	$pdf->SetFont('helvetica','',12);
-	$pdf->writeHTMLCell(170, '', 20, '', 'Arequipa, '.$dia.' de '.$mes.' del '.$anio_actual.'<br>', 0, 0, 0, true, 'L', true); 
+	$pdf->writeHTMLCell(170, '', 20, '', 'Arequipa, '.dia_actual().' de '.mes_actual().' del '.anio_actual().'<br>', 0, 0, 0, true, 'L', true); 
 	$pdf->Ln(); 
 
 	$texto1 = 'Vista la solicitud de Don(ña): <b>'.$apell_nombres.'</b> quien solicita nombramiento de jurado
@@ -93,7 +75,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 		$lista_jurado .= '<li><b>'.$jurado->nombre.' ('.$jurado->tipo.')</b></li>';    
 	}
 
-	$lista_jurado .= '<li><b>'.$nombre_asesor.' (asesor)</b></li>';    
+	$lista_jurado .= '<li><b>'.$asesor->apn.' (asesor)</b></li>';    
 
 	$lista_jurado .= '</ul>';
 	$texto4 = '<b>SE DECRETA: </b><br><br>Nombrar el Jurado integrado por los Señores Docentes:'.$lista_jurado.'<br>';
@@ -119,7 +101,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	$pdf->writeHTMLCell(170, '', 20, '', '<span style="text-decoration:overline">Decano de la Facultad de Ingeniería de Producción y Servicios</span>', 0, 0, 0, true, 'L', true); 
 	$pdf->Ln();
 
-	$pdf->Output('Resolucion_nombramiento_jurados_'.$dia.'-'.$mes1.'-'.$anio_actual.'_'.$codigo_expediente.'.pdf', 'I');
+	$pdf->Output('Resolucion_nombramiento_jurados_'.$codigo_expediente.'.pdf', 'I');
 }
 else {
 	echo "<h3>No tiene permiso de acceso para mostrar el archivo</h3>";

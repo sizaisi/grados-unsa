@@ -11,7 +11,7 @@
                 <form ref="frm_datos_pdf" :action="url_pdf" target="_blank" method="post">
                     <input type="hidden" name="titulo_proyecto" :value="expediente.titulo">      
                     <input type="hidden" name="codigo_expediente" :value="expediente.codigo">                      
-                    <input type="hidden" name="nombre_asesor" :value="nombre_asesor">                                   
+                    <input type="hidden" name="asesor">                                   
                     <template v-for="(graduando, index) in array_graduando">
                         <input type="hidden" name="array_nombres[]" :value="graduando.apell_nombres" :key="index">
                     </template>                        
@@ -124,7 +124,7 @@ export default {
         url_show_file : this.$root.FILE_URL,
         array_ruta : [],
         btn_color : this.$root.btn_colors,                              
-        nombre_asesor : '',  
+        asesor : null,  
         array_documento : [],
         columnas_documento: [               
             { key: 'nombre', label: 'Nombre' },                        
@@ -170,7 +170,8 @@ export default {
 
         return false
     },
-    generarPdf() {                              
+    generarPdf() {       
+        this.$refs.frm_datos_pdf.asesor.value = JSON.stringify(this.asesor)                       
         this.$refs.frm_datos_pdf.submit()
     },
     getRutas() { // rutas del procedimiento
@@ -239,16 +240,16 @@ export default {
             }                   
           })              
     },
-    getNombreAsesor() { //para asignar al jurado
+    getAsesor() {
         let me = this      
         var formData = this._toFormData({
             idexpediente: this.expediente.id
         })
 
-        this.axios.post(`${this.url}/Usuario/getNombreAsesor`, formData)
+        this.axios.post(`${this.url}/Usuario/getAsesor`, formData)
         .then(function(response) {
             if (!response.data.error) {                
-                me.nombre_asesor = response.data.nombre_asesor                                                        
+                me.asesor = response.data.asesor
             }
             else {                
                 console.log(response.data.message)      
@@ -374,7 +375,7 @@ export default {
   },
   mounted: function() {        
     this.getRutas()               
-    this.getNombreAsesor()        
+    this.getAsesor()        
     this.getDocumento()       
   },
 }
