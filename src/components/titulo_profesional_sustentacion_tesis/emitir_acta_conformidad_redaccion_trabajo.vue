@@ -7,8 +7,8 @@
             active-nav-item-class="font-weight-bold text-uppercase text-danger"   
             style="min-height: 250px"                        
         >           
-            <b-tab title="1. Generar acta" title-item-class="disabledTab" :disabled="tabIndex2 < 0">                                
-                <b-form @submit.prevent="generarPdf"  ref="frm_datos_pdf" :action="url_pdf" target="_blank" method="post">
+            <b-tab title="1. Generar documento" title-item-class="disabledTab" :disabled="tabIndex2 < 0">                                
+                <b-form @submit.prevent="generarPdf"  ref="frm_datos_pdf" :action="url_pdf" target="_blank" method="post">                     
                     <input type="hidden" name="titulo_proyecto" :value="expediente.titulo">      
                     <input type="hidden" name="codigo_expediente" :value="expediente.codigo">                                                              
                     <input type="hidden" name="fecha_sustentacion" :value="fecha_sustentacion">                    
@@ -30,16 +30,26 @@
                     <div class="row mt-3">
                         <div class="mx-auto"> 
                             <b-button type="submit" variant="success">
-                                <b-icon icon="file-earmark-text"></b-icon> Generar acta
+                                <b-icon icon="file-earmark-text"></b-icon> Acta de conformidad
                             </b-button> 
                         </div>
                     </div>
                 </b-form>    
             </b-tab>      
-            <b-tab title="2. Adjuntar documento" title-item-class="disabledTab" :disabled="tabIndex2 < 1">
+            <b-tab title="2. Adjuntar documentos" title-item-class="disabledTab" :disabled="tabIndex2 < 1">
                 <b-form @submit.prevent="registrarDocumento" class="mb-3">                  
                     <b-row>    
-                        <b-col sm="12" md="8" lg="8">
+                        <b-col sm="12" md="3" lg="3">
+                            <b-form-select 
+                                class="mr-3" 
+                                v-model="nombre_documento" 
+                                :options="select_nombre_documento" 
+                                id="nombre_documento"
+                                required    
+                            >
+                            </b-form-select> 
+                        </b-col>
+                        <b-col sm="12" md="7" lg="7">
                             <b-form-file
                                 v-model="file"                                    
                                 placeholder="Seleccione un archivo..."                            
@@ -47,8 +57,8 @@
                                 required                            
                             ></b-form-file>           
                         </b-col>
-                        <b-col sm="12" md="4" lg="4">
-                            <b-button type="submit" variant="success" title="Subir Archivo" :disabled="array_documento.length > 0">
+                        <b-col sm="12" md="1" lg="1">
+                            <b-button type="submit" variant="success" title="Subir Archivo" :disabled="array_documento.length > 1">
                                 <b-icon icon="upload"></b-icon>
                             </b-button>
                         </b-col>
@@ -75,7 +85,7 @@
                                 <b-button variant="info" size="sm" title="Descargar" @click="mostrarArchivo" class="mr-1">
                                     <b-icon icon="download"></b-icon>
                                 </b-button>
-                                <b-button @click="eliminarDocumento(data.item.id)" variant="danger" size="sm" title="Eliminar">
+                                <b-button @click="eliminarDocumento(data.item.id, data.item.nombre)" variant="danger" size="sm" title="Eliminar">
                                     <b-icon icon="trash"></b-icon>
                                 </b-button>
                             </template> 
@@ -143,6 +153,12 @@ export default {
             { key: 'nombre', label: 'Nombre' },                        
             { key: 'acciones', label: 'Acciones', class: 'text-center' },            
         ],
+        select_nombre_documento: [
+            { value: null, text: '-- Nombre documento --', disabled: true },
+            { value: 'Tesis', text: 'Tesis', disabled: false},                              
+            { value: 'Acta de conformidad de redacción de tesis', text: 'Acta de conformidad', disabled: false },            
+        ],
+        nombre_documento: null,
         file: null,
         estaOcupado: false,
         errors: [],                             
@@ -155,6 +171,7 @@ export default {
     },  
     nextTab() {      
         let pasar = false
+        this.errors = []       
         
         if (this.tabIndex == 0) {
             pasar = true
@@ -170,11 +187,9 @@ export default {
             })  
         }              
     },       
-    validarTab2() {
-        this.errors = []       
-
-        if (!this.array_documento.length) {
-            this.errors.push("La lista de documentos debe contener 1 elemento.")
+    validarTab2() {      
+        if (this.array_documento.length < 2) {
+            this.errors.push("La lista de documentos debe contener 2 archivos.")
         }                
 
         if (!this.errors.length) {
@@ -269,6 +284,22 @@ export default {
             }
         })   
     },      
+    habilitarNombreDocumento(nombre) {
+        for (var i in this.select_nombre_documento) {
+            if (this.select_nombre_documento[i].value == nombre) {
+                this.select_nombre_documento[i].disabled = false                     
+                break
+            }
+        }                             
+    },
+    deshabilitarNombreDocumento(nombre) {
+        for (var i in this.select_nombre_documento) {
+            if (this.select_nombre_documento[i].value == nombre) {
+                this.select_nombre_documento[i].disabled = true                     
+                break
+            }
+        }                             
+    },
     getDocumento() { // para mostrar una lista de documentos del procedimiento
         let me = this       
         let formData = this._toFormData({
@@ -281,6 +312,11 @@ export default {
         .then(function(response) {
             if (!response.data.error) {
                 me.array_documento = response.data.array_documento                
+                
+                for (var i in me.array_documento) {                        
+                    //deshabilitar los nombres de documentos listados
+                    me.deshabilitarNombreDocumento(me.array_documento[i].nombre) 
+                }                                   
             }
             else {
                 console.log(response.data.message)
@@ -290,7 +326,7 @@ export default {
     registrarDocumento() {         
         let me = this                      
         let formData = this._toFormData({
-            nombre: 'Acta de conformidad de redacción de tesis',
+            nombre: this.nombre_documento,
             data: this.file,
             idgrado_proc: this.idgrado_proc,
             idusuario: this.idusuario,
@@ -323,7 +359,7 @@ export default {
                 }
         })         
     },          
-    eliminarDocumento(iddocumento) {
+    eliminarDocumento(iddocumento, nombre) {
         let me = this               
         let formData = this._toFormData({
             id: iddocumento
@@ -355,6 +391,7 @@ export default {
                             variant: 'success',
                             toaster: 'b-toaster-bottom-right',                      
                         })                        
+                        me.habilitarNombreDocumento(nombre)                            
                         me.getDocumento()
                     }
                 })                
@@ -363,6 +400,7 @@ export default {
     },   
     resetearValores() {       
         this.file = null                    
+        this.nombre_documento = null
         this.errors = []   
         this.estaOcupado = false                     
     },    

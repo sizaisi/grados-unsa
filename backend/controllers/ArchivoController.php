@@ -20,7 +20,7 @@ class ArchivoController {
         $archivo->setIdusuario($_POST['idusuario']);
         $archivo->setIdexpediente($_POST['idexpediente']);
 
-        $result = $archivo->getDocumento();
+        $result = $archivo->getListDocumento();
 
         echo json_encode($result);       
 	}

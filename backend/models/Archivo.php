@@ -95,11 +95,11 @@ class Archivo {
 		return $result;
 	 }   
   
-	 public function getDocumento() {
+	 public function getListDocumento() {
   
 		$result = array('error' => false);
   
-		$sql = "SELECT * FROM GT_ARCHIVO 
+		$sql = "SELECT id, nombre, extension FROM GT_ARCHIVO 
 				WHERE idgrado_proc = $this->idgrado_proc
 				AND idusuario = $this->idusuario
 				AND idexpediente = $this->idexpediente";

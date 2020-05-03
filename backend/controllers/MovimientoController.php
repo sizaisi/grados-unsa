@@ -25,5 +25,17 @@ class MovimientoController {
 		$result = $movimiento->deshacer($idgradproc_origen);
 
 		echo json_encode($result);       
-	}		
+	}	
+	
+	// obtener ruta entrada por el procedimiento destino
+	public function getLastMovimientoByProc() { 
+		$movimiento = new Movimiento();
+		
+		$idgradproc_destino = $_POST['idgradproc_destino'];  		  
+		$movimiento->setIdExpediente($_POST['idexpediente']);		
+
+		$result = $movimiento->getLastMovimiento($idgradproc_destino);
+
+		echo json_encode($result);             
+	}
 }

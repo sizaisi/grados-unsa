@@ -5,103 +5,97 @@
         <h5 class="text-center nav-link active font-weight-bold text-uppercase text-danger" v-text="grado_procedimiento.nombre"></h5>          
         <p class="narrow text-center" v-text="grado_procedimiento.descripcion"></p>
       </div>
-      <b-card no-body class="p-3" bg-variant="light">
-        <b-card no-body class="mb-3">
-          <b-card-header class="p-1" header-text-variant="white" header-tag="header" role="tab">
-            <b-button block href="#" v-b-toggle.accordion-1 variant="info">Información de Expediente</b-button>
-          </b-card-header>
-          <b-collapse id="accordion-1" visible role="tabpanel">
-            <b-tabs pills card vertical>
-                <b-tab title="Expediente">
-                  <!-- Información expediente -->                                                                 
-                  <div class="mb-4">
-                    <h4 class="text-info text-center"><i class="fa fa-folder-open" aria-hidden="true"></i> Expediente</h4>
-                  </div>           
-                  <form>
-                    <div class="form-row">
-                        <div class="form-group col-md-3">
-                          <label class="text-info">Código</label>                                   
-                          <label class="lbl-data" v-text="expediente.codigo"></label>                     
-                        </div>
-                        <div class="form-group col-md-9">
-                          <label class="text-info">Título Proyecto</label>                                   
-                          <label class="lbl-data" v-text="expediente.titulo"></label>                     
-                        </div>
-                    </div>               
-                    <div class="form-row">
-                        <div class="form-group col-md-6">
-                          <label class="text-info">Programa de estudios</label>                                   
-                          <label class="lbl-data" v-text="expediente.nesc"></label>                     
-                        </div>
-                        <div class="form-group col-md-6">
-                          <label class="text-info">Fecha de inicio de trámite</label>                                   
-                          <label class="lbl-data" v-text="expediente.fecha_inicio"></label>                     
-                        </div>
-                    </div>               
-                  </form>                    
-                </b-tab>
-                <b-tab title="Graduando">
-                  <!-- Información graduando -->                    
-                  <div class="mb-4">
-                    <h4 class="text-info text-center"><i class="fa fa-user" aria-hidden="true"></i> Graduando (s)</h4>
-                  </div>            
-                  <table class="table table-bordered table-sm">   
-                    <thead>
-                        <th class="text-center">CUI</th>
-                        <th class="text-left">Apellidos y Nombres</th>
-                        <th class="text-center">E-mail</th>                           
-                        <th class="text-center">Teléfono</th>
-                        <th class="text-left">Dirección</th>
-                    </thead>
-                    <tbody>
-                        <tr v-for="(graduando, index) in array_graduando" :key="index">                              
-                          <td class="text-center" v-text="graduando.cui"></td>
-                          <td class="text-center" v-text="graduando.apell_nombres"></td>
-                          <td class="text-center" v-text="graduando.email"></td>                              
-                          <td class="text-center" v-text="graduando.telefono_movil"></td>
-                          <td class="text-center" v-text="graduando.direccion"></td>
-                        </tr>                                                
-                    </tbody>
-                  </table>
-                  
-                </b-tab>   
-                <b-tab title="Archivos">
-                  <!-- Información archivos -->                    
-                  <div class="mb-4">
-                    <h4 class="text-info text-center"><i class="fa fa-files-o" aria-hidden="true"></i> Archivos</h4>
-                  </div>            
-                  <table class="table table-bordered table-striped table-sm">                           
+      <b-card no-body>
+        <b-tabs card>  
+          <b-tab title="Información de Expediente" active> 
+            <b-card no-body>         
+              <b-tabs pills card vertical>
+                  <b-tab title="Expediente">
+                    <!-- Información expediente -->                                                                 
+                    <div class="mb-4">
+                      <h4 class="text-info text-center"><i class="fa fa-folder-open" aria-hidden="true"></i> Expediente</h4>
+                    </div>           
+                    <form>
+                      <div class="form-row">
+                          <div class="form-group col-md-3">
+                            <label class="text-info">Código</label>                                   
+                            <label class="lbl-data" v-text="expediente.codigo"></label>                     
+                          </div>
+                          <div class="form-group col-md-9">
+                            <label class="text-info">Título Proyecto</label>                                   
+                            <label class="lbl-data" v-text="expediente.titulo"></label>                     
+                          </div>
+                      </div>               
+                      <div class="form-row">
+                          <div class="form-group col-md-6">
+                            <label class="text-info">Programa de estudios</label>                                   
+                            <label class="lbl-data" v-text="expediente.nesc"></label>                     
+                          </div>
+                          <div class="form-group col-md-6">
+                            <label class="text-info">Fecha de inicio de trámite</label>                                   
+                            <label class="lbl-data" v-text="expediente.fecha_inicio"></label>                     
+                          </div>
+                      </div>               
+                    </form>                    
+                  </b-tab>
+                  <b-tab title="Graduando">
+                    <!-- Información graduando -->                    
+                    <div class="mb-4">
+                      <h4 class="text-info text-center"><i class="fa fa-user" aria-hidden="true"></i> Graduando (s)</h4>
+                    </div>            
+                    <table class="table table-bordered table-sm">   
                       <thead>
-                        <th class="text-center">Nombre </th>
-                        <th class="text-center">Procedimiento</th>
-                        <th class="text-center">Rol-Area</th>                           
-                        <th class="text-center">Descargar</th>
+                          <th class="text-center">CUI</th>
+                          <th class="text-left">Apellidos y Nombres</th>
+                          <th class="text-center">E-mail</th>                           
+                          <th class="text-center">Teléfono</th>
+                          <th class="text-left">Dirección</th>
                       </thead>
-                      <tbody>                     
-                        <form ref="show_file" :action="url_show_file" target="_blank" method="post">
-                            <input type="hidden" name="file_id">                                            
-                        </form>     
-                        <tr v-for="(archivo, index) in array_archivo" :key="index">
-                          <td v-text="archivo.nombre"></td>
-                          <td v-text="archivo.procedimiento"></td>
-                          <td class="text-center" v-text="archivo.area"></td>
-                          <td class="text-center">                                                      
-                            <b-button variant="info" size="sm" @click="mostrarArchivo(archivo.id)" title="Descargar">
-                              <b-icon icon="download"></b-icon>
-                            </b-button>
-                          </td>                              
-                        </tr>                                                
+                      <tbody>
+                          <tr v-for="(graduando, index) in array_graduando" :key="index">                              
+                            <td class="text-center" v-text="graduando.cui"></td>
+                            <td class="text-center" v-text="graduando.apell_nombres"></td>
+                            <td class="text-center" v-text="graduando.email"></td>                              
+                            <td class="text-center" v-text="graduando.telefono_movil"></td>
+                            <td class="text-center" v-text="graduando.direccion"></td>
+                          </tr>                                                
                       </tbody>
-                  </table>                               
-                </b-tab>               
-            </b-tabs>
-          </b-collapse>
-        </b-card>
-        <b-card no-body>
-          <b-card-header class="p-1" header-text-variant="white" header-tag="header" role="tab">
-            <b-button block href="#" v-b-toggle.accordion-2 variant="info">Procesamiento de Expediente</b-button>
-          </b-card-header>  
-          <b-collapse id="accordion-2" visible role="tabpanel">
+                    </table>
+                    
+                  </b-tab>   
+                  <b-tab title="Archivos">
+                    <!-- Información archivos -->                    
+                    <div class="mb-4">
+                      <h4 class="text-info text-center"><i class="fa fa-files-o" aria-hidden="true"></i> Archivos</h4>
+                    </div>            
+                    <table class="table table-bordered table-striped table-sm">                           
+                        <thead>
+                          <th class="text-center">Nombre </th>
+                          <th class="text-center">Procedimiento</th>
+                          <th class="text-center">Rol-Area</th>                           
+                          <th class="text-center">Descargar</th>
+                        </thead>
+                        <tbody>                     
+                          <form ref="show_file" :action="url_show_file" target="_blank" method="post">
+                              <input type="hidden" name="file_id">                                            
+                          </form>     
+                          <tr v-for="(archivo, index) in array_archivo" :key="index">
+                            <td v-text="archivo.nombre"></td>
+                            <td v-text="archivo.procedimiento"></td>
+                            <td class="text-center" v-text="archivo.area"></td>
+                            <td class="text-center">                                                      
+                              <b-button variant="info" size="sm" @click="mostrarArchivo(archivo.id)" title="Descargar">
+                                <b-icon icon="download"></b-icon>
+                              </b-button>
+                            </td>                              
+                          </tr>                                                
+                        </tbody>
+                    </table>                               
+                  </b-tab>               
+              </b-tabs>        
+            </b-card>
+          </b-tab>
+          <b-tab title="Procesamiento de Expediente">                        
             <!-- Compoenente del procedimiento -->                
             <component  :is="nombre_componente"                          
                         :idgrado_modalidad="grado_procedimiento.idgrado_modalidad"
@@ -114,12 +108,10 @@
                         :expediente="expediente"
                         :array_graduando="array_graduando"                       
                         v-if="array_graduando.length > 0"
-            />  
-          </b-collapse>
-        </b-card>        
-
-      </b-card>     
-      
+            />            
+          </b-tab>
+        </b-tabs>    
+      </b-card>
       <div class="text-center mt-3">                           
         <b-button 
           :to="{ name: 'menu-procedimientos', 

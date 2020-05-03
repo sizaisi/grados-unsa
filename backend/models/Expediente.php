@@ -2,6 +2,7 @@
 
 class Expediente {
 	private $id;
+	private $url_repo;
 
 	private $conn;
 
@@ -11,6 +12,14 @@ class Expediente {
 
 	function setId($id) {
 		$this->id = $id;
+	}
+
+	function getUrlRepo() {
+		return $this->url_repo;
+	}
+
+	function setUrlRepo($url_repo) {
+		$this->url_repo = $url_repo;
 	}
 
 	public function __construct() {
@@ -124,6 +133,32 @@ class Expediente {
   
 		return $result;
 	 }
+
+	 public function getURL() {
+  
+		$result = array('error' => false);
+  
+		$sql = "SELECT url_repo FROM GT_EXPEDIENTE WHERE id = $this->id";
+
+		$result_query = mysqli_query($this->conn, $sql);
+
+		if ($result_query) {			
+			if (mysqli_num_rows($result_query) > 0) {
+				$row = $result_query->fetch_assoc();        
+				$result['url_repo'] = $row['url_repo'];
+			}			
+			else {
+				$result['error'] = true;
+				$result['message'] = "No se pudo encontrar la url de repositorio.";            
+			}			
+		}
+		else {
+			$result['error'] = true;
+			$result['message'] = "No se pudo obtener el url de repositorio.";            
+		}		
+  
+		return $result;
+	 }   
   
 	 public function getExpediente() {
   
@@ -141,5 +176,23 @@ class Expediente {
 		$result['expediente'] = $row;      
   
 		return $result;
-	 }   
+	 }  
+	 
+	 public function actualizar_url(){
+        $result = array('error' => false);
+
+        $sql = "UPDATE GT_EXPEDIENTE SET url_repo = '$this->url_repo' WHERE id = $this->id";
+
+        $result_query = mysqli_query($this->conn, $sql);
+
+        if ($result_query) {
+            $result['message'] = "URL actualizado con éxito.";
+        }
+        else {
+            $result['error'] = true;
+            $result['message'] = "No se pudo actualizar el URL.";
+        }
+
+        return $result;   
+    }
 }

@@ -1,11 +1,45 @@
 <template>
-  <div class="p-3 text-center">         
-    <template v-for="(ruta, index) in array_ruta">                     
-      <b-button class="m-1" :variant="btn_color[ruta.etiqueta]" @click="mover(ruta)" :key="index">
-        {{ ruta.etiqueta | capitalize }}
-      </b-button>                 
-    </template>                 
-  </div>
+  <div v-if="movimiento != null">     
+    <template v-if="movimiento.etiqueta == 'aprobar'">
+      <b-row class="justify-content-lg-center">
+        <b-col col lg="8">
+          <p class="text-justify">
+            Expediente aprobado por el procedimiento <b>{{ movimiento.procedimiento_origen }}</b> 
+            a cargo de <b>{{ movimiento.rol_area_origen }}</b> con fecha <b>{{ movimiento.fecha }} hrs.</b>
+          </p>                 
+        </b-col>
+      </b-row>
+      <b-card no-body>
+        <div class="p-3 text-center">         
+          <template v-for="(ruta, index) in array_ruta">                     
+            <b-button class="m-1" :variant="btn_color[ruta.etiqueta]" @click="mover(ruta)" :key="index">
+              {{ ruta.etiqueta | capitalize }}
+            </b-button>                 
+          </template>
+        </div>  
+      </b-card>
+    </template>          
+    <template v-if="movimiento.etiqueta == 'denegar'">
+      <b-row class="justify-content-lg-center">
+        <b-col col lg="8">
+          <p class="text-justify">
+            Expediente <b>denegado</b> por el procedimiento 
+            <b>{{ movimiento.procedimiento_origen }}</b> a cargo de
+            <b v-if="movimiento.nomb_oper!=null">{{ movimiento.nomb_oper }}</b> 
+            <b v-else>{{ movimiento.apn }}</b> 
+            <b v-if="movimiento.rol_area_origen!=null"> ({{ movimiento.rol_area_origen }})</b> 
+            <b v-else> ({{ movimiento.tipo_rol }})</b> 
+            con fecha <b>{{ movimiento.fecha }} hrs.</b>
+          </p>                 
+        </b-col>
+      </b-row>
+      <b-card no-body>
+        <div class="p-3 text-center">         
+          <h3>DENEGADO</h3>
+        </div>  
+      </b-card>
+    </template>          
+  </div>    
 </template>
 
 <script>
@@ -24,18 +58,31 @@ export default {
   data() {
     return {             
       url: this.$root.API_URL,      
+      movimiento : null,
       array_ruta : [],
-      btn_color : this.$root.btn_colors,           
-      movimiento : {
-          idexpediente : '',
-          idusuario : '',
-          idruta : '',
-          idgradproc_destino : '',               
-      },                                   
+      btn_color : this.$root.btn_colors,                                                  
     }
   },
   methods: {    
-    getRutas() { // rutas del procedimiento
+    getLastMovimiento() {
+        let me = this
+        var formData = this._toFormData({
+            idgradproc_destino: this.idgrado_proc, 
+            idexpediente: this.expediente.id         
+        })        
+
+        this.axios.post(`${this.url}/Movimiento/getLastMovimientoByProc`, formData)
+        .then(function(response) {
+          if (!response.data.error) {              
+            me.movimiento = response.data.movimiento         
+            console.log(me.movimiento)              
+          }
+          else {              
+            console.log(response.data.message)
+          }
+        })   
+    },                       
+    getRutas() {
         let me = this
         var formData = this._toFormData({
             idgradproc_origen: this.idgrado_proc,            
@@ -44,13 +91,13 @@ export default {
         this.axios.post(`${this.url}/Ruta/getRutasByProc`, formData)
         .then(function(response) {
           if (!response.data.error) {              
-            me.array_ruta = response.data.array_ruta                      
+            me.array_ruta = response.data.array_ruta                             
           }
           else {              
-            me.errorMsg = response.data.message
+            console.log(response.data.message)
           }
         })   
-    },                       
+    },                           
     mover(ruta) { // movimiento para derivar el expediente al siguiente procedimiento
       this.$bvModal.msgBoxConfirm(
           '¿Esta seguro de ' + ruta.etiqueta + ' este expediente?', {
@@ -63,17 +110,16 @@ export default {
           .then(value => {
             if (value) {
               let me = this                               
-              this.movimiento.idexpediente = this.expediente.id
-              this.movimiento.idusuario = this.idusuario
-              this.movimiento.idruta = ruta.id
-              this.movimiento.idgradproc_destino = ruta.idgradproc_destino                     
-
-              var formData = this._toFormData(this.movimiento)
+              let formData = this._toFormData({
+                    idexpediente: this.expediente.id,
+                    idusuario: this.idusuario,
+                    idruta: ruta.id,
+                    idgradproc_destino: ruta.idgradproc_destino                     
+                })                                    
 
               this.axios.post(`${this.url}/Movimiento/mover`, formData)
               .then(function(response) {                                          
-                if (!response.data.error) { //si no hay error
-                  me.movimiento.iddocente = ''                                     
+                if (!response.data.error) { //si no hay error                                                      
                   me.$root.$bvToast.toast(response.data.message, {
                     title: 'Éxito!',
                     variant: 'success',
@@ -100,10 +146,7 @@ export default {
                 }
               }) 
             }                   
-          })
-          .catch(err => {
-            console.log(err)
-          })        
+          })              
     },
     _toFormData(obj) {
         var fd = new FormData()
@@ -122,7 +165,8 @@ export default {
         return value.charAt(0).toUpperCase() + value.slice(1)
     }
   },
-  mounted: function() {        
+  mounted: function() {   
+    this.getLastMovimiento()                     
     this.getRutas()                     
   },
 }

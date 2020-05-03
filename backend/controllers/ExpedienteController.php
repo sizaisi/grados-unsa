@@ -45,5 +45,28 @@ class ExpedienteController {
                 $result = $expediente->getExpediente();
         
                 echo json_encode($result);  
-	}		
+        }
+
+        public function getURL() {
+        
+                $expediente = new Expediente();
+                
+                $expediente->setId($_POST['idexpediente']);                                                                
+
+                $result = $expediente->getURL();
+        
+                echo json_encode($result);  
+	}
+        
+        public function updateURL() {
+        
+                $expediente = new Expediente();
+                
+                $expediente->setId($_POST['idexpediente']);                         
+                $expediente->setUrlRepo($_POST['url_repo']);                         
+
+                $result = $expediente->actualizar_url();
+        
+                echo json_encode($result);  
+	}
 }

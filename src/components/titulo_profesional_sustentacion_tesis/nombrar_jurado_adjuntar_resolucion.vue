@@ -242,6 +242,7 @@ export default {
     },  
     nextTab() {      
         let pasar = false
+        this.errors = []
         
         if (this.tabIndex == 0) {
             pasar = this.validarTab1()
@@ -260,9 +261,7 @@ export default {
             })  
         }              
     },   
-    validarTab1() {
-        this.errors = []
-
+    validarTab1() {        
         if (!this.fecha_sorteo) {
             this.errors.push("El campo fecha de sorteo es requerido")
         }
@@ -276,9 +275,7 @@ export default {
 
         return false
     },
-    validarTab3() {
-        this.errors = []       
-
+    validarTab3() {   
         if (!this.array_documento.length) {
             this.errors.push("La lista de documentos debe contener 1 elemento.")
         }                

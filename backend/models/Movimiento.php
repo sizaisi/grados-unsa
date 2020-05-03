@@ -43,6 +43,52 @@ class Movimiento {
 	function setIdRuta($idruta) {
 		$this->idruta = $idruta;
 	}	
+
+	//para devolver el movimiento actual de entrada a traves del idgrado-procedimiento destino
+	function getLastMovimiento($idgradproc_destino) { 
+		$result = array('error' => false);
+  
+		/*$sql = "SELECT GT_M.fecha, GT_R.etiqueta, GT_P.nombre AS procedimiento_origen, GT_GP.tipo_rol, GT_RA.nombre AS rol_area_origen
+				FROM GT_MOVIMIENTO GT_M 
+				INNER JOIN GT_RUTA GT_R ON GT_M.idruta = GT_R.id
+				INNER JOIN GT_GRADO_PROCEDIMIENTO GT_GP ON GT_R.idgradproc_origen = GT_GP.id
+				INNER JOIN GT_PROCEDIMIENTO GT_P ON GT_GP.idprocedimiento = GT_P.id
+				LEFT JOIN GT_ROL_AREA GT_RA ON GT_GP.tipo_rol = '' AND GT_GP.idrol_area = GT_RA.id				
+				WHERE GT_R.idgradproc_destino = $idgradproc_destino 
+				AND GT_M.idexpediente = $this->idexpediente AND GT_R.condicion = 1
+				ORDER BY GT_M.id desc limit 1";*/
+
+		$sql = "SELECT t_movimiento.*, SIAC_OPER.nomb_oper, REPLACE(SIAC_DOC.apn, '/', ' ') as apn
+				FROM
+				(
+					SELECT GT_M.id, GT_M.idusuario, GT_M.fecha, GT_R.etiqueta, GT_P.nombre AS procedimiento_origen, GT_GP.tipo_rol, GT_RA.nombre AS rol_area_origen
+					FROM GT_MOVIMIENTO GT_M 
+					INNER JOIN GT_RUTA GT_R ON GT_M.idruta = GT_R.id
+					INNER JOIN GT_GRADO_PROCEDIMIENTO GT_GP ON GT_R.idgradproc_origen = GT_GP.id
+					INNER JOIN GT_PROCEDIMIENTO GT_P ON GT_GP.idprocedimiento = GT_P.id
+					LEFT JOIN GT_ROL_AREA GT_RA ON GT_GP.tipo_rol = '' AND GT_GP.idrol_area = GT_RA.id				
+					WHERE GT_R.idgradproc_destino = $idgradproc_destino 
+					AND GT_M.idexpediente = $this->idexpediente AND GT_R.condicion = 1
+				) t_movimiento
+				INNER JOIN GT_USUARIO GT_U ON GT_U.id = t_movimiento.idusuario
+				LEFT JOIN SIAC_OPER ON GT_U.tipo = 'Administrativo' AND SIAC_OPER.codi_oper = GT_U.codi_usuario
+				LEFT JOIN SIAC_DOC ON GT_U.tipo = 'Docente' AND SIAC_DOC.codper = GT_U.codi_usuario
+				ORDER BY t_movimiento.id desc limit 1";
+
+		$result_query = mysqli_query($this->conn, $sql);
+
+		if ($result_query) {									  
+			if ($row = $result_query->fetch_assoc()) {
+				$result['movimiento'] = $row;  							
+			}		
+		}
+		else {
+			$result['error'] = true;
+			$result['message'] = "No se pudo obtener el ultimo movimiento de entrada del procedimiento.";            
+		}		  
+		
+		return $result;
+	  }
 	
 	// registrar movimiento y actualizar procedimiento del expediente con el idgradprod_destino
 	public function mover($idgradproc_destino) {      
@@ -120,4 +166,5 @@ class Movimiento {
   
 		return $result;     
 	 }      
+	 
 }
