@@ -246,7 +246,7 @@ export default {
             idexpediente: this.expediente.id
         })
 
-        this.axios.post(`${this.url}/Usuario/getAsesor`, formData)
+        this.axios.post(`${this.url}/UsuarioExpediente/getAsesor`, formData)
         .then(function(response) {
             if (!response.data.error) {                
                 me.asesor = response.data.asesor                                                        

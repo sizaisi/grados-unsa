@@ -17,11 +17,11 @@ class UsuarioController {
 	public function getGradByIdExp() {		   
 		$idexpediente = $_POST['idexpediente'];        
 
-        $usuario = new Usuario();
+                $usuario = new Usuario();
 
-        $result = $usuario->getGradByIdExp($idexpediente);
-   
-        echo json_encode($result);     
+                $result = $usuario->getGradByIdExp($idexpediente);
+        
+                echo json_encode($result);     
 	}
 
 	public function getDocentes() {               
@@ -54,15 +54,7 @@ class UsuarioController {
                 echo json_encode($result);                
 	}	
 	
-	public function getAsesor() {
-		$idexpediente = $_POST['idexpediente'];        
-
-                $usuario_expediente = new UsuarioExpediente();
-
-                $result = $usuario_expediente->getAsesor($idexpediente);
-        
-                echo json_encode($result);           
-	}	
+		
 
 	public function storeAsesor() {
 		$usuario_expediente = new UsuarioExpediente();

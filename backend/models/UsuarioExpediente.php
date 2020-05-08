@@ -68,15 +68,15 @@ class UsuarioExpediente {
 		return $result;
 	 }    
   
-	 public function getAsesor($idexpediente) {
+	 public function getAsesor() {
   
 		$result = array('error' => false);
   
-		$sql = "SELECT REPLACE(AC_D.apn, '/', ' ') as apn, dic	
+		$sql = "SELECT GT_UE.id, GT_UE.tipo, REPLACE(AC_D.apn, '/', ' ') AS apn, AC_D.dic AS nro_documento	
 				FROM GT_USUARIO_EXPEDIENTE AS GT_UE
 				INNER JOIN GT_USUARIO AS GT_U ON GT_UE.idusuario = GT_U.id                
 				INNER JOIN SIAC_DOC AS AC_D ON GT_U.codi_usuario = AC_D.codper
-				WHERE GT_UE.idexpediente = $idexpediente AND GT_UE.tipo = 'asesor'";
+				WHERE GT_UE.idexpediente = $this->idexpediente AND GT_UE.tipo = 'asesor'";
 
 		$result_query = mysqli_query($this->conn, $sql);
 
@@ -129,7 +129,7 @@ class UsuarioExpediente {
 		return $result;
 	 }    
   
-	 public function insertar_asesor() {      
+	 /*public function insertar_asesor() {      
   
 		$result = array('error' => false);
   
@@ -165,9 +165,9 @@ class UsuarioExpediente {
 		}           
   
 		return $result;
-	 }
+	 }*/
   
-	 public function insertar_jurado() {      
+	 public function insertar() {      
   
 		$result = array('error' => false);
   
@@ -177,17 +177,17 @@ class UsuarioExpediente {
 		$result_query = mysqli_query($this->conn, $sql);
   
 		if ($result_query) {
-		   $result['message'] = "Jurado agregado correctamente.";
+		   $result['message'] = "Docente agregado correctamente.";
 		}
 		else {
 		   $result['error'] = true;
-		   $result['message'] = "No se pudo agregar el jurado.";
+		   $result['message'] = "No se pudo agregar el docente.";
 		}      
   
 		return $result;
 	 }
   
-	 public function eliminar_jurado() {      
+	 public function eliminar() {      
   
 		$result = array('error' => false);
   
@@ -196,11 +196,11 @@ class UsuarioExpediente {
 		$result_query = mysqli_query($this->conn, $sql);
   
 		if ($result_query) {
-		   $result['message'] = "Jurado eliminado correctamente.";
+		   $result['message'] = "Docente eliminado correctamente.";
 		}
 		else {
 		   $result['error'] = true;
-		   $result['message'] = "No se pudo eliminar el jurado.";
+		   $result['message'] = "No se pudo eliminar el docente.";
 		}      
   
 		return $result;

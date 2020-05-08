@@ -2,8 +2,9 @@
 require_once 'models/Archivo.php';
 
 class ArchivoController {
-	
-	public function index(){
+    
+    //mostrar todos los archivos de un expediente
+	public function index() { 
 		$archivo = new Archivo();        
 
 		$archivo->setIdexpediente($_POST['idexpediente']);
@@ -11,7 +12,21 @@ class ArchivoController {
         $result = $archivo->getTodosArchivos();
 
         echo json_encode($result);           
-	}
+    }
+
+    //mostrar archivos del procedimiento anterior y el actual procedimiento
+    public function show() { 
+        $archivo = new Archivo();        
+                
+        $archivo->setIdgrado_Proc($_POST['idgrado_proc']);
+		$archivo->setIdexpediente($_POST['idexpediente']);
+
+        $result = $archivo->getArchivosProcOrigen();
+
+        echo json_encode($result);           
+    }
+    
+
 
 	public function getDocumento() {
 		$archivo = new Archivo();        
@@ -37,8 +52,7 @@ class ArchivoController {
 
         $result = $archivo->storeDocumento();
 
-        echo json_encode($result); 
-        //echo 'idexpediente: '.$_POST['idexpediente'].' idusuario: '.$_POST['idusuario'];
+        echo json_encode($result);         
 	}	
 		
 	public function delete() {
@@ -49,9 +63,6 @@ class ArchivoController {
         $result = $archivo->deleteDocumento();
 
         echo json_encode($result);           
-    }
+    }  
     
-    public function show() {
-
-    }
 }

@@ -34,7 +34,8 @@ new Vue({
   data: {
     API_URL: config.API_URL,
     FILE_URL: config.FILE_URL,
-    btn_colors : config.btn_colors,
+    estados : config.estados,
+    btn_colors : config.btn_colors,    
   },  
   router,
   store,    

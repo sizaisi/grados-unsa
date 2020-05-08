@@ -94,6 +94,40 @@ class Archivo {
   
 		return $result;
 	 }   
+
+	 public function getArchivosProcOrigen() {
+
+		$result = array('error' => false);
+  
+		$sql = "SELECT GT_A.id, GT_A.nombre, GT_P.nombre AS procedimiento, GT_RA.nombre AS area FROM 
+				GT_ARCHIVO AS GT_A 
+				INNER JOIN GT_GRADO_PROCEDIMIENTO GT_GP ON GT_A.idgrado_proc = GT_GP.id 
+				INNER JOIN GT_PROCEDIMIENTO GT_P ON GT_GP.idprocedimiento = GT_P.id 
+				INNER JOIN GT_USUARIO GT_U ON GT_A.idusuario = GT_U.id 
+				INNER JOIN GT_ROL_AREA GT_RA ON GT_U.idrol_area = GT_RA.id 
+				WHERE GT_A.idexpediente = $this->idexpediente 
+				AND GT_A.idgrado_proc = ( SELECT GT_R.idgradproc_origen 
+											FROM GT_MOVIMIENTO GT_M 
+											INNER JOIN GT_RUTA GT_R ON GT_M.idruta = GT_R.id 
+											WHERE GT_R.idgradproc_destino = $this->idgrado_proc 
+											AND GT_M.idexpediente = $this->idexpediente AND GT_R.condicion = 1 
+											ORDER BY GT_M.id desc limit 1
+								  		) 
+				ORDER BY GT_A.id ASC";				
+		
+		
+		$result_query = mysqli_query($this->conn, $sql);
+  
+		$array_archivo_ultimo = array();
+  
+		while ($row = $result_query->fetch_assoc()) {         
+		   array_push($array_archivo_ultimo, $row);
+		}
+  
+		$result['array_archivo_ultimo'] = $array_archivo_ultimo;      
+  
+		return $result;
+	 }   
   
 	 public function getListDocumento() {
   

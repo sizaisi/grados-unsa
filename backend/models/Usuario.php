@@ -47,15 +47,13 @@ class Usuario {
 				WHERE idexpediente = $idexpediente
 				ORDER BY ac_i.apn ASC";
   
-		$result_query = mysqli_query($this->conn, $sql);
+		$result_query = mysqli_query($this->conn, $sql); 	
   
-		$array_graduando = array();
-  
-		while ($row = $result_query->fetch_assoc()) {         
-		   array_push($array_graduando, $row);
+		if ($row = $result_query->fetch_assoc()) {         
+		   $graduando = $row;
 		}
   
-		$result['array_graduando'] = $array_graduando;      
+		$result['graduando'] = $graduando;      
   
 		return $result;
 	 }   
@@ -84,7 +82,7 @@ class Usuario {
   
 		$result = array('error' => false);
   
-		$sql = "SELECT gt_u.id AS iddocente, REPLACE(ac_doc.apn,'/',' ') as apell_nombres " .
+		$sql = "SELECT gt_u.id, REPLACE(ac_doc.apn,'/',' ') AS apn, ac_doc.dic AS nro_documento " .
 			   "FROM GT_USUARIO AS gt_u " .
 			   "INNER JOIN SIAC_DOC AS ac_doc ON gt_u.codi_usuario = ac_doc.codper " .             
 			   "INNER JOIN actdepa AS ac_d ON ac_doc.depend = ac_d.depa " .             

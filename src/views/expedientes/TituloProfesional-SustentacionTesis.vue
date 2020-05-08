@@ -6,7 +6,7 @@
         <p class="narrow text-center" v-text="grado_procedimiento.descripcion"></p>
       </div>
       <b-card no-body>
-        <b-tabs card>  
+        <b-tabs card justified active-nav-item-class="font-weight-bold text-uppercase text-danger">  
           <b-tab title="Información de Expediente" active> 
             <b-card no-body>         
               <b-tabs pills card vertical>
@@ -15,7 +15,7 @@
                     <div class="mb-4">
                       <h4 class="text-info text-center"><i class="fa fa-folder-open" aria-hidden="true"></i> Expediente</h4>
                     </div>           
-                    <form>
+                    <form v-if="expediente != null">
                       <div class="form-row">
                           <div class="form-group col-md-3">
                             <label class="text-info">Código</label>                                   
@@ -41,30 +41,37 @@
                   <b-tab title="Graduando">
                     <!-- Información graduando -->                    
                     <div class="mb-4">
-                      <h4 class="text-info text-center"><i class="fa fa-user" aria-hidden="true"></i> Graduando (s)</h4>
-                    </div>            
-                    <table class="table table-bordered table-sm">   
-                      <thead>
-                          <th class="text-center">CUI</th>
-                          <th class="text-left">Apellidos y Nombres</th>
-                          <th class="text-center">E-mail</th>                           
-                          <th class="text-center">Teléfono</th>
-                          <th class="text-left">Dirección</th>
-                      </thead>
-                      <tbody>
-                          <tr v-for="(graduando, index) in array_graduando" :key="index">                              
-                            <td class="text-center" v-text="graduando.cui"></td>
-                            <td class="text-center" v-text="graduando.apell_nombres"></td>
-                            <td class="text-center" v-text="graduando.email"></td>                              
-                            <td class="text-center" v-text="graduando.telefono_movil"></td>
-                            <td class="text-center" v-text="graduando.direccion"></td>
-                          </tr>                                                
-                      </tbody>
-                    </table>
-                    
-                  </b-tab>   
-                  <b-tab title="Archivos">
-                    <!-- Información archivos -->                    
+                      <h4 class="text-info text-center"><i class="fa fa-user" aria-hidden="true"></i> Graduando</h4>
+                    </div>    
+                    <form v-if="graduando != null">
+                      <div class="form-row">
+                          <div class="form-group col-md-3">
+                            <label class="text-info">CUI</label>                                   
+                            <label class="lbl-data" v-text="graduando.cui"></label>                     
+                          </div>
+                          <div class="form-group col-md-9">
+                            <label class="text-info">Apellidos y Nombres</label>                                   
+                            <label class="lbl-data" v-text="graduando.apell_nombres"></label>                     
+                          </div>
+                      </div>               
+                      <div class="form-row">
+                          <div class="form-group col-md-3">
+                            <label class="text-info">E-mail</label>                                   
+                            <label class="lbl-data" v-text="graduando.email"></label>                     
+                          </div>
+                          <div class="form-group col-md-3">
+                            <label class="text-info">Teléfono</label>                                   
+                            <label class="lbl-data" v-text="graduando.telefono_movil"></label>                     
+                          </div>
+                          <div class="form-group col-md-6">
+                            <label class="text-info">Dirección</label>                                   
+                            <label class="lbl-data" v-text="graduando.direccion"></label>                     
+                          </div>
+                      </div>               
+                    </form>                              
+                  </b-tab> 
+                  <b-tab title="Documentos">
+                    <!-- Información todos archivos -->                    
                     <div class="mb-4">
                       <h4 class="text-info text-center"><i class="fa fa-files-o" aria-hidden="true"></i> Archivos</h4>
                     </div>            
@@ -90,10 +97,70 @@
                             </td>                              
                           </tr>                                                
                         </tbody>
-                    </table>                               
-                  </b-tab>               
+                    </table>
+                  </b-tab>                                   
               </b-tabs>        
             </b-card>
+          </b-tab>
+          <b-tab title="Información de Procedencia">  
+            <b-card no-body>         
+              <b-tabs pills card vertical>   
+                  <b-tab title="Estado de Expediente">
+                    <!-- Información procedimiento origen -->                                                                 
+                    <div class="mb-4">
+                      <h4 class="text-info text-center">Estado de Expediente</h4>
+                    </div>         
+                    <b-row class="justify-content-lg-center" v-if="movimiento != null">
+                      <b-col col lg="8">
+                        <p class="text-justify">
+                          Expediente <b>{{ estados[movimiento.etiqueta] }}</b> por el procedimiento 
+                          <b>{{ movimiento.procedimiento_origen }}</b> a cargo de
+                          <b v-if="movimiento.administrativo != null">{{ movimiento.administrativo }}</b> 
+                          <b v-else>{{ movimiento.docente }}</b> 
+                          <b v-if="movimiento.rol_area_origen != null"> ({{ movimiento.rol_area_origen }})</b> 
+                          <b v-else> ({{ movimiento.tipo_rol }})</b> 
+                          con fecha <b>{{ movimiento.fecha }} hrs.</b>
+                        </p>                 
+                      </b-col>
+                    </b-row>                      
+                  </b-tab>                 
+                  <b-tab title="Archivos adjuntos" v-if="array_archivo_ultimo.length > 0">                    
+                    <!-- Archivos procedimiento origen -->                    
+                    <div class="mb-4">
+                      <h4 class="text-info text-center"><i class="fa fa-files-o" aria-hidden="true"></i> Archivos Adjuntos</h4>
+                    </div>            
+                    <table class="table table-bordered table-striped table-sm">                           
+                        <thead>
+                          <th class="text-center">Nombre </th>
+                          <th class="text-center">Procedimiento</th>
+                          <th class="text-center">Rol-Area</th>                           
+                          <th class="text-center">Descargar</th>
+                        </thead>
+                        <tbody>                     
+                          <form ref="show_file" :action="url_show_file" target="_blank" method="post">
+                              <input type="hidden" name="file_id">                                            
+                          </form>     
+                          <tr v-for="(archivo, index) in array_archivo_ultimo" :key="index">
+                            <td v-text="archivo.nombre"></td>
+                            <td v-text="archivo.procedimiento"></td>
+                            <td class="text-center" v-text="archivo.area"></td>
+                            <td class="text-center">                                                      
+                              <b-button variant="info" size="sm" @click="mostrarArchivo(archivo.id)" title="Descargar">
+                                <b-icon icon="download"></b-icon>
+                              </b-button>
+                            </td>                              
+                          </tr>                                                
+                        </tbody>
+                    </table>                              
+                  </b-tab>                
+                  <b-tab title="Observaciones">
+                    <!-- Información observaciones recientes -->                                                                 
+                    <div class="mb-4">
+                      <h4 class="text-info text-center">Observaciones</h4>
+                    </div>                               
+                  </b-tab>   
+              </b-tabs>        
+            </b-card>            
           </b-tab>
           <b-tab title="Procesamiento de Expediente">                        
             <!-- Compoenente del procedimiento -->                
@@ -106,8 +173,9 @@
                         :tipo_rol="tipo_rol"
                         :tipo_usuario="tipo_usuario"
                         :expediente="expediente"
-                        :array_graduando="array_graduando"                       
-                        v-if="array_graduando.length > 0"
+                        :graduando="graduando" 
+                        :movimiento="movimiento"                      
+                        v-if="graduando != null"
             />            
           </b-tab>
         </b-tabs>    
@@ -135,14 +203,14 @@
 </div>   
 </template>
 <script>
-import tp_st_verificar_requisitos_grado 
-  from '@/components/titulo_profesional_sustentacion_tesis/verificar_requisitos_grado.vue'
+import verificar_requisitos_grado 
+  from '@/components/titulo_profesional_sustentacion_tesis/verificar_requisitos_grado/index.vue'
 import tp_st_verificar_pertenencia_tema 
   from '@/components/titulo_profesional_sustentacion_tesis/verificar_pertinencia_tema.vue'
 import tp_st_nombrar_jurado_adjuntar_resolucion 
   from '@/components/titulo_profesional_sustentacion_tesis/nombrar_jurado_adjuntar_resolucion.vue'
-import tp_st_designar_docente_asesor_comision_calificacion_borrador
-  from '@/components/titulo_profesional_sustentacion_tesis/designar_docente_asesor_comision_calificacion_borrador.vue'
+import designar_docente_asesor_comision_calificacion_borrador
+  from '@/components/titulo_profesional_sustentacion_tesis/designar_docente_asesor_comision_calificacion_borrador/index.vue'  
 import tp_st_resolver_asignacion_asesoria_proyecto
   from '@/components/titulo_profesional_sustentacion_tesis/resolver_asignacion_asesoria_proyecto.vue'
 import tp_st_emitir_resolucion_asignacion_asesor_tema
@@ -172,10 +240,10 @@ export default {
   name: 'info-expediente',
   props: ['nombre_componente', 'idgrado_proc', 'idexpediente', 'idusuario', 'codi_usuario', 'idrol_area', 'tipo_rol', 'tipo_usuario'],
   components: {
-    tp_st_verificar_requisitos_grado,
+    verificar_requisitos_grado,
     tp_st_verificar_pertenencia_tema,
     tp_st_nombrar_jurado_adjuntar_resolucion,
-    tp_st_designar_docente_asesor_comision_calificacion_borrador,
+    designar_docente_asesor_comision_calificacion_borrador,
     tp_st_resolver_asignacion_asesoria_proyecto,
     tp_st_emitir_resolucion_asignacion_asesor_tema,
     tp_st_dar_conformidad_asesoramiento_proyecto,
@@ -194,12 +262,32 @@ export default {
       url: this.$root.API_URL,      
       url_show_file : `${this.$root.API_URL}/utils/show_file.php`,        
       grado_procedimiento : {},     
-      expediente : {},  
-      array_graduando : [], // autor y coautores del proyecto de graduacion
+      expediente : null,  
+      graduando : null, // autor del proyecto de graduacion
+      movimiento : null, // ultimo movimiento ingresado al procedimiento y expediente seleccionado
+      estados : this.$root.estados,
       array_archivo : [], // archivos del expediente                    
+      array_archivo_ultimo : [], // archivos del expediente del proc origen del ultimo movimiento 
     }    
   },
-  methods: {     
+  methods: {  
+    getLastMovimiento() {
+      let me = this
+      var formData = this._toFormData({
+          idgradproc_destino: this.idgrado_proc, 
+          idexpediente: this.idexpediente         
+      })        
+
+      this.axios.post(`${this.url}/Movimiento/getLastMovimientoByProc`, formData)
+      .then(function(response) {
+        if (!response.data.error) {              
+          me.movimiento = response.data.movimiento                     
+        }
+        else {              
+          console.log(response.data.message)
+        }
+      })   
+    },    
     mostrarArchivo(id) {               
         this.$refs.show_file.file_id.value = id
         this.$refs.show_file.submit()
@@ -240,37 +328,53 @@ export default {
     },                                                             
     getGraduando() {  // para mostrar la informacion del graduando o graduandos
         let me = this       
-
         var formData = this._toFormData({
             idexpediente: this.idexpediente,
         })
 
         this.axios.post(`${this.url}/Usuario/getGradByIdExp`, formData)
         .then(function(response) {
-          if (response.data.error) {
-              me.errorMsg = response.data.message
+          if (!response.data.error) {
+              me.graduando = response.data.graduando                                                        
           }
           else {
-              me.array_graduando = response.data.array_graduando                                          
+              console.log(response.data.message)
           }
         })               
     },   
     getArchivos() {
         let me = this
-        var formData = this._toFormData({
-            idexpediente: this.idexpediente,
+        var formData = this._toFormData({          
+          idexpediente: this.idexpediente,
         })       
 
         this.axios.post(`${this.url}/Archivo/index`, formData)
-        .then(function(response) {
-          if (response.data.error) {
-              me.errorMsg = response.data.message
+        .then(function(response) {          
+          if (!response.data.error) {
+            me.array_archivo = response.data.array_archivo
           }
-          else {
-              me.array_archivo = response.data.array_archivo                              
+          else {              
+            console.log(response.data.message)
           }
         })          
     },    
+    getArchivosProcOrigen() {
+        let me = this
+        var formData = this._toFormData({
+          idgrado_proc: this.idgrado_proc, //procedimiento actual seria el destino
+          idexpediente: this.idexpediente,
+        })       
+
+        this.axios.post(`${this.url}/Archivo/show`, formData)
+        .then(function(response) {          
+          if (!response.data.error) {
+            me.array_archivo_ultimo = response.data.array_archivo_ultimo
+          }
+          else {              
+            console.log(response.data.message)
+          }
+        })          
+    }, 
     _toFormData(obj) {
         var fd = new FormData()
 
@@ -284,10 +388,12 @@ export default {
   mounted: function() { 
     
     if (this.idexpediente != null) { //si se ha establecido id del expediente      
+      this.getLastMovimiento()
       this.getGradoProcedimiento()
       this.getExpediente()
       this.getGraduando()
-      this.getArchivos()                 
+      this.getArchivos()  
+      this.getArchivosProcOrigen()               
     }
     else {
       this.$router.push({ name: 'home' }); 

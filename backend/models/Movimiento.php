@@ -58,7 +58,7 @@ class Movimiento {
 				AND GT_M.idexpediente = $this->idexpediente AND GT_R.condicion = 1
 				ORDER BY GT_M.id desc limit 1";*/
 
-		$sql = "SELECT t_movimiento.*, SIAC_OPER.nomb_oper, REPLACE(SIAC_DOC.apn, '/', ' ') as apn
+		$sql = "SELECT t_movimiento.*, SIAC_OPER.nomb_oper AS administrativo, REPLACE(SIAC_DOC.apn, '/', ' ') AS docente, SIAC_DOC.dic AS nro_doc_docente
 				FROM
 				(
 					SELECT GT_M.id, GT_M.idusuario, GT_M.fecha, GT_R.etiqueta, GT_P.nombre AS procedimiento_origen, GT_GP.tipo_rol, GT_RA.nombre AS rol_area_origen

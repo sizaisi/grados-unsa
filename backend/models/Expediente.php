@@ -30,12 +30,13 @@ class Expediente {
 		$result = array('error' => false);
   
 		if ($tipo_usuario == 'Administrativo') {
-			$sql = "SELECT gt_e.*, a.nesc               
-					FROM GT_EXPEDIENTE AS gt_e
-					INNER JOIN actescu AS a ON gt_e.nues = a.nues
-					WHERE gt_e.estado_expediente = 'En proceso' AND gt_e.idgrado_procedimiento=$idgrado_procedimiento
-					AND gt_e.nues IN (SELECT codi_depe FROM SIAC_OPER_DEPE WHERE codi_oper='$codi_usuario')
-					ORDER BY gt_e.fecha_inicio ASC";
+			$sql = "SELECT GT_E.*, AC_E.nesc, AC_F.nfac AS facultad
+					FROM GT_EXPEDIENTE AS GT_E
+					INNER JOIN actescu AS AC_E ON AC_E.nues = GT_E.nues
+					INNER JOIN actfacu AS AC_F ON AC_F.facu = AC_E.facu
+					WHERE GT_E.estado_expediente = 'En proceso' AND GT_E.idgrado_procedimiento=$idgrado_procedimiento
+					AND GT_E.nues IN (SELECT codi_depe FROM SIAC_OPER_DEPE WHERE codi_oper='$codi_usuario')
+					ORDER BY GT_E.fecha_inicio ASC";
 		}
 		else if ($tipo_usuario == 'Docente') {			
 
@@ -164,10 +165,11 @@ class Expediente {
   
 		$result = array('error' => false);
   
-		$sql = "SELECT gt_e.*, ac_a.nesc " .             
-			   "FROM GT_EXPEDIENTE AS gt_e " .
-			   "INNER JOIN actescu AS ac_a ON gt_e.nues = ac_a.nues " .
-			   "WHERE gt_e.id = $this->id";
+		$sql = "SELECT GT_E.*, AC_E.nesc, AC_F.nfac AS facultad
+			    FROM GT_EXPEDIENTE AS GT_E
+			    INNER JOIN actescu AS AC_E ON GT_E.nues = AC_E.nues
+				INNER JOIN actfacu AS AC_F ON AC_F.facu = AC_E.facu
+			    WHERE GT_E.id = $this->id";
   
 		$result_query = mysqli_query($this->conn, $sql);
   
