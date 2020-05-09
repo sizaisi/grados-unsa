@@ -18,7 +18,7 @@
                         </p>                 
                     </b-col>
                   </b-row>
-                  <b-button class="m-1" :variant="btn_color[ruta.etiqueta]" @click="mover(ruta)">
+                  <b-button class="m-1" :variant="color_acciones[ruta.etiqueta]" @click="mover(ruta)">
                     {{ ruta.etiqueta | capitalize }}
                   </b-button>                                                           
                 </div> 
@@ -56,7 +56,7 @@ export default {
             tabIndex: 0,         
             tabIndex2: 0,  
             array_ruta : [],      
-            btn_color : this.$root.btn_colors,                         
+            color_acciones : this.$root.color_acciones,                         
             errors: [], 
         }
     },
@@ -81,7 +81,7 @@ export default {
             this.$bvModal.msgBoxConfirm(
                 '¿Esta seguro de ' + ruta.etiqueta + ' este expediente?', {
                 title: ruta.etiqueta.charAt(0).toUpperCase()+ruta.etiqueta.slice(1),                    
-                okVariant: this.btn_color[ruta.etiqueta],
+                okVariant: this.color_acciones[ruta.etiqueta],
                 okTitle: 'SI',
                 cancelTitle: 'NO',          
                 centered: true

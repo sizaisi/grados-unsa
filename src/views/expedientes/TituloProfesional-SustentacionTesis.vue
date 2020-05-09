@@ -12,92 +12,93 @@
               <b-tabs pills card vertical>
                   <b-tab title="Expediente">
                     <!-- Información expediente -->                                                                 
-                    <div class="mb-4">
+                    <div class="mb-3">
                       <h4 class="text-info text-center"><i class="fa fa-folder-open" aria-hidden="true"></i> Expediente</h4>
                     </div>           
-                    <form v-if="expediente != null">
-                      <div class="form-row">
-                          <div class="form-group col-md-3">
-                            <label class="text-info">Código</label>                                   
-                            <label class="lbl-data" v-text="expediente.codigo"></label>                     
-                          </div>
-                          <div class="form-group col-md-9">
-                            <label class="text-info">Título Proyecto</label>                                   
-                            <label class="lbl-data" v-text="expediente.titulo"></label>                     
-                          </div>
-                      </div>               
-                      <div class="form-row">
-                          <div class="form-group col-md-6">
-                            <label class="text-info">Programa de estudios</label>                                   
-                            <label class="lbl-data" v-text="expediente.nesc"></label>                     
-                          </div>
-                          <div class="form-group col-md-6">
-                            <label class="text-info">Fecha de inicio de trámite</label>                                   
-                            <label class="lbl-data" v-text="expediente.fecha_inicio"></label>                     
-                          </div>
-                      </div>               
-                    </form>                    
+                    <b-card v-if="expediente != null">
+                      <form>
+                        <div class="form-row">
+                            <div class="form-group col-md-3">
+                              <label class="text-info">Código</label>                                   
+                              <label class="lbl-data" v-text="expediente.codigo"></label>                     
+                            </div>
+                            <div class="form-group col-md-9">
+                              <label class="text-info">Título Proyecto</label>                                   
+                              <label class="lbl-data" v-text="expediente.titulo"></label>                     
+                            </div>
+                        </div>               
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                              <label class="text-info">Programa de estudios</label>                                   
+                              <label class="lbl-data" v-text="expediente.nesc"></label>                     
+                            </div>
+                            <div class="form-group col-md-6">
+                              <label class="text-info">Fecha de inicio de trámite</label>                                   
+                              <label class="lbl-data" v-text="expediente.fecha_inicio"></label>                     
+                            </div>
+                        </div>               
+                      </form>                    
+                    </b-card>
                   </b-tab>
                   <b-tab title="Graduando">
                     <!-- Información graduando -->                    
-                    <div class="mb-4">
+                    <div class="mb-3">
                       <h4 class="text-info text-center"><i class="fa fa-user" aria-hidden="true"></i> Graduando</h4>
                     </div>    
-                    <form v-if="graduando != null">
-                      <div class="form-row">
-                          <div class="form-group col-md-3">
-                            <label class="text-info">CUI</label>                                   
-                            <label class="lbl-data" v-text="graduando.cui"></label>                     
-                          </div>
-                          <div class="form-group col-md-9">
-                            <label class="text-info">Apellidos y Nombres</label>                                   
-                            <label class="lbl-data" v-text="graduando.apell_nombres"></label>                     
-                          </div>
-                      </div>               
-                      <div class="form-row">
-                          <div class="form-group col-md-3">
-                            <label class="text-info">E-mail</label>                                   
-                            <label class="lbl-data" v-text="graduando.email"></label>                     
-                          </div>
-                          <div class="form-group col-md-3">
-                            <label class="text-info">Teléfono</label>                                   
-                            <label class="lbl-data" v-text="graduando.telefono_movil"></label>                     
-                          </div>
-                          <div class="form-group col-md-6">
-                            <label class="text-info">Dirección</label>                                   
-                            <label class="lbl-data" v-text="graduando.direccion"></label>                     
-                          </div>
-                      </div>               
-                    </form>                              
+                    <b-card v-if="graduando != null">
+                      <form>
+                        <div class="form-row">
+                            <div class="form-group col-md-3">
+                              <label class="text-info">CUI</label>                                   
+                              <label class="lbl-data" v-text="graduando.cui"></label>                     
+                            </div>
+                            <div class="form-group col-md-9">
+                              <label class="text-info">Apellidos y Nombres</label>                                   
+                              <label class="lbl-data" v-text="graduando.apell_nombres"></label>                     
+                            </div>
+                        </div>               
+                        <div class="form-row">
+                            <div class="form-group col-md-3">
+                              <label class="text-info">E-mail</label>                                   
+                              <label class="lbl-data" v-text="graduando.email"></label>                     
+                            </div>
+                            <div class="form-group col-md-3">
+                              <label class="text-info">Teléfono</label>                                   
+                              <label class="lbl-data" v-text="graduando.telefono_movil"></label>                     
+                            </div>
+                            <div class="form-group col-md-6">
+                              <label class="text-info">Dirección</label>                                   
+                              <label class="lbl-data" v-text="graduando.direccion"></label>                     
+                            </div>
+                        </div>               
+                      </form>   
+                    </b-card>                           
                   </b-tab> 
                   <b-tab title="Documentos">
                     <!-- Información todos archivos -->                    
-                    <div class="mb-4">
+                    <div class="mb-3">
                       <h4 class="text-info text-center"><i class="fa fa-files-o" aria-hidden="true"></i> Archivos</h4>
-                    </div>            
-                    <table class="table table-bordered table-striped table-sm">                           
-                        <thead>
-                          <th class="text-center">Nombre </th>
-                          <th class="text-center">Procedimiento</th>
-                          <th class="text-center">Rol-Area</th>                           
-                          <th class="text-center">Descargar</th>
-                        </thead>
-                        <tbody>                     
-                          <form ref="show_file" :action="url_show_file" target="_blank" method="post">
-                              <input type="hidden" name="file_id">                                            
-                          </form>     
-                          <tr v-for="(archivo, index) in array_archivo" :key="index">
-                            <td v-text="archivo.nombre"></td>
-                            <td v-text="archivo.procedimiento"></td>
-                            <td class="text-center" v-text="archivo.area"></td>
-                            <td class="text-center">                                                      
-                              <b-button variant="info" size="sm" @click="mostrarArchivo(archivo.id)" title="Descargar">
-                                <b-icon icon="download"></b-icon>
-                              </b-button>
-                            </td>                              
-                          </tr>                                                
-                        </tbody>
-                    </table>
+                    </div>   
+                    <form ref="show_file" :action="url_show_file" target="_blank" method="post">
+                        <input type="hidden" name="file_id">                                            
+                    </form>          
+                    <b-table                              
+                        :items="array_archivo"
+                        :fields="columnas_archivos"                              
+                        striped
+                        bordered                           
+                        hover
+                        responsive                        
+                        show-empty
+                        empty-text="No hay documentos que mostrar."
+                        primary-key="id"
+                    >         
+                      <template v-slot:cell(descargar)="data">                                 
+                        <b-button variant="info" size="sm" title="Descargar" @click="mostrarArchivo(data.item.id)">
+                          <b-icon icon="download"></b-icon>
+                        </b-button>
+                      </template>                     
+                    </b-table>                  
                   </b-tab>                                   
               </b-tabs>        
             </b-card>
@@ -105,53 +106,75 @@
           <b-tab title="Información de Procedencia">  
             <b-card no-body>         
               <b-tabs pills card vertical>   
-                  <b-tab title="Estado de Expediente">
+                  <b-tab title="Estado de expediente">
                     <!-- Información procedimiento origen -->                                                                 
-                    <div class="mb-4">
-                      <h4 class="text-info text-center">Estado de Expediente</h4>
-                    </div>         
+                    <div class="mb-3">
+                      <h4 class="text-info text-center">Estado de expediente</h4>
+                    </div>      
                     <b-row class="justify-content-lg-center" v-if="movimiento != null">
-                      <b-col col lg="8">
-                        <p class="text-justify">
-                          Expediente <b>{{ estados[movimiento.etiqueta] }}</b> por el procedimiento 
-                          <b>{{ movimiento.procedimiento_origen }}</b> a cargo de
-                          <b v-if="movimiento.administrativo != null">{{ movimiento.administrativo }}</b> 
-                          <b v-else>{{ movimiento.docente }}</b> 
-                          <b v-if="movimiento.rol_area_origen != null"> ({{ movimiento.rol_area_origen }})</b> 
-                          <b v-else> ({{ movimiento.tipo_rol }})</b> 
-                          con fecha <b>{{ movimiento.fecha }} hrs.</b>
-                        </p>                 
+                      <b-col col lg="10">
+                        <table class="table table-bordered table-borderless">
+                          <tbody>  
+                            <tr>
+                              <th class="bg-light text-right">Estado: </th>
+                              <td>
+                                <b-badge 
+                                  :variant="color_acciones[movimiento.etiqueta]" 
+                                  v-text="estados[movimiento.etiqueta]"
+                                  class="estado"
+                                >                                  
+                                </b-badge> 
+                              </td>                                  
+                            </tr>
+                            <tr>
+                              <th class="bg-light text-right">Responsable: </th>
+                              <td v-if="movimiento.administrativo != null" v-text="movimiento.administrativo"></td>                           
+                              <td v-else v-text="movimiento.docente"></td>
+                            </tr>
+                            <tr>
+                              <th class="bg-light text-right">Rol / Área: </th>
+                              <td v-if="movimiento.rol_area_origen != null" v-text="movimiento.rol_area_origen"></td>                           
+                              <td v-else v-text="movimiento.tipo_rol"></td>                              
+                            </tr>
+                            <tr>
+                              <th class="bg-light text-right">Procedimiento: </th>
+                              <td v-text="movimiento.procedimiento_origen"></td>                                
+                            </tr>                                               
+                            
+                            <tr>
+                              <th class="bg-light text-right">Fecha / Hora: </th>
+                              <td v-text="movimiento.fecha + ' hrs.'">johncarter@mail.com</td>                              
+                            </tr>
+                          </tbody>
+                        </table>
                       </b-col>
-                    </b-row>                      
+                    </b-row>                                                 
                   </b-tab>                 
                   <b-tab title="Archivos adjuntos" v-if="array_archivo_ultimo.length > 0">                    
                     <!-- Archivos procedimiento origen -->                    
                     <div class="mb-4">
-                      <h4 class="text-info text-center"><i class="fa fa-files-o" aria-hidden="true"></i> Archivos Adjuntos</h4>
-                    </div>            
-                    <table class="table table-bordered table-striped table-sm">                           
-                        <thead>
-                          <th class="text-center">Nombre </th>
-                          <th class="text-center">Procedimiento</th>
-                          <th class="text-center">Rol-Area</th>                           
-                          <th class="text-center">Descargar</th>
-                        </thead>
-                        <tbody>                     
-                          <form ref="show_file" :action="url_show_file" target="_blank" method="post">
-                              <input type="hidden" name="file_id">                                            
-                          </form>     
-                          <tr v-for="(archivo, index) in array_archivo_ultimo" :key="index">
-                            <td v-text="archivo.nombre"></td>
-                            <td v-text="archivo.procedimiento"></td>
-                            <td class="text-center" v-text="archivo.area"></td>
-                            <td class="text-center">                                                      
-                              <b-button variant="info" size="sm" @click="mostrarArchivo(archivo.id)" title="Descargar">
-                                <b-icon icon="download"></b-icon>
-                              </b-button>
-                            </td>                              
-                          </tr>                                                
-                        </tbody>
-                    </table>                              
+                      <h4 class="text-info text-center"><i class="fa fa-files-o" aria-hidden="true"></i> Archivos adjuntos</h4>
+                    </div>  
+                    <form ref="show_file_ultimo" :action="url_show_file" target="_blank" method="post">
+                      <input type="hidden" name="file_id">                                            
+                    </form>     
+                    <b-table                              
+                        :items="array_archivo_ultimo"
+                        :fields="columnas_archivos_ultimo"                              
+                        striped                        
+                        bordered   
+                        borderless      
+                        responsive                                                                                       
+                        show-empty
+                        empty-text="No hay archivos que mostrar."
+                        primary-key="id"
+                    >         
+                      <template v-slot:cell(descargar)="data">                                 
+                        <b-button variant="info" size="sm" title="Descargar" @click="mostrarArchivoUltimos(data.item.id)">
+                          <b-icon icon="download"></b-icon>
+                        </b-button>
+                      </template>                     
+                    </b-table>                   
                   </b-tab>                
                   <b-tab title="Observaciones">
                     <!-- Información observaciones recientes -->                                                                 
@@ -266,8 +289,21 @@ export default {
       graduando : null, // autor del proyecto de graduacion
       movimiento : null, // ultimo movimiento ingresado al procedimiento y expediente seleccionado
       estados : this.$root.estados,
+      color_acciones : this.$root.color_acciones,
       array_archivo : [], // archivos del expediente                    
       array_archivo_ultimo : [], // archivos del expediente del proc origen del ultimo movimiento 
+      columnas_archivos: [               
+        { key: 'nombre', label: 'Nombre', class: 'text-left', sortable: true },
+        { key: 'procedimiento', label: 'Procedimiento', class: 'text-left', sortable: true },
+        { key: 'area', label: 'Rol-Area', class: 'text-center', sortable: true },
+        { key: 'descargar', label: 'Descargar', class: 'text-center' }
+      ],
+      columnas_archivos_ultimo: [               
+        { key: 'nombre', label: 'Nombre', class: 'text-left' },
+        { key: 'procedimiento', label: 'Procedimiento', class: 'text-left' },
+        { key: 'area', label: 'Rol-Area', class: 'text-center' },
+        { key: 'descargar', label: 'Descargar', class: 'text-center' }
+      ],
     }    
   },
   methods: {  
@@ -291,6 +327,10 @@ export default {
     mostrarArchivo(id) {               
         this.$refs.show_file.file_id.value = id
         this.$refs.show_file.submit()
+    },        
+    mostrarArchivoUltimos(id) {               
+        this.$refs.show_file_ultimo.file_id.value = id
+        this.$refs.show_file_ultimo.submit()
     },        
     getGradoProcedimiento() {  // para mostrar el nombre del procedimiento seleccionado
         let me = this       
@@ -403,14 +443,16 @@ export default {
 </script>
 <style scoped>
   .lbl-data {
-   border: 0;
-   padding: 0;
-   font-weight: bold;
-   display: block;
-   width: 100%;   
-   font-size: 1rem;
-   margin-bottom: 0;    
- }
- 
+    border: 0;
+    padding: 0;
+    font-weight: bold;
+    display: block;
+    width: 100%;   
+    font-size: 1rem;
+    margin-bottom: 0;    
+  }  
+  .estado {
+    font-size: 0.85em;
+  }
 </style>
 
