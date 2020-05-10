@@ -1,5 +1,5 @@
 <template>
-    <div>
+<div>
     <b-card no-body>
         <b-tabs 
             v-model="tabIndex" 
@@ -22,7 +22,7 @@
                               placeholder="Ingrese al menos 30 caracteres"  
                               :state="observacion.descripcion.length >= 30"                            
                               required
-                              rows="2"
+                              rows="3"
                             ></b-form-textarea>                            
                           </b-form-group>
                         </b-col>                    
@@ -89,9 +89,8 @@
             <b-button @click="nextTab" :disabled="tabIndex==1">Siguiente</b-button>
         </b-button-group>     
     </div>   
-    </div>    
+</div>    
 </template>
-
 <script>
 export default {
     name: 'aprobado-derivar',
@@ -160,82 +159,73 @@ export default {
         },                       
         mover(ruta) { // movimiento para derivar el expediente al siguiente procedimiento
             this.$bvModal.msgBoxConfirm(
-                '¿Esta seguro de ' + ruta.etiqueta + ' este expediente?', {
-                title: ruta.etiqueta.charAt(0).toUpperCase()+ruta.etiqueta.slice(1),                    
+                '¿Seguro que quiere ' + ruta.etiqueta + ' este expediente?', {
+                title: ruta.etiqueta.charAt(0).toUpperCase()+ruta.etiqueta.slice(1) + ' Expediente',                    
                 okVariant: this.color_acciones[ruta.etiqueta],
-                okTitle: 'SI',
-                cancelTitle: 'NO',          
+                okTitle: ruta.etiqueta.charAt(0).toUpperCase()+ruta.etiqueta.slice(1),
+                cancelTitle: 'Cancelar',          
                 centered: true
-                })
-                .then(value => {
-                    if (value) {
+            }).then(value => {
+                if (value) {
                     let me = this                               
                     let formData = this._toFormData({
-                            idexpediente: this.expediente.id,
-                            idusuario: this.idusuario,
-                            idruta: ruta.id,
-                            idgradproc_destino: ruta.idgradproc_destino                     
-                        })                                    
+                        idexpediente: this.expediente.id,
+                        idusuario: this.idusuario,
+                        idruta: ruta.id,
+                        idgradproc_destino: ruta.idgradproc_destino                     
+                    })                                    
 
                     this.axios.post(`${this.url}/Movimiento/mover`, formData)
                     .then(function(response) {                                          
-                        if (!response.data.error) { //si no hay error                                                      
-                        me.$root.$bvToast.toast(response.data.message, {
-                            title: 'Éxito!',
-                            variant: 'success',
-                            toaster: 'b-toaster-bottom-right',                      
-                        })
-                        me.$router.push({name: 'menu-procedimientos',                   
-                                            params: { 
-                                                idgrado_modalidad: me.idgrado_modalidad, 
-                                                idgrado_proc: me.idgrado_proc, 
-                                                idusuario: me.idusuario,
-                                                codi_usuario: me.codi_usuario,
-                                                idrol_area: me.idrol_area,
-                                                tipo_rol: me.tipo_rol,
-                                                tipo_usuario: me.tipo_usuario,
-                                            }
-                                        })                  
+                        if (!response.data.error) {
+                            me.$parent.mostrarNotificacion('Éxito!', 'success', 5000, 'done', response.data.message, 'bottom-right')
+                            me.$router.push({name: 'menu-procedimientos',                   
+                                                params: { 
+                                                    idgrado_modalidad: me.idgrado_modalidad, 
+                                                    idgrado_proc: me.idgrado_proc, 
+                                                    idusuario: me.idusuario,
+                                                    codi_usuario: me.codi_usuario,
+                                                    idrol_area: me.idrol_area,
+                                                    tipo_rol: me.tipo_rol,
+                                                    tipo_usuario: me.tipo_usuario,
+                                                }
+                                            })                  
                         }
                         else {                           
-                        me.$bvToast.toast(response.data.message, {
-                            title: 'Error!',
-                            variant: 'danger',
-                            toaster: 'b-toaster-bottom-right',                    
-                        })                    
+                            me.$parent.mostrarNotificacion('Error!', 'danger', 5000, 'error_outline', response.data.message, 'bottom-right')
                         }
                     }) 
-                    }                   
-                })              
+                }                   
+            })              
         },        
         editarObservaciones(data) {          
-          this.observacion = Object.assign({}, data)
+            this.observacion = Object.assign({}, data)
         },
         guardarObservaciones() {
-          if (this.observacion.id == null) {
-            this.registrarObservaciones()
-          }
-          else {
-            this.actualizarObservaciones()
-          }            
+            if (this.observacion.id == null) {
+                this.registrarObservaciones()
+            }
+            else {
+                this.actualizarObservaciones()
+            }            
         },         
         getObservaciones() {
-          let me = this      
-          var formData = this._toFormData({
-            idgrado_proc: this.idgrado_proc,
-            idusuario: this.idusuario,
-            idexpediente: this.expediente.id
-          })
+            let me = this      
+            var formData = this._toFormData({
+                idgrado_proc: this.idgrado_proc,
+                idusuario: this.idusuario,
+                idexpediente: this.expediente.id
+            })
 
-          this.axios.post(`${this.url}/Observaciones/show`, formData)
-          .then(function(response) {                
-            if (!response.data.error) {                
-              me.array_observaciones = response.data.array_observaciones
-            }
-            else {                
-              console.log(response.data.message)      
-            }
-          })    
+            this.axios.post(`${this.url}/Observaciones/show`, formData)
+            .then(function(response) {                
+                if (!response.data.error) {                
+                    me.array_observaciones = response.data.array_observaciones
+                }
+                else {                
+                    console.log(response.data.message)      
+                }
+            })    
         },  
         registrarObservaciones() {   
             if (this.observacion.descripcion.length < 30) {
@@ -255,23 +245,14 @@ export default {
             this.axios.post(`${this.url}/Observaciones/store`, formData)
               .then(function(response) {      
                   me.resetearValores()
-                  if (!response.data.error) {                        
-                      me.$bvToast.toast(response.data.message, {
-                          title: 'Éxito!',
-                          variant: 'success',
-                          toaster: 'b-toaster-bottom-right',                      
-                      })
-                      me.getObservaciones()                           
+                  if (!response.data.error) {                                              
+                    me.$parent.mostrarNotificacion('Éxito!', 'success', 5000, 'done', response.data.message, 'bottom-right')
+                    me.getObservaciones()                           
                   }
                   else {
-                      me.$bvToast.toast(response.data.message, {
-                          title: 'Error!',
-                          variant: 'danger',
-                          toaster: 'b-toaster-bottom-right',                      
-                      })                                                             
+                    me.$parent.mostrarNotificacion('Error!', 'danger', 5000, 'error_outline', response.data.message, 'bottom-right')
                   }                      
-            })        
-                
+            })                        
         },
         actualizarObservaciones() {   
             if (this.observacion.descripcion.length < 30) {
@@ -290,22 +271,13 @@ export default {
               .then(function(response) {    
                   me.resetearValores()                                                                      
                   if (!response.data.error) {                        
-                      me.$bvToast.toast(response.data.message, {
-                          title: 'Éxito!',
-                          variant: 'success',
-                          toaster: 'b-toaster-bottom-right',                      
-                      })
-                      me.getObservaciones()                           
+                    me.$parent.mostrarNotificacion('Éxito!', 'success', 5000, 'done', response.data.message, 'bottom-right')
+                    me.getObservaciones()                           
                   }
                   else {
-                      me.$bvToast.toast(response.data.message, {
-                          title: 'Error!',
-                          variant: 'danger',
-                          toaster: 'b-toaster-bottom-right',                      
-                      })                                                             
+                    me.$parent.mostrarNotificacion('Error!', 'danger', 5000, 'error_outline', response.data.message, 'bottom-right')
                   }                      
-            })        
-                
+            })    
         },
         eliminarObservaciones(id) {        
             let me = this                    
@@ -314,11 +286,11 @@ export default {
             })  
 
             this.$bvModal.msgBoxConfirm(
-              '¿Esta seguro de eliminar estas observaciones?', {
-              title: 'Eliminar asesor',                    
+              '¿Seguro que quieres eliminar estas observaciones?', {
+              title: 'Eliminar observaciones',                    
               okVariant: 'danger',
-              okTitle: 'SI',
-              cancelTitle: 'NO',          
+              okTitle: 'Eliminar',
+              cancelTitle: 'Cancelar',          
               centered: true
             })
             .then(value => {
@@ -327,19 +299,11 @@ export default {
                     .then(function(response) {                           
                         me.resetearValores()
                         if (!response.data.error) {
-                            me.$bvToast.toast(response.data.message, {
-                                title: 'Éxito!',
-                                variant: 'success',
-                                toaster: 'b-toaster-bottom-right',                      
-                            })                            
+                            me.$parent.mostrarNotificacion('Éxito!', 'success', 5000, 'done', response.data.message, 'bottom-right')
                             me.getObservaciones()                            
                         }
                         else {
-                            me.$bvToast.toast(response.data.message, {
-                                title: 'Error!',
-                                variant: 'danger',
-                                toaster: 'b-toaster-bottom-right',                      
-                            })
+                            me.$parent.mostrarNotificacion('Error!', 'danger', 5000, 'error_outline', response.data.message, 'bottom-right')
                         }
                     })                
                 }
@@ -354,7 +318,7 @@ export default {
             var fd = new FormData()
 
             for (var i in obj) {
-            fd.append(i, obj[i])
+                fd.append(i, obj[i])
             }
 
             return fd

@@ -306,7 +306,7 @@ export default {
       ],
     }    
   },
-  methods: {  
+  methods: {        
     getLastMovimiento() {
       let me = this
       var formData = this._toFormData({

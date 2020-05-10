@@ -83,7 +83,7 @@ class Observaciones {
 		$result_query = mysqli_query($this->conn, $sql);
   
 		if ($result_query) {
-		   $result['message'] = "Las observaciones fueron registradas correctamente.";
+		   $result['message'] = "Observaciones registradas correctamente.";
 		}
 		else {
 		   $result['error'] = true;

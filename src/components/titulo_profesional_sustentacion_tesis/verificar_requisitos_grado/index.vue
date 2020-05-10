@@ -12,7 +12,7 @@
               button
               name="acciones"
               button-variant="outline-primary"  
-              class="m-2"        
+              class="m-2"                      
             >
               {{ ruta.etiqueta | capitalize }} Expediente
             </b-form-radio>            
@@ -21,7 +21,7 @@
       </fieldset>
     </div>   
 
-    <template v-if="estados[movimiento.etiqueta] == 'enviado' && ruta_seleccionada != null">           
+    <template v-if="estados[movimiento.etiqueta] == 'enviado' && ruta_seleccionada != null">                 
       <enviado_aprobar
         :idgrado_modalidad="idgrado_modalidad"
         :idgrado_proc="idgrado_proc"
@@ -33,7 +33,7 @@
         :expediente="expediente"
         :graduando="graduando"
         :ruta="ruta_seleccionada"                                        
-        v-if="ruta_seleccionada.etiqueta == 'aprobar'"                  
+        v-if="ruta_seleccionada.etiqueta == 'aprobar'"                         
       />              
       <enviado_denegar
         :idgrado_modalidad="idgrado_modalidad"
@@ -76,31 +76,23 @@ export default {
   },
   data() {
     return {             
-      url: this.$root.API_URL,      
-      //movimiento : null,      
+      url: this.$root.API_URL,                 
       array_ruta : [],   
       ruta_seleccionada: null,      
-      estados : this.$root.estados,      
+      estados : this.$root.estados,  
     }
   },
-  methods: {    
-    /*getLastMovimiento() {
-        let me = this
-        var formData = this._toFormData({
-            idgradproc_destino: this.idgrado_proc, 
-            idexpediente: this.expediente.id         
-        })        
-
-        this.axios.post(`${this.url}/Movimiento/getLastMovimientoByProc`, formData)
-        .then(function(response) {
-          if (!response.data.error) {              
-            me.movimiento = response.data.movimiento                     
-          }
-          else {              
-            console.log(response.data.message)
-          }
-        })   
-    },*/   
+  methods: {         
+    mostrarNotificacion(titulo, color, tiempo, icono, mensaje, posicion) {
+      this.$vs.notify({
+        title: titulo,
+        color: color,
+        time: tiempo,
+        icon: icono,
+        text: mensaje,
+        position: posicion,
+      })
+    },        
     getRutas() {
         let me = this
         var formData = this._toFormData({
@@ -125,18 +117,17 @@ export default {
         }
 
         return fd
-    },      
+    }    
   },  
   filters: {
     capitalize: function (value) {
       if (!value) return ''
-      value = value.toString()
+        value = value.toString()
 
       return value.charAt(0).toUpperCase() + value.slice(1)
     }
   },
-  mounted: function() {   
-    //this.getLastMovimiento()
+  mounted: function() {       
     this.getRutas()                                  
   },
 }
