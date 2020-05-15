@@ -6,9 +6,10 @@ require_once '../../utils/functions.php';
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	/************************ VARIABLES DE FORMULARIO *********************/
 	$expediente = json_decode($_POST['expediente']);	
-	$apell_nombres = $_POST['apell_nombres'];
-	$asesor_anterior = $_POST['asesor_anterior'];
-	$asesor_actual = json_decode($_POST['asesor_actual']);
+	$graduando = json_decode($_POST['graduando']);
+	//$movimiento = json_decode($_POST['movimiento']);
+	$asesor_anterior = 'Jeiken Sizaisi';
+	$asesor = json_decode($_POST['asesor']);
 	/**********************************************************************/
 
 	// create new PDF document
@@ -48,7 +49,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	$pdf->setCellHeightRatio(2.5);
 	$texto1 = 'El informe del Docente-Asesor Dr./Mg. : <b>'.$asesor_anterior.'</b>';
 	$texto1 .= ' en el que renuncia a continuar asesorando el Proyecto de Tesis Titulada:<br><b>'.$expediente->titulo.'</b><br>';
-	$texto1 .= 'Del ciudadano Don(ña): <b>'.$apell_nombres.'</b>';	
+	$texto1 .= 'Del ciudadano Don(ña): <b>'.$graduando->apell_nombres.'</b>';	
 	
 	$pdf->SetFont('helvetica', '', 12);
 	$pdf->writeHTMLCell(160, '', 25, '', $texto1, 0, 0, 0, true, 'J', true);
@@ -56,7 +57,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	$pdf->SetFont('helvetica', 'B', 12);
 	$pdf->writeHTMLCell(160, '', 25, '', 'SE RESUELVE:', 0, 0, 0, true, 'L', true); 
 	$pdf->Ln(); 
-	$texto2 = '<b>PRIMERO.- </b>Designar como nuevo Asesor al Docente Dr/Mg. <b>'.$asesor_actual->apn.
+	$texto2 = '<b>PRIMERO.- </b>Designar como nuevo Asesor al Docente Dr/Mg. <b>'.$asesor->apn.
 			  '</b> docente de la facultad, a partir del 20 de abril del 2020 del proyecto de Tesis titulado:<br>'.
 			  '<b>'.$expediente->titulo.'</b><br>';
 	

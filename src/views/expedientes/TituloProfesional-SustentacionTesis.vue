@@ -315,7 +315,7 @@ export default {
       })        
 
       this.axios.post(`${this.url}/Movimiento/getLastMovimientoByProc`, formData)
-      .then(function(response) {
+      .then(function(response) {        
         if (!response.data.error) {              
           me.movimiento = response.data.movimiento                     
         }
@@ -350,37 +350,37 @@ export default {
         })             
     },   
     getExpediente() {  // para mostrar los datos del expediente
-        let me = this
-        
-        var formData = this._toFormData({
-            idexpediente: this.idexpediente,
-        })
+      let me = this
+      
+      var formData = this._toFormData({
+          idexpediente: this.idexpediente,
+      })
 
-        this.axios.post(`${this.url}/Expediente/getExpById`, formData)
-        .then(function(response) {
-          if (response.data.error) {
-              me.errorMsg = response.data.message
-          }
-          else {
-              me.expediente = response.data.expediente                                                  
-          }
-        })          
+      this.axios.post(`${this.url}/Expediente/getExpById`, formData)
+      .then(function(response) {
+        if (response.data.error) {
+          me.errorMsg = response.data.message
+        }
+        else {
+          me.expediente = response.data.expediente                                                  
+        }
+      })          
     },                                                             
     getGraduando() {  // para mostrar la informacion del graduando o graduandos
-        let me = this       
-        var formData = this._toFormData({
-            idexpediente: this.idexpediente,
-        })
+      let me = this       
+      var formData = this._toFormData({
+          idexpediente: this.idexpediente,
+      })
 
-        this.axios.post(`${this.url}/Usuario/getGradByIdExp`, formData)
-        .then(function(response) {
-          if (!response.data.error) {
-              me.graduando = response.data.graduando                                                        
-          }
-          else {
-              console.log(response.data.message)
-          }
-        })               
+      this.axios.post(`${this.url}/Persona/getGraduando`, formData)
+      .then(function(response) {                    
+        if (!response.data.error) {
+            me.graduando = response.data.graduando                                                        
+        }
+        else {
+            console.log(response.data.message)
+        }
+      })               
     },   
     getArchivos() {
         let me = this
@@ -396,10 +396,10 @@ export default {
           else {              
             console.log(response.data.message)
           }
-        })          
+        })       
     },    
     getArchivosProcOrigen() {
-        let me = this
+        /*let me = this
         var formData = this._toFormData({
           idgrado_proc: this.idgrado_proc, //procedimiento actual seria el destino
           idexpediente: this.idexpediente,
@@ -413,7 +413,7 @@ export default {
           else {              
             console.log(response.data.message)
           }
-        })          
+        }) */         
     }, 
     _toFormData(obj) {
         var fd = new FormData()

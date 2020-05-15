@@ -19,7 +19,7 @@ export default {
     tipo_rol: String,
     tipo_usuario: String,
     expediente: Object,
-    array_graduando: Array,
+    graduando: Object,
   },
   data() {
     return {             

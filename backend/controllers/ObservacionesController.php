@@ -16,12 +16,13 @@ class ObservacionesController {
 	}
     
     public function store() {        
-		$observaciones = new Observaciones();
-  
-        $observaciones->setDescripcion($_POST['descripcion']);
+		$observaciones = new Observaciones();  
+        
+        $observaciones->setIdExpediente($_POST['idexpediente']);
         $observaciones->setIdGradoProc($_POST['idgrado_proc']);
         $observaciones->setIdUsuario($_POST['idusuario']);
-        $observaciones->setIdExpediente($_POST['idexpediente']);
+        $observaciones->setIdRuta($_POST['idruta']);
+        $observaciones->setDescripcion($_POST['descripcion']);        
 
         $result = $observaciones->insertar();        
 
@@ -36,7 +37,7 @@ class ObservacionesController {
 
         $result = $observaciones->actualizar();        
 
-        echo json_encode($result);           
+        echo json_encode($result);      
 	}	
 
 	public function delete() {        

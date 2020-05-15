@@ -7,7 +7,7 @@ class ArchivoController {
 	public function index() { 
 		$archivo = new Archivo();        
 
-		$archivo->setIdexpediente($_POST['idexpediente']);
+		$archivo->setIdExpediente($_POST['idexpediente']);
 
         $result = $archivo->getTodosArchivos();
 
@@ -28,29 +28,31 @@ class ArchivoController {
     
 
 
-	public function getDocumento() {
-		$archivo = new Archivo();        
+	public function get() {
+        $archivo = new Archivo();        
+        
+        $archivo->setIdExpediente($_POST['idexpediente']);
+        $archivo->setIdGradoProc($_POST['idgrado_proc']);
+        $archivo->setIdUsuario($_POST['idusuario']);        
 
-        $archivo->setIdgrado_Proc($_POST['idgrado_proc']);
-        $archivo->setIdusuario($_POST['idusuario']);
-        $archivo->setIdexpediente($_POST['idexpediente']);
-
-        $result = $archivo->getListDocumento();
+        $result = $archivo->getArchivo();
 
         echo json_encode($result);       
 	}
 	
 	public function store() {
-		$archivo = new Archivo();        
+        $archivo = new Archivo();        
+        
+        $archivo->setIdExpediente($_POST['idexpediente']);
+        $archivo->setIdGradoProc($_POST['idgrado_proc']);
+        $archivo->setIdUsuario($_POST['idusuario']);
+        $archivo->setIdRuta($_POST['idruta']);
+        $archivo->setNombreAsignado($_POST['nombre_asignado']);
+        $archivo->setNombreArchivo($_FILES['file']['name']);
+        $archivo->setMime($_FILES['file']['type']);
+        $archivo->setData(base64_encode(file_get_contents($_FILES['file']['tmp_name'])));                
 
-        $archivo->setNombre($_POST['nombre']);
-        $archivo->setData(base64_encode(file_get_contents($_FILES['data']['tmp_name'])));
-        $archivo->setExtension($_FILES['data']['type']);
-        $archivo->setIdgrado_Proc($_POST['idgrado_proc']);
-        $archivo->setIdusuario($_POST['idusuario']);
-        $archivo->setIdexpediente($_POST['idexpediente']);       
-
-        $result = $archivo->storeDocumento();
+        $result = $archivo->insertar();
 
         echo json_encode($result);         
 	}	
@@ -60,7 +62,7 @@ class ArchivoController {
 
         $archivo->setId($_POST['id']);        
 
-        $result = $archivo->deleteDocumento();
+        $result = $archivo->eliminar();
 
         echo json_encode($result);           
     }  

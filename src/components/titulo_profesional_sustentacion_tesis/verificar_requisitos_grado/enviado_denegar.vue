@@ -8,77 +8,54 @@
             style="min-height: 250px"                        
           >   
             <b-tab title="1. Añadir observaciones" title-item-class="disabledTab" :disabled="tabIndex2 < 0">
-                <b-form @submit.prevent="guardarObservaciones" class="mb-3">
-                    <b-row class="justify-content-lg-center mb-2">
-                        <b-col col lg="6">
-                          <b-form-group
-                            class="mb-0"
-                            label="Observaciones:"
-                            label-for="observaciones"                            
-                          >
-                            <b-form-textarea                          
-                              id="observaciones"
-                              v-model="observacion.descripcion"                            
-                              placeholder="Ingrese al menos 30 caracteres"  
-                              :state="observacion.descripcion.length >= 30"                            
-                              required
-                              rows="3"
-                            ></b-form-textarea>                            
-                          </b-form-group>
-                        </b-col>                    
-                    </b-row>
-                    <b-row class="justify-content-lg-center">
-                        <b-col col lg="6" class="text-right">
-                            <b-button style="height:34px" variant="success" size="sm" type="submit" title="Guardar">
-                              Guardar
-                            </b-button>
-                        </b-col>                    
-                    </b-row>  
-                </b-form>   
-                <div class="row">
-                  <div class="col-lg-12">
-                    <b-table                              
-                        :items="array_observaciones"
-                        :fields="columnas_observaciones"                              
-                        striped
-                        bordered     
-                        small                                             
-                        show-empty
-                        empty-text="No hay observaciones que mostrar."
-                        primary-key="id"                        
-                    >  
-                      <template v-slot:cell(acciones)="data">                                                           
-                          <b-button variant="warning" size="sm" title="Editar" @click="editarObservaciones(data.item)" class="mr-1">
-                              <b-icon icon="pencil-square"></b-icon>
-                          </b-button>
-                          <b-button variant="danger" size="sm" @click="eliminarObservaciones(data.item.id)" title="Eliminar">
-                              <b-icon icon="trash"></b-icon>
-                          </b-button>
-                      </template>                       
-                    </b-table>
-                  </div>
-                </div>                 
+                <observaciones                    
+                    :idgrado_proc="idgrado_proc"
+                    :idusuario="idusuario"                    
+                    :expediente="expediente"                    
+                    :ruta="ruta"                                                            
+                    ref="observaciones"
+                />
                 <div v-if="errors.length" class="alert alert-danger" role="alert">
-                    <ul>
-                        <li v-for="(error, i) in errors" :key="i">{{ error }}</li>
-                    </ul>
+                    <ul><li v-for="(error, i) in errors" :key="i">{{ error }}</li></ul>
                 </div>           
-            </b-tab>            
-            <b-tab :title="'2. '+ruta.etiqueta.charAt(0).toUpperCase()+ruta.etiqueta.slice(1)+' expediente'" 
-                   title-item-class="disabledTab" :disabled="tabIndex2 < 1">
-                <div class="text-center">                   
-                  <b-row class="justify-content-lg-center">
-                    <b-col col lg="8">
-                        <p class="text-justify">
-                            <b>Nota: </b> La acción {{ ruta.etiqueta }} permite derivar el expediente al procedimiento 
-                            <b>{{ ruta.procedimiento_destino }}</b> a cargo de <b>{{ ruta.rol_area_destino }}</b>
-                        </p>                 
-                    </b-col>
-                  </b-row>
-                  <b-button class="m-1" :variant="color_acciones[ruta.etiqueta]" @click="mover(ruta)">
-                      {{ ruta.etiqueta | capitalize }}
-                  </b-button>                                                           
-                </div> 
+            </b-tab>
+            <b-tab title="2. Añadir documento" title-item-class="disabledTab" :disabled="tabIndex2 < 1">
+                <documentos                    
+                    :idgrado_proc="idgrado_proc"
+                    :idusuario="idusuario"                    
+                    :expediente="expediente"                    
+                    :ruta="ruta"                                                            
+                    ref="documentos"
+                    max_docs = "1"
+                    nombre_asignado = "Nombre asignado prueba"
+                />
+                <div v-if="errors.length" class="alert alert-danger" role="alert">
+                    <ul><li v-for="(error, i) in errors" :key="i">{{ error }}</li></ul>
+                </div>       
+            </b-tab>           
+            <b-tab title="3. Generar documento" title-item-class="disabledTab" :disabled="tabIndex2 < 2">
+                <generacion_documento                                        
+                    :expediente="expediente"  
+                    :graduando="graduando"
+                    :movimiento="movimiento"                          
+                    :asesor="asesor"       
+                    nombre_archivo_pdf="resolucion_designacion_nuevo_asesor.php"
+                    boton_nombre="Resolución nuevo asesor"
+                />                      
+            </b-tab>   
+            <b-tab :title="'4. '+ruta.etiqueta.charAt(0).toUpperCase()+ruta.etiqueta.slice(1)+' expediente'" 
+                   title-item-class="disabledTab" :disabled="tabIndex2 < 3">
+                <movimiento_expediente
+                    :idgrado_modalidad="idgrado_modalidad"
+                    :idgrado_proc="idgrado_proc"                        
+                    :idusuario="idusuario"
+                    :codi_usuario="codi_usuario"
+                    :idrol_area="idrol_area"
+                    :tipo_rol="tipo_rol"
+                    :tipo_usuario="tipo_usuario"
+                    :expediente="expediente"                  
+                    :ruta="ruta"                                                            
+                />
             </b-tab>
         </b-tabs>
     </b-card>
@@ -86,14 +63,19 @@
     <div class="text-center">
         <b-button-group class="mt-3">
             <b-button class="mr-1" @click="prevTab" :disabled="tabIndex==0">Anterior</b-button>
-            <b-button @click="nextTab" :disabled="tabIndex==1">Siguiente</b-button>
+            <b-button @click="nextTab" :disabled="tabIndex==3">Siguiente</b-button>
         </b-button-group>     
     </div>   
 </div>    
 </template>
 <script>
+import observaciones from '../resources/observaciones.vue'
+import documentos from '../resources/documentos.vue'
+import generacion_documento from '../resources/generacion_documento.vue'
+import movimiento_expediente from '../resources/movimiento_expediente.vue'
+
 export default {
-    name: 'aprobado-derivar',
+    name: 'enviado-denegar',
     props: {
         idgrado_modalidad: String,
         idgrado_proc: String,    
@@ -103,25 +85,22 @@ export default {
         tipo_rol: String,
         tipo_usuario: String,
         expediente: Object,
-        array_graduando: Array, 
+        graduando: Object,
+        movimiento: Object,
         ruta: Object            
+    },
+    components: {    
+        observaciones,   
+        documentos,   
+        generacion_documento,
+        movimiento_expediente,
     },
     data() {
         return {             
             url: this.$root.API_URL,      
             tabIndex: 0,         
-            tabIndex2: 0,  
-            array_ruta : [],      
-            color_acciones : this.$root.color_acciones, 
-            columnas_observaciones: [               
-                { key: 'descripcion', label: 'Observaciones' },                        
-                { key: 'acciones', label: 'Acciones', class: 'text-center' },            
-            ],
-            observacion : {
-              id : null,
-              descripcion : ''
-            }, 
-            array_observaciones : [],                    
+            tabIndex2: 0,                          
+            asesor : null,  //object              
             errors: [], 
         }
     },
@@ -137,7 +116,15 @@ export default {
                             
             if (this.tabIndex == 0) {
                 pasar = this.validarTab1()
-            }                    
+            }                 
+            
+            if (this.tabIndex == 1) {
+                pasar = true
+            }                 
+
+            if (this.tabIndex == 2) {
+                pasar = true
+            }                             
 
             if (pasar) {
                 this.tabIndex2++
@@ -147,7 +134,7 @@ export default {
             }              
         },   
         validarTab1() {        
-            if (!this.array_observaciones.length) {
+            if (this.$refs.observaciones.cantidadObservaciones() == 0) { //referencia al metodo del componente hijo
                 this.errors.push("Debe registrar observaciones para el expediente seleccionado.")
             }                        
 
@@ -156,184 +143,36 @@ export default {
             }      
 
             return false
-        },                       
-        mover(ruta) { // movimiento para derivar el expediente al siguiente procedimiento
-            this.$bvModal.msgBoxConfirm(
-                '¿Seguro que quiere ' + ruta.etiqueta + ' este expediente?', {
-                title: ruta.etiqueta.charAt(0).toUpperCase()+ruta.etiqueta.slice(1) + ' Expediente',                    
-                okVariant: this.color_acciones[ruta.etiqueta],
-                okTitle: ruta.etiqueta.charAt(0).toUpperCase()+ruta.etiqueta.slice(1),
-                cancelTitle: 'Cancelar',          
-                centered: true
-            }).then(value => {
-                if (value) {
-                    let me = this                               
-                    let formData = this._toFormData({
-                        idexpediente: this.expediente.id,
-                        idusuario: this.idusuario,
-                        idruta: ruta.id,
-                        idgradproc_destino: ruta.idgradproc_destino                     
-                    })                                    
-
-                    this.axios.post(`${this.url}/Movimiento/mover`, formData)
-                    .then(function(response) {                                          
-                        if (!response.data.error) {
-                            me.$parent.mostrarNotificacion('Éxito!', 'success', 5000, 'done', response.data.message, 'bottom-right')
-                            me.$router.push({name: 'menu-procedimientos',                   
-                                                params: { 
-                                                    idgrado_modalidad: me.idgrado_modalidad, 
-                                                    idgrado_proc: me.idgrado_proc, 
-                                                    idusuario: me.idusuario,
-                                                    codi_usuario: me.codi_usuario,
-                                                    idrol_area: me.idrol_area,
-                                                    tipo_rol: me.tipo_rol,
-                                                    tipo_usuario: me.tipo_usuario,
-                                                }
-                                            })                  
-                        }
-                        else {                           
-                            me.$parent.mostrarNotificacion('Error!', 'danger', 5000, 'error_outline', response.data.message, 'bottom-right')
-                        }
-                    }) 
-                }                   
-            })              
         },        
-        editarObservaciones(data) {          
-            this.observacion = Object.assign({}, data)
-        },
-        guardarObservaciones() {
-            if (this.observacion.id == null) {
-                this.registrarObservaciones()
-            }
-            else {
-                this.actualizarObservaciones()
-            }            
-        },         
-        getObservaciones() {
+        getAsesor() {
             let me = this      
             var formData = this._toFormData({
-                idgrado_proc: this.idgrado_proc,
-                idusuario: this.idusuario,
                 idexpediente: this.expediente.id
             })
 
-            this.axios.post(`${this.url}/Observaciones/show`, formData)
+            this.axios.post(`${this.url}/UsuarioExpediente/getAsesor`, formData)
             .then(function(response) {                
                 if (!response.data.error) {                
-                    me.array_observaciones = response.data.array_observaciones
+                    me.asesor = response.data.asesor
                 }
                 else {                
-                    console.log(response.data.message)      
+                    //console.log(response.data.message)      
                 }
             })    
-        },  
-        registrarObservaciones() {   
-            if (this.observacion.descripcion.length < 30) {
-              this.errors = []
-              this.errors.push("Debe ingresar al menos 20 caracteres.")
-              return
-            }        
-
-            let me = this        
-            let formData = this._toFormData({
-              descripcion: this.observacion.descripcion,
-              idgrado_proc: this.idgrado_proc,
-              idusuario: this.idusuario,                  
-              idexpediente: this.expediente.id
-            })  
-
-            this.axios.post(`${this.url}/Observaciones/store`, formData)
-              .then(function(response) {      
-                  me.resetearValores()
-                  if (!response.data.error) {                                              
-                    me.$parent.mostrarNotificacion('Éxito!', 'success', 5000, 'done', response.data.message, 'bottom-right')
-                    me.getObservaciones()                           
-                  }
-                  else {
-                    me.$parent.mostrarNotificacion('Error!', 'danger', 5000, 'error_outline', response.data.message, 'bottom-right')
-                  }                      
-            })                        
-        },
-        actualizarObservaciones() {   
-            if (this.observacion.descripcion.length < 30) {
-              this.errors = []
-              this.errors.push("Debe ingresar al menos 20 caracteres.")
-              return
-            }                   
-
-            let me = this        
-            let formData = this._toFormData({
-              id: this.observacion.id,              
-              descripcion: this.observacion.descripcion,              
-            })  
-
-            this.axios.post(`${this.url}/Observaciones/update`, formData)
-              .then(function(response) {    
-                  me.resetearValores()                                                                      
-                  if (!response.data.error) {                        
-                    me.$parent.mostrarNotificacion('Éxito!', 'success', 5000, 'done', response.data.message, 'bottom-right')
-                    me.getObservaciones()                           
-                  }
-                  else {
-                    me.$parent.mostrarNotificacion('Error!', 'danger', 5000, 'error_outline', response.data.message, 'bottom-right')
-                  }                      
-            })    
-        },
-        eliminarObservaciones(id) {        
-            let me = this                    
-            let formData = this._toFormData({
-              id: id,              
-            })  
-
-            this.$bvModal.msgBoxConfirm(
-              '¿Seguro que quieres eliminar estas observaciones?', {
-              title: 'Eliminar observaciones',                    
-              okVariant: 'danger',
-              okTitle: 'Eliminar',
-              cancelTitle: 'Cancelar',          
-              centered: true
-            })
-            .then(value => {
-                if (value) {        
-                    this.axios.post(`${this.url}/Observaciones/delete`, formData)
-                    .then(function(response) {                           
-                        me.resetearValores()
-                        if (!response.data.error) {
-                            me.$parent.mostrarNotificacion('Éxito!', 'success', 5000, 'done', response.data.message, 'bottom-right')
-                            me.getObservaciones()                            
-                        }
-                        else {
-                            me.$parent.mostrarNotificacion('Error!', 'danger', 5000, 'error_outline', response.data.message, 'bottom-right')
-                        }
-                    })                
-                }
-            })                  
-        },                        
-        resetearValores() {                
-            this.observacion.id = null
-            this.observacion.descripcion = ''                            
-            this.errors = []                              
         },
         _toFormData(obj) {
             var fd = new FormData()
 
             for (var i in obj) {
-                fd.append(i, obj[i])
+            fd.append(i, obj[i])
             }
 
             return fd
-        },      
+        },                               
     },
-    filters: {
-        capitalize: function (value) {
-            if (!value) return ''
-            value = value.toString()
-            return value.charAt(0).toUpperCase() + value.slice(1)
-        }
-    },
-    mounted: function() {                                 
-        this.getObservaciones()                 
-    },
+    mounted: function() {                   
+        this.getAsesor()                      
+    },     
 }
 </script>
 <style scoped>

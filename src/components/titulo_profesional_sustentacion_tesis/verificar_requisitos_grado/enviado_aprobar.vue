@@ -1,43 +1,53 @@
 <template>
     <div>
-    <b-card no-body>
-        <b-tabs 
-            v-model="tabIndex" 
-            card        
-            active-nav-item-class="font-weight-bold text-uppercase text-danger"   
-            style="min-height: 250px"                        
-          >                      
-            <b-tab :title="'1. '+ruta.etiqueta.charAt(0).toUpperCase()+ruta.etiqueta.slice(1)+' expediente'" 
-                   title-item-class="disabledTab" :disabled="tabIndex2 < 0">
-                <div class="text-center">                   
-                  <b-row class="justify-content-lg-center">
-                    <b-col col lg="8">
-                        <p class="text-justify">
-                          <b>Nota: </b> La acción {{ ruta.etiqueta }} permite derivar el expediente al procedimiento 
-                          <b>{{ ruta.procedimiento_destino }}</b> a cargo de <b>{{ ruta.rol_area_destino }}</b>
-                        </p>                 
-                    </b-col>
-                  </b-row>
-                  <b-button class="m-1" :variant="color_acciones[ruta.etiqueta]" @click="mover(ruta)">
-                    {{ ruta.etiqueta | capitalize }}
-                  </b-button>                                                           
-                </div> 
-            </b-tab>
-        </b-tabs>
-    </b-card>
-    <!-- Control buttons-->
-    <div class="text-center">
-        <b-button-group class="mt-3">
-            <b-button class="mr-1" @click="prevTab" :disabled="tabIndex==0">Anterior</b-button>
-            <b-button @click="nextTab" :disabled="tabIndex==0">Siguiente</b-button>
-        </b-button-group>     
-    </div>   
-    </div>    
+        <template v-if="!existeRecursoRutaVecinas">                    
+            <b-card no-body>
+                <b-tabs 
+                    v-model="tabIndex" 
+                    card        
+                    active-nav-item-class="font-weight-bold text-uppercase text-danger"   
+                    style="min-height: 250px"                        
+                >                      
+                    <b-tab :title="'1. '+ruta.etiqueta.charAt(0).toUpperCase()+ruta.etiqueta.slice(1)+' expediente'" 
+                        title-item-class="disabledTab" :disabled="tabIndex2 < 0">
+                        <div class="text-center">                   
+                            <b-row class="justify-content-lg-center">
+                                <b-col col lg="8">
+                                    <p class="text-justify">
+                                        <b>Nota: </b> La acción {{ ruta.etiqueta }} permite derivar el expediente al procedimiento 
+                                        <b>{{ ruta.procedimiento_destino }}</b> a cargo de <b>{{ ruta.rol_area_destino }}</b>
+                                    </p>                 
+                                </b-col>
+                            </b-row>
+                            <b-button class="m-3" :variant="color_acciones[ruta.etiqueta]" @click="mover(ruta)">
+                                {{ ruta.etiqueta | capitalize }}
+                            </b-button>                         
+                        </div> 
+                        <div v-if="errors.length" class="alert alert-danger" role="alert">
+                            <ul><li v-for="(error, i) in errors" :key="i">{{ error }}</li></ul>
+                        </div>                                                                 
+                    </b-tab>
+                </b-tabs>
+            </b-card>
+            <!-- Control buttons-->
+            <div class="text-center">
+                <b-button-group class="mt-3">
+                    <b-button class="mr-1" @click="prevTab" :disabled="tabIndex==0">Anterior</b-button>
+                    <b-button @click="nextTab" :disabled="tabIndex==0">Siguiente</b-button>
+                </b-button-group>     
+            </div>   
+        </template>
+        <template v-else>
+            <div class="alert alert-danger" role="alert">
+                <ul><li>Debe deshacer las acciones realizadas en otras opciones de este procedimiento</li></ul>
+            </div>                                                                 
+        </template>
+    </div>        
 </template>
 
 <script>
 export default {
-    name: 'aprobado-derivar',
+    name: 'enviado-aprobar',
     props: {
         idgrado_modalidad: String,
         idgrado_proc: String,    
@@ -48,14 +58,15 @@ export default {
         tipo_usuario: String,
         expediente: Object,
         array_graduando: Array, 
-        ruta: Object            
+        ruta: Object
     },
     data() {
         return {             
             url: this.$root.API_URL,      
             tabIndex: 0,         
             tabIndex2: 0,  
-            array_ruta : [],      
+            array_ruta : [],
+            existeRecursoRutaVecinas : false,
             color_acciones : this.$root.color_acciones,                         
             errors: [], 
         }
@@ -76,8 +87,30 @@ export default {
                     this.tabIndex++        
                 })  
             }              
-        },                 
-        mover(ruta) { // movimiento para derivar el expediente al siguiente procedimiento
+        },                  
+        //verifica si las rutas vecinas de este procedimiento se registro observaciones,
+        //archivos o personas sin confirmar
+        verificarRecursoRutasVecinas() { 
+            let me = this      
+            var formData = this._toFormData({
+                idexpediente: this.expediente.id,
+                idgrado_proc: this.idgrado_proc,
+                idusuario: this.idusuario,                
+                idruta: this.ruta.id
+            })
+
+            this.axios.post(`${this.url}/Recurso/verify`, formData)
+            .then(function(response) {                                
+                if (!response.data.error) {                
+                    me.existeRecursoRutaVecinas = response.data.existeRecursoRutaVecinas
+                }
+                else {                
+                    console.log(response.data.message)      
+                }
+            })  
+        },    
+        mover(ruta) { // movimiento para derivar el expediente al siguiente procedimiento            
+
             this.$bvModal.msgBoxConfirm(
                 '¿Esta seguro de ' + ruta.etiqueta + ' este expediente?', {
                 title: ruta.etiqueta.charAt(0).toUpperCase()+ruta.etiqueta.slice(1),                    
@@ -126,7 +159,16 @@ export default {
                     }) 
                     }                   
                 })              
-        },                        
+        },
+        _toFormData(obj) {
+            var fd = new FormData()
+
+            for (var i in obj) {
+                fd.append(i, obj[i])
+            }
+
+            return fd
+        },                         
     },
     filters: {
         capitalize: function (value) {
@@ -135,8 +177,8 @@ export default {
             return value.charAt(0).toUpperCase() + value.slice(1)
         }
     },
-    mounted: function() {                                 
-        
+    mounted: function() { 
+        this.verificarRecursoRutasVecinas()        
     },
 }
 </script>

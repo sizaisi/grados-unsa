@@ -11,7 +11,7 @@
               :value="ruta"
               button
               name="acciones"
-              button-variant="outline-primary"  
+              button-variant="outline-primary"
               class="m-2"                      
             >
               {{ ruta.etiqueta | capitalize }} Expediente
@@ -82,17 +82,7 @@ export default {
       estados : this.$root.estados,  
     }
   },
-  methods: {         
-    mostrarNotificacion(titulo, color, tiempo, icono, mensaje, posicion) {
-      this.$vs.notify({
-        title: titulo,
-        color: color,
-        time: tiempo,
-        icon: icono,
-        text: mensaje,
-        position: posicion,
-      })
-    },        
+  methods: {              
     getRutas() {
         let me = this
         var formData = this._toFormData({
@@ -100,13 +90,13 @@ export default {
         })        
 
         this.axios.post(`${this.url}/Ruta/getRutasByProc`, formData)
-        .then(function(response) {
-        if (!response.data.error) {              
-            me.array_ruta = response.data.array_ruta                             
-        }
-        else {              
-            console.log(response.data.message)
-        }
+        .then(function(response) {          
+          if (!response.data.error) {              
+              me.array_ruta = response.data.array_ruta                             
+          }
+          else {              
+              console.log(response.data.message)
+          }
         })   
     },                  
     _toFormData(obj) {

@@ -54,6 +54,18 @@ new Vue({
     estados : config.estados,
     color_acciones : config.color_acciones,    
   },  
+  methods: {         
+    mostrarNotificacion(titulo, color, tiempo, icono, mensaje, posicion) {
+      this.$vs.notify({
+        title: titulo,
+        color: color,
+        time: tiempo,
+        icon: icono,
+        text: mensaje,
+        position: posicion,
+      })
+    },
+  },       
   router,
   store,    
   render: h => h(App)

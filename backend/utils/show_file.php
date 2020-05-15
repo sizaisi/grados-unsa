@@ -4,12 +4,24 @@ if (isset($_POST['file_id'])) {
 	$file_id = $_POST['file_id'];
 	
 	$conn = Database::conectar();
-	$sql = "SELECT * from GT_ARCHIVO where id = $file_id";
+	$sql = "SELECT * from GT_ARCHIVO_N where idrecurso = $file_id";
 	$result_query = mysqli_query($conn, $sql);
-	$row = $result_query->fetch_assoc();      
+	$row = $result_query->fetch_assoc();     
+	
+	switch ($row['mime']) {
+		case 'application/pdf':
+			$extension = '.pdf';
+			break;
+		case 'image/png':
+			$extension = '.png';
+			break;
+		case 'image/jpeg':
+			$extension = '.jpg';
+			break;
+	}	
 
-	header('Content-type:'.$row['extension']);
-	header('Content-Disposition:inline; filename='.$row['nombre'].'.pdf');
+	header('Content-type:'.$row['mime']);
+	header('Content-Disposition:inline; filename='.$row['nombre_asignado'].$extension);
 
 	echo base64_decode($row['data']);      	
 }

@@ -85,7 +85,7 @@
 
 <script>
 export default {
-  name: 'menu-procedimiento', 
+  name: 'menu-procedimientos', 
   props: ['idgrado_modalidad', 'idgrado_proc', 'idusuario', 'codi_usuario', 'idrol_area', 'tipo_rol', 'tipo_usuario'],  
   data() {
     return {                               

@@ -1,64 +1,33 @@
 <?php
+require_once 'Recurso.php';
 
-class Observaciones {
-	private $id;
-	private $descripcion;
-	private $idgrado_proc;
-    private $idusuario;
-    private $idexpediente;
+class Observaciones extends Recurso {	
+    private $descripcion;
 
 	private $conn;
 	
 	public function __construct() {
 		$this->conn = Database::conectar();
-	}
+	}	
 	
-	function getId() {
-		return $this->id;
-	}
-
-	function setId($id) {
-		$this->id = $id;
-    }
-    
     function getDescripcion() {
 		return $this->descripcion;
 	}
 
 	function setDescripcion($descripcion) {
 		$this->descripcion = $descripcion;
-    }
-
-    function getIdGradoProc() {
-		return $this->idgrado_proc;
-	}
-
-	function setIdGradoProc($idgrado_proc) {
-		$this->idgrado_proc = $idgrado_proc;
-    }
-
-    function getIdUsuario() {
-		return $this->idusuario;
-	}
-
-	function setIdUsuario($idusuario) {
-		$this->idusuario = $idusuario;
-    }
-
-	function getIdExpediente() {
-		return $this->idexpediente;
-	}
-
-	function setIdExpediente($idexpediente) {
-		$this->idexpediente = $idexpediente;
-	}	
+    }    
 	
 	public function getObservaciones() {
-
 		$result = array('error' => false);
   
-		$sql = "SELECT id, descripcion FROM GT_OBSERVACION WHERE idgrado_proc = $this->idgrado_proc 
-                AND idusuario = $this->idusuario AND idexpediente = $this->idexpediente";
+		$sql = "SELECT GT_R.id, GT_O.descripcion, GT_R.estado
+				FROM GT_RECURSO AS GT_R
+				INNER JOIN GT_OBSERVACIONES GT_O ON GT_O.idrecurso = GT_R.id
+				WHERE GT_R.idexpediente = $this->idexpediente 
+                AND GT_R.idgrado_proc = $this->idgrado_proc 
+				AND GT_R.idusuario = $this->idusuario
+				AND GT_R.idmovimiento IS NULL";
   
 		$result_query = mysqli_query($this->conn, $sql);
   
@@ -73,31 +42,49 @@ class Observaciones {
 		return $result;
 	}      
   
-	public function insertar() {      
-  
-		$result = array('error' => false);
-  
-		$sql = "INSERT INTO GT_OBSERVACION(descripcion, idgrado_proc, idusuario, idexpediente) 
-				 VALUES ('$this->descripcion', $this->idgrado_proc, $this->idusuario, $this->idexpediente)";
+	public function insertar() {     
+		$result = array('error' => false);                
+		$this->conn->autocommit(FALSE); //iniciar transaccion	
 		
-		$result_query = mysqli_query($this->conn, $sql);
+		$sql = "INSERT INTO GT_RECURSO(idexpediente, idgrado_proc, idusuario, idmovimiento, idruta, estado) 
+				VALUES ($this->idexpediente, $this->idgrado_proc, $this->idusuario, NULL, $this->idruta, 0)";      
+		$result_query = mysqli_query($this->conn, $sql);     
+		
+		$idrecurso;
+		
+		if (!$result_query) {
+		   	$result['error'] = true;                    
+		}       
+		else {
+			$idrecurso = mysqli_insert_id($this->conn);
+		}
+		
+		$sql = "INSERT INTO GT_OBSERVACIONES(idrecurso, descripcion) 
+				VALUES ($idrecurso, '$this->descripcion')";      
+		$result_query = mysqli_query($this->conn, $sql);     		
   
-		if ($result_query) {
+		if (!$result_query) {
+		   $result['error'] = true;                    
+		} 
+		
+		if( $result['error'] == false) { //si no hay ningun error en querys
+		   $this->conn->commit();          
 		   $result['message'] = "Observaciones registradas correctamente.";
 		}
 		else {
-		   $result['error'] = true;
-		   $result['message'] = "No se pudieron registrar las observaciones.";
-		}      
+		   $this->conn->rollback(); // deshacer transaccion
+		   $result['message'] = "No se pudo registrar las observaciones.";
+		}
   
-		return $result;
+		$this->conn->autocommit(TRUE); //finalizar transaccion
+  
+		return $result; 	
     }
     
-    public function actualizar() {      
-  
+    public function actualizar() {  
 		$result = array('error' => false);
   
-		$sql = "UPDATE GT_OBSERVACION SET descripcion = '$this->descripcion' WHERE id = $this->id";
+		$sql = "UPDATE GT_OBSERVACIONES SET descripcion = '$this->descripcion' WHERE idrecurso = $this->id";
 		
 		$result_query = mysqli_query($this->conn, $sql);
   
@@ -112,22 +99,39 @@ class Observaciones {
 		return $result;
 	}
   
-	public function eliminar() {      
-  
-		$result = array('error' => false);
-  
-		$sql = "DELETE FROM GT_OBSERVACION where id = $this->id";
+	public function eliminar() {   		
+		$result = array('error' => false);                
+		$this->conn->autocommit(FALSE); //iniciar transaccion	
 		
-		$result_query = mysqli_query($this->conn, $sql);
+		$sql = "DELETE FROM GT_OBSERVACIONES where idrecurso = $this->id";      
+		$result_query = mysqli_query($this->conn, $sql);     	
+		
+		if (!$result_query) {
+		   	$result['error'] = true;                    
+		}       	
+		
+		$sql = "DELETE FROM GT_RECURSO where id = $this->id AND idmovimiento IS NULL";
+		$result_query = mysqli_query($this->conn, $sql);     		
   
-		if ($result_query) {
-		   $result['message'] = "Observaciones eliminadas correctamente.";
+		if (!$result_query) {
+			$result['error'] = true;                	       
+		} 	
+
+		if (mysqli_affected_rows($this->conn) == 0) { //no debe eliminar si el recurso ya tiene movimiento
+			$result['error'] = true;
+		}
+		
+		if( $result['error'] == false) { //si no hay ningun error en querys
+		   	$this->conn->commit();          
+		   	$result['message'] = "Observaciones eliminadas correctamente.";
 		}
 		else {
-		   $result['error'] = true;
-		   $result['message'] = "No se pudieron eliminar las observaciones.";
-		}      
+		   	$this->conn->rollback(); // deshacer transaccion
+		   	$result['message'] = "No se pudo eliminar las observaciones.";
+		}
   
-		return $result;
+		$this->conn->autocommit(TRUE); //finalizar transaccion
+  
+		return $result; 		
 	 }
 }
