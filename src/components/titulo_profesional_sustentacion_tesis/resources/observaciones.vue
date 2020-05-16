@@ -12,7 +12,7 @@
                     id="observaciones"
                     v-model="observacion.descripcion"                            
                     placeholder="Ingrese al menos 30 caracteres"  
-                    :state="observacion.descripcion.length >= 30"                            
+                    :state="observacion.descripcion.length >= 30"
                     required
                     rows="3"
                 ></b-form-textarea>                            

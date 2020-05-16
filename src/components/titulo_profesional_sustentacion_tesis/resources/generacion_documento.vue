@@ -1,7 +1,7 @@
 <template>
     <div class="mb-3">    
-        <b-form ref="frm_datos_pdf" @submit.prevent="generarPdf" :action="url_pdf+nombre_archivo_pdf" 
-            target="_blank" method="post">
+        <b-form class="mb-3" ref="frm_datos_pdf" @submit.prevent="generarPdf" :action="url_pdf+nombre_archivo_pdf" 
+            target="frame" method="post">
             <input type="hidden" name="expediente">                
             <input type="hidden" name="movimiento">            
             <input type="hidden" name="asesor">                  
@@ -14,7 +14,17 @@
                     </b-button>
                 </div>
             </div>
-        </b-form>                
+        </b-form>         
+        <iframe 
+            name="frame" 
+            :src="url_pdf+nombre_archivo_pdf"
+            width="700" 
+            height="580" 
+            frameborder="0" 
+            allowtransparency="true"
+            :style="{ display: show_frame, margin: '0 auto'}"
+        >
+        </iframe>        
     </div>
 </template>
 <script>
@@ -30,7 +40,8 @@ export default {
     },
     data() {
         return {                                     
-            url_pdf : `${this.$root.API_URL}/pdfs/titulo_profesional_sustentacion_tesis/`,                        
+            url_pdf : `${this.$root.API_URL}/pdfs/titulo_profesional_sustentacion_tesis/`,
+            show_frame: 'none'                        
         }
     },
     methods: {                    
@@ -40,6 +51,8 @@ export default {
             this.$refs.frm_datos_pdf.movimiento.value = JSON.stringify(this.movimiento)   
             this.$refs.frm_datos_pdf.asesor.value = JSON.stringify(this.asesor)                   
             this.$refs.frm_datos_pdf.submit()
+
+            this.show_frame = 'block'
         },                                               
     }    
 }

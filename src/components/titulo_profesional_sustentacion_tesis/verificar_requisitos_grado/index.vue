@@ -1,6 +1,6 @@
 <template>
   <div v-if="movimiento != null">
-    <div class="row justify-content-center">
+    <div class="row justify-content-center mb-1">
       <fieldset class="col-8 col-md-6 px-3">
         <legend>Elija una opción:</legend>
         <div class="row justify-content-center">      

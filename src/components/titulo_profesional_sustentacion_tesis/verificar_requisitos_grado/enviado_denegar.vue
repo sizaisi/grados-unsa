@@ -1,72 +1,78 @@
 <template>
-<div>
-    <b-card no-body>
-        <b-tabs 
-            v-model="tabIndex" 
-            card        
-            active-nav-item-class="font-weight-bold text-uppercase text-danger"   
-            style="min-height: 250px"                        
-          >   
-            <b-tab title="1. Añadir observaciones" title-item-class="disabledTab" :disabled="tabIndex2 < 0">
-                <observaciones                    
-                    :idgrado_proc="idgrado_proc"
-                    :idusuario="idusuario"                    
-                    :expediente="expediente"                    
-                    :ruta="ruta"                                                            
-                    ref="observaciones"
-                />
-                <div v-if="errors.length" class="alert alert-danger" role="alert">
-                    <ul><li v-for="(error, i) in errors" :key="i">{{ error }}</li></ul>
-                </div>           
-            </b-tab>
-            <b-tab title="2. Añadir documento" title-item-class="disabledTab" :disabled="tabIndex2 < 1">
-                <documentos                    
-                    :idgrado_proc="idgrado_proc"
-                    :idusuario="idusuario"                    
-                    :expediente="expediente"                    
-                    :ruta="ruta"                                                            
-                    ref="documentos"
-                    max_docs = "1"
-                    nombre_asignado = "Nombre asignado prueba"
-                />
-                <div v-if="errors.length" class="alert alert-danger" role="alert">
-                    <ul><li v-for="(error, i) in errors" :key="i">{{ error }}</li></ul>
-                </div>       
-            </b-tab>           
-            <b-tab title="3. Generar documento" title-item-class="disabledTab" :disabled="tabIndex2 < 2">
-                <generacion_documento                                        
-                    :expediente="expediente"  
-                    :graduando="graduando"
-                    :movimiento="movimiento"                          
-                    :asesor="asesor"       
-                    nombre_archivo_pdf="resolucion_designacion_nuevo_asesor.php"
-                    boton_nombre="Resolución nuevo asesor"
-                />                      
-            </b-tab>   
-            <b-tab :title="'4. '+ruta.etiqueta.charAt(0).toUpperCase()+ruta.etiqueta.slice(1)+' expediente'" 
-                   title-item-class="disabledTab" :disabled="tabIndex2 < 3">
-                <movimiento_expediente
-                    :idgrado_modalidad="idgrado_modalidad"
-                    :idgrado_proc="idgrado_proc"                        
-                    :idusuario="idusuario"
-                    :codi_usuario="codi_usuario"
-                    :idrol_area="idrol_area"
-                    :tipo_rol="tipo_rol"
-                    :tipo_usuario="tipo_usuario"
-                    :expediente="expediente"                  
-                    :ruta="ruta"                                                            
-                />
-            </b-tab>
-        </b-tabs>
-    </b-card>
-    <!-- Control buttons-->
-    <div class="text-center">
-        <b-button-group class="mt-3">
-            <b-button class="mr-1" @click="prevTab" :disabled="tabIndex==0">Anterior</b-button>
-            <b-button @click="nextTab" :disabled="tabIndex==3">Siguiente</b-button>
-        </b-button-group>     
-    </div>   
-</div>    
+    <b-card>
+        <template v-if="!existeRecursoRutaVecinas">
+            <b-card no-body>
+                <b-tabs 
+                    v-model="tabIndex" 
+                    card        
+                    active-nav-item-class="font-weight-bold text-uppercase text-danger"   
+                    style="min-height: 250px"                        
+                >   
+                    <b-tab title="1. Añadir observaciones" title-item-class="disabledTab" :disabled="tabIndex2 < 0">
+                        <observaciones                    
+                            :idgrado_proc="idgrado_proc"
+                            :idusuario="idusuario"                    
+                            :expediente="expediente"                    
+                            :ruta="ruta"                                                            
+                            ref="observaciones"
+                        />
+                        <div v-if="errors.length" class="alert alert-danger" role="alert">
+                            <ul><li v-for="(error, i) in errors" :key="i">{{ error }}</li></ul>
+                        </div>           
+                    </b-tab>
+                    <b-tab title="2. Añadir documento" title-item-class="disabledTab" :disabled="tabIndex2 < 1">
+                        <documentos                    
+                            :idgrado_proc="idgrado_proc"
+                            :idusuario="idusuario"                    
+                            :expediente="expediente"                    
+                            :ruta="ruta"                                                            
+                            ref="documentos"
+                            max_docs = "1"
+                            nombre_asignado = "Nombre asignado prueba"
+                        />
+                        <div v-if="errors.length" class="alert alert-danger" role="alert">
+                            <ul><li v-for="(error, i) in errors" :key="i">{{ error }}</li></ul>
+                        </div>       
+                    </b-tab>           
+                    <b-tab title="3. Generar documento" title-item-class="disabledTab" :disabled="tabIndex2 < 2">
+                        <generacion_documento                                        
+                            :expediente="expediente"  
+                            :graduando="graduando"
+                            :movimiento="movimiento"                          
+                            :asesor="asesor"       
+                            nombre_archivo_pdf="resolucion_designacion_nuevo_asesor.php"
+                            boton_nombre="Resolución nuevo asesor"
+                        />                      
+                    </b-tab>   
+                    <b-tab :title="'4. '+ruta.etiqueta.charAt(0).toUpperCase()+ruta.etiqueta.slice(1)+' expediente'" 
+                        title-item-class="disabledTab" :disabled="tabIndex2 < 3">
+                        <movimiento_expediente
+                            :idgrado_modalidad="idgrado_modalidad"
+                            :idgrado_proc="idgrado_proc"                        
+                            :idusuario="idusuario"
+                            :codi_usuario="codi_usuario"
+                            :idrol_area="idrol_area"
+                            :tipo_rol="tipo_rol"
+                            :tipo_usuario="tipo_usuario"
+                            :expediente="expediente"                  
+                            :ruta="ruta"                                                            
+                        />
+                    </b-tab>
+                </b-tabs>
+            </b-card>        
+            <div class="text-center">
+                <b-button-group class="mt-3">
+                    <b-button class="mr-1" @click="prevTab" :disabled="tabIndex==0">Anterior</b-button>
+                    <b-button @click="nextTab" :disabled="tabIndex==3">Siguiente</b-button>
+                </b-button-group>     
+            </div> 
+        </template>
+        <template v-else>
+            <div class="alert alert-danger" role="alert">
+                <ul><li>Debe deshacer las acciones realizadas en otras opciones de este procedimiento</li></ul>
+            </div>                                                                 
+        </template>
+    </b-card>       
 </template>
 <script>
 import observaciones from '../resources/observaciones.vue'
@@ -99,7 +105,8 @@ export default {
         return {             
             url: this.$root.API_URL,      
             tabIndex: 0,         
-            tabIndex2: 0,                          
+            tabIndex2: 0, 
+            existeRecursoRutaVecinas : false,                         
             asesor : null,  //object              
             errors: [], 
         }
@@ -156,10 +163,30 @@ export default {
                     me.asesor = response.data.asesor
                 }
                 else {                
-                    //console.log(response.data.message)      
+                    console.log(response.data.message)      
                 }
             })    
         },
+        //verifica si las rutas vecinas de este procedimiento se registro observaciones, archivos o personas sin confirmar
+        verificarRecursoRutasVecinas() { 
+            let me = this      
+            var formData = this._toFormData({
+                idexpediente: this.expediente.id,
+                idgrado_proc: this.idgrado_proc,
+                idusuario: this.idusuario,                
+                idruta: this.ruta.id
+            })
+
+            this.axios.post(`${this.url}/Recurso/verify`, formData)
+            .then(function(response) {                                
+                if (!response.data.error) {                
+                    me.existeRecursoRutaVecinas = response.data.existeRecursoRutaVecinas
+                }
+                else {                
+                    console.log(response.data.message)      
+                }
+            })  
+        },    
         _toFormData(obj) {
             var fd = new FormData()
 
@@ -170,7 +197,8 @@ export default {
             return fd
         },                               
     },
-    mounted: function() {                   
+    mounted: function() {     
+        this.verificarRecursoRutasVecinas()              
         this.getAsesor()                      
     },     
 }

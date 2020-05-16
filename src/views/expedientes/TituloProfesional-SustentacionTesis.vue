@@ -1,10 +1,8 @@
 <template>
   <div>      
-   <div class="container" style="background-color: #fff; padding:20px;">                                    
-      <div>
-        <h5 class="text-center nav-link active font-weight-bold text-uppercase text-danger" v-text="grado_procedimiento.nombre"></h5>          
-        <p class="narrow text-center" v-text="grado_procedimiento.descripcion"></p>
-      </div>
+   <div class="container" style="background-color: #fff; padding:20px;">                                          
+      <h5 class="text-center nav-link active font-weight-bold text-uppercase text-danger" v-text="grado_procedimiento.nombre"></h5>          
+      <p class="narrow text-center" v-text="grado_procedimiento.descripcion"></p>      
       <b-card no-body>
         <b-tabs card justified active-nav-item-class="font-weight-bold text-uppercase text-danger">  
           <b-tab title="Información de Expediente" active> 
