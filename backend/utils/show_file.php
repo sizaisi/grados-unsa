@@ -4,7 +4,7 @@ if (isset($_POST['file_id'])) {
 	$file_id = $_POST['file_id'];
 	
 	$conn = Database::conectar();
-	$sql = "SELECT * from GT_ARCHIVO_N where idrecurso = $file_id";
+	$sql = "SELECT * from GT_ARCHIVO where idrecurso = $file_id";
 	$result_query = mysqli_query($conn, $sql);
 	$row = $result_query->fetch_assoc();     
 	

@@ -86,6 +86,7 @@
                         striped
                         bordered                           
                         hover
+                        small
                         responsive                        
                         show-empty
                         empty-text="No hay documentos que mostrar."
@@ -387,7 +388,7 @@ export default {
         })       
 
         this.axios.post(`${this.url}/Archivo/index`, formData)
-        .then(function(response) {          
+        .then(function(response) {                 
           if (!response.data.error) {
             me.array_archivo = response.data.array_archivo
           }
@@ -397,21 +398,21 @@ export default {
         })       
     },    
     getArchivosProcOrigen() {
-        /*let me = this
+        let me = this
         var formData = this._toFormData({
           idgrado_proc: this.idgrado_proc, //procedimiento actual seria el destino
           idexpediente: this.idexpediente,
         })       
 
         this.axios.post(`${this.url}/Archivo/show`, formData)
-        .then(function(response) {          
+        .then(function(response) {              
           if (!response.data.error) {
             me.array_archivo_ultimo = response.data.array_archivo_ultimo
           }
           else {              
             console.log(response.data.message)
           }
-        }) */         
+        })  
     }, 
     _toFormData(obj) {
         var fd = new FormData()

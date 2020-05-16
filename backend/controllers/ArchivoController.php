@@ -18,15 +18,13 @@ class ArchivoController {
     public function show() { 
         $archivo = new Archivo();        
                 
-        $archivo->setIdgrado_Proc($_POST['idgrado_proc']);
-		$archivo->setIdexpediente($_POST['idexpediente']);
+        $archivo->setIdGradoProc($_POST['idgrado_proc']);
+		$archivo->setIdExpediente($_POST['idexpediente']);
 
         $result = $archivo->getArchivosProcOrigen();
 
         echo json_encode($result);           
-    }
-    
-
+    } 
 
 	public function get() {
         $archivo = new Archivo();        
@@ -65,6 +63,5 @@ class ArchivoController {
         $result = $archivo->eliminar();
 
         echo json_encode($result);           
-    }  
-    
+    }      
 }
