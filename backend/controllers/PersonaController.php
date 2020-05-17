@@ -3,65 +3,41 @@ require_once 'models/Persona.php';
 
 class PersonaController {    
     
-	public function getGraduando() { 
-		$persona = new Persona();        
+	public function show_asesor() {        
+        $persona = new Persona();       
+        
+        $persona->setIdExpediente($_POST['idexpediente']);
+        $persona->setIdGradoProc($_POST['idgrado_proc']);
+        $persona->setIdUsuario($_POST['idusuario']);       
 
-		$persona->setIdExpediente($_POST['idexpediente']);
-
-        $result = $persona->getGraduando();
-
-        echo json_encode($result);           
-    }
-
-    //mostrar archivos del procedimiento anterior y el actual procedimiento
-    public function show() { 
-        $archivo = new Archivo();        
-                
-        $archivo->setIdgrado_Proc($_POST['idgrado_proc']);
-		$archivo->setIdexpediente($_POST['idexpediente']);
-
-        $result = $archivo->getArchivosProcOrigen();
+        $result = $persona->getAsesor();
 
         echo json_encode($result);           
-    }
-    
-
-
-	public function getDocumento() {
-		$archivo = new Archivo();        
-
-        $archivo->setIdgrado_Proc($_POST['idgrado_proc']);
-        $archivo->setIdusuario($_POST['idusuario']);
-        $archivo->setIdexpediente($_POST['idexpediente']);
-
-        $result = $archivo->getListDocumento();
-
-        echo json_encode($result);       
 	}
 	
 	public function store() {
-		$archivo = new Archivo();        
+		$persona = new Persona();        
+        
+        $persona->setIdExpediente($_POST['idexpediente']);
+        $persona->setIdGradoProc($_POST['idgrado_proc']);
+        $persona->setIdUsuario($_POST['idusuario']);
+        $persona->setIdRuta($_POST['idruta']);
+        $persona->setIdDocente($_POST['iddocente']);
+        $persona->setTipo($_POST['tipo']);       
 
-        $archivo->setNombre($_POST['nombre']);
-        $archivo->setData(base64_encode(file_get_contents($_FILES['data']['tmp_name'])));
-        $archivo->setExtension($_FILES['data']['type']);
-        $archivo->setIdgrado_Proc($_POST['idgrado_proc']);
-        $archivo->setIdusuario($_POST['idusuario']);
-        $archivo->setIdexpediente($_POST['idexpediente']);       
-
-        $result = $archivo->storeDocumento();
-
-        echo json_encode($result);         
-	}	
-		
-	public function delete() {
-		$archivo = new Archivo();        
-
-        $archivo->setId($_POST['id']);        
-
-        $result = $archivo->deleteDocumento();
+        $result = $persona->insertar();
 
         echo json_encode($result);           
-    }  
+	}	
+		
+	public function delete() {        
+		$persona = new Persona();
+  
+        $persona->setId($_POST['id']);       
+
+        $result = $persona->eliminar();        
+
+        echo json_encode($result);            
+	}
     
 }

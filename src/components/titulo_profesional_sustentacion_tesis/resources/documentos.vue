@@ -81,9 +81,9 @@
 export default {
     name: 'documentos',
     props: {        
+        expediente: Object,
         idgrado_proc: String,    
-        idusuario: String,        
-        expediente: Object,        
+        idusuario: String,                        
         ruta: Object,
         nombre_asignado : String,
         max_docs : String,        
@@ -153,7 +153,7 @@ export default {
                         me.getDocumento()
                     }
                     else {
-                        me.$root.mostrarNotificacion('Error!', 'danger', 4000, 'error_outline', response.data.message, 'bottom-right')                                                                    
+                        me.$root.mostrarNotificacion('Error!', 'danger', 4000, 'error_outline', response.data.message, 'bottom-right')
                     }
             })         
         },          

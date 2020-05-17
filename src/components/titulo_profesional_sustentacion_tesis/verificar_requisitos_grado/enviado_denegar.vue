@@ -10,9 +10,9 @@
                 >   
                     <b-tab title="1. Añadir observaciones" title-item-class="disabledTab" :disabled="tabIndex2 < 0">
                         <observaciones                    
+                            :expediente="expediente"
                             :idgrado_proc="idgrado_proc"
-                            :idusuario="idusuario"                    
-                            :expediente="expediente"                    
+                            :idusuario="idusuario"                                                                    
                             :ruta="ruta"                                                            
                             ref="observaciones"
                         />
@@ -21,11 +21,11 @@
                         </div>           
                     </b-tab>
                     <b-tab title="2. Añadir documento" title-item-class="disabledTab" :disabled="tabIndex2 < 1">
-                        <documentos                    
+                        <documentos               
+                            :expediente="expediente"
                             :idgrado_proc="idgrado_proc"
-                            :idusuario="idusuario"                    
-                            :expediente="expediente"                    
-                            :ruta="ruta"                                                            
+                            :idusuario="idusuario"                                                                    
+                            :ruta="ruta"                                                           
                             ref="documentos"
                             max_docs = "1"
                             nombre_asignado = "Nombre asignado prueba"
@@ -44,8 +44,16 @@
                             boton_nombre="Resolución nuevo asesor"
                         />                      
                     </b-tab>   
-                    <b-tab :title="'4. '+ruta.etiqueta.charAt(0).toUpperCase()+ruta.etiqueta.slice(1)+' expediente'" 
-                        title-item-class="disabledTab" :disabled="tabIndex2 < 3">
+                    <b-tab title="4. Asignar asesor" title-item-class="disabledTab" :disabled="tabIndex2 < 3">
+                        <asesores
+                            :expediente="expediente"
+                            :idgrado_proc="idgrado_proc"
+                            :idusuario="idusuario"                                                
+                            :ruta="ruta"       
+                        />       
+                    </b-tab>
+                    <b-tab :title="'5. '+ruta.etiqueta.charAt(0).toUpperCase()+ruta.etiqueta.slice(1)+' expediente'" 
+                        title-item-class="disabledTab" :disabled="tabIndex2 < 4">
                         <movimiento_expediente
                             :idgrado_modalidad="idgrado_modalidad"
                             :idgrado_proc="idgrado_proc"                        
@@ -63,7 +71,7 @@
             <div class="text-center">
                 <b-button-group class="mt-3">
                     <b-button class="mr-1" @click="prevTab" :disabled="tabIndex==0">Anterior</b-button>
-                    <b-button @click="nextTab" :disabled="tabIndex==3">Siguiente</b-button>
+                    <b-button @click="nextTab" :disabled="tabIndex==4">Siguiente</b-button>
                 </b-button-group>     
             </div> 
         </template>
@@ -77,6 +85,7 @@
 <script>
 import observaciones from '../resources/observaciones.vue'
 import documentos from '../resources/documentos.vue'
+import asesores from '../resources/asesores.vue'
 import generacion_documento from '../resources/generacion_documento.vue'
 import movimiento_expediente from '../resources/movimiento_expediente.vue'
 
@@ -98,6 +107,7 @@ export default {
     components: {    
         observaciones,   
         documentos,   
+        asesores,
         generacion_documento,
         movimiento_expediente,
     },
@@ -131,7 +141,11 @@ export default {
 
             if (this.tabIndex == 2) {
                 pasar = true
-            }                             
+            }     
+            
+            if (this.tabIndex == 3) {
+                pasar = true
+            }     
 
             if (pasar) {
                 this.tabIndex2++
@@ -150,22 +164,6 @@ export default {
             }      
 
             return false
-        },        
-        getAsesor() {
-            let me = this      
-            var formData = this._toFormData({
-                idexpediente: this.expediente.id
-            })
-
-            this.axios.post(`${this.url}/UsuarioExpediente/getAsesor`, formData)
-            .then(function(response) {                
-                if (!response.data.error) {                
-                    me.asesor = response.data.asesor
-                }
-                else {                
-                    console.log(response.data.message)      
-                }
-            })    
         },
         //verifica si las rutas vecinas de este procedimiento se registro observaciones, archivos o personas sin confirmar
         verificarRecursoRutasVecinas() { 
@@ -186,7 +184,23 @@ export default {
                     console.log(response.data.message)      
                 }
             })  
-        },    
+        },        
+        getAsesor() {
+            let me = this      
+            var formData = this._toFormData({
+                idexpediente: this.expediente.id
+            })
+
+            this.axios.post(`${this.url}/UsuarioExpediente/getAsesor`, formData)
+            .then(function(response) {                
+                if (!response.data.error) {                
+                    me.asesor = response.data.asesor
+                }
+                else {                
+                    console.log(response.data.message)      
+                }
+            })    
+        },            
         _toFormData(obj) {
             var fd = new FormData()
 

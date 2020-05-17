@@ -12,7 +12,17 @@ class UsuarioController {
                 $result = $usuario->getIdUsuario();
         
                 echo json_encode($result);               
-	}
+        }
+        
+        public function getGraduando() { 
+		$idexpediente = $_POST['idexpediente'];        
+
+                $usuario = new Usuario();
+      
+                $result = $usuario->getGraduando($idexpediente);
+
+                echo json_encode($result);           
+        }
 	
 	public function getGradByIdExp() {		   
 		$idexpediente = $_POST['idexpediente'];        

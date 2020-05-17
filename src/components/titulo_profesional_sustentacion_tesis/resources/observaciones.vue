@@ -55,9 +55,9 @@
 export default {
     name: 'observaciones',
     props: {        
+        expediente: Object,
         idgrado_proc: String,    
-        idusuario: String,        
-        expediente: Object,        
+        idusuario: String,                        
         ruta: Object
     },
     data() {
