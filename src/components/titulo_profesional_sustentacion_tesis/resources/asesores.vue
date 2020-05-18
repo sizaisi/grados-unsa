@@ -30,31 +30,27 @@
                     </b-button>
                 </b-col>                    
             </b-row>  
-        </b-form>   
-        <div class="row">
-            <div class="col-lg-12">
-                <table class="table table-bordered table-sm" v-if="asesor != null">   
-                    <thead>
-                        <th class="text-center">Nro. Documento</th> 
-                        <th class="text-left">Docente</th> 
-                        <th class="text-center">Tipo</th>                                                               
-                        <th class="text-center">Eliminar</th>
-                    </thead>
-                    <tbody>
-                        <tr>                              
-                        <td class="text-center" v-text="asesor.nro_documento"></td>
-                        <td class="text-left" v-text="asesor.apn"></td>
-                        <td class="text-center" v-text="asesor.tipo"></td>                                
-                        <td class="text-center">
-                            <b-button variant="danger" size="sm" title="Eliminar asesor" @click="eliminarAsesor(asesor.id)">
-                                <b-icon icon="trash"></b-icon>
-                            </b-button>
-                        </td>                                                            
-                        </tr>                                                
-                    </tbody>
-                </table>                                                      
-            </div>                     
-        </div>                 
+        </b-form>        
+        <table class="table table-bordered table-sm" v-if="asesor != null">   
+            <thead>
+                <th class="text-center">Nro. Documento</th> 
+                <th class="text-left">Docente</th> 
+                <th class="text-center">Tipo</th>                                                               
+                <th class="text-center">Eliminar</th>
+            </thead>
+            <tbody>
+                <tr>                              
+                <td class="text-center" v-text="asesor.nro_documento"></td>
+                <td class="text-left" v-text="asesor.apn"></td>
+                <td class="text-center" v-text="asesor.tipo"></td>                                
+                <td class="text-center">
+                    <b-button variant="danger" size="sm" title="Eliminar asesor" @click="eliminarAsesor(asesor.id)">
+                        <b-icon icon="trash"></b-icon>
+                    </b-button>
+                </td>                                                            
+                </tr>                                                
+            </tbody>
+        </table>        
         <div v-if="errors.length" class="alert alert-danger" role="alert">
             <ul>
                 <li v-for="(error, i) in errors" :key="i">{{ error }}</li>
@@ -100,13 +96,13 @@ export default {
         },
         getAsesor() {
             let me = this                  
-            var formData = this._toFormData({
+            let formData = this._toFormData({
                 idexpediente: this.expediente.id,
                 idgrado_proc: this.idgrado_proc,
                 idusuario: this.idusuario,                                
             })
 
-            this.axios.post(`${this.url}/Persona/show_asesor`, formData)
+            this.axios.post(`${this.url}/Persona/get_asesor`, formData)
             .then(function(response) {                 
                 if (!response.data.error) {                
                     me.asesor = response.data.asesor
@@ -128,7 +124,7 @@ export default {
             })           
 
             this.axios.post(`${this.url}/Persona/store`, formData)
-                .then(function(response) {                                    
+                .then(function(response) {                                                 
                     me.resetearValores()                                   
                     if (!response.data.error) {                        
                         me.$root.mostrarNotificacion('Éxito!', 'success', 4000, 'done', response.data.message, 'bottom-right')
@@ -142,7 +138,10 @@ export default {
         eliminarAsesor(id) {        
             let me = this        
             let formData = this._toFormData({
-              id: id,              
+              id: id,          
+              idexpediente: this.expediente.id,
+              idgrado_proc: this.idgrado_proc,              
+              tipo: 'asesor'    
             })  
 
             this.$bvModal.msgBoxConfirm(
@@ -156,7 +155,7 @@ export default {
             .then(value => {
                 if (value) {        
                     this.axios.post(`${this.url}/Persona/delete`, formData)
-                    .then(function(response) {                           
+                    .then(function(response) {                                                   
                         me.resetearValores()  
                         me.asesor = null //docente nulo para obligar a agregar un docente
                         if (!response.data.error) {

@@ -52,8 +52,16 @@
                             :ruta="ruta"       
                         />       
                     </b-tab>
-                    <b-tab :title="'5. '+ruta.etiqueta.charAt(0).toUpperCase()+ruta.etiqueta.slice(1)+' expediente'" 
-                        title-item-class="disabledTab" :disabled="tabIndex2 < 4">
+                    <b-tab title="5. Asignar jurado" title-item-class="disabledTab" :disabled="tabIndex2 < 4">
+                        <jurados
+                            :expediente="expediente"
+                            :idgrado_proc="idgrado_proc"
+                            :idusuario="idusuario"                                                
+                            :ruta="ruta"       
+                        />       
+                    </b-tab>
+                    <b-tab :title="'6. '+ruta.etiqueta.charAt(0).toUpperCase()+ruta.etiqueta.slice(1)+' expediente'" 
+                        title-item-class="disabledTab" :disabled="tabIndex2 < 5">
                         <movimiento_expediente
                             :idgrado_modalidad="idgrado_modalidad"
                             :idgrado_proc="idgrado_proc"                        
@@ -71,7 +79,7 @@
             <div class="text-center">
                 <b-button-group class="mt-3">
                     <b-button class="mr-1" @click="prevTab" :disabled="tabIndex==0">Anterior</b-button>
-                    <b-button @click="nextTab" :disabled="tabIndex==4">Siguiente</b-button>
+                    <b-button @click="nextTab" :disabled="tabIndex==5">Siguiente</b-button>
                 </b-button-group>     
             </div> 
         </template>
@@ -83,9 +91,11 @@
     </b-card>       
 </template>
 <script>
+
 import observaciones from '../resources/observaciones.vue'
 import documentos from '../resources/documentos.vue'
 import asesores from '../resources/asesores.vue'
+import jurados from '../resources/jurados.vue'
 import generacion_documento from '../resources/generacion_documento.vue'
 import movimiento_expediente from '../resources/movimiento_expediente.vue'
 
@@ -108,6 +118,7 @@ export default {
         observaciones,   
         documentos,   
         asesores,
+        jurados,
         generacion_documento,
         movimiento_expediente,
     },
@@ -145,7 +156,11 @@ export default {
             
             if (this.tabIndex == 3) {
                 pasar = true
-            }     
+            }
+
+            if (this.tabIndex == 4) {
+                pasar = true
+            }
 
             if (pasar) {
                 this.tabIndex2++

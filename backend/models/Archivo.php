@@ -143,8 +143,8 @@ class Archivo extends Recurso {
 		$result = array('error' => false);   
 		$this->conn->autocommit(FALSE); //iniciar transaccion	
 		
-		$sql = "INSERT INTO GT_RECURSO(idexpediente, idgrado_proc, idusuario, idmovimiento, idruta, estado) 
-				VALUES ($this->idexpediente, $this->idgrado_proc, $this->idusuario, NULL, $this->idruta, 0)";      
+		$sql = "INSERT INTO GT_RECURSO(idexpediente, idgrado_proc, idusuario, idmovimiento, idruta) 
+				VALUES ($this->idexpediente, $this->idgrado_proc, $this->idusuario, NULL, $this->idruta)";      
 		$result_query = mysqli_query($this->conn, $sql);     
 		
 		$idrecurso;

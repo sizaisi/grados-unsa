@@ -21,7 +21,7 @@ class Observaciones extends Recurso {
 	public function getObservaciones() {
 		$result = array('error' => false);
   
-		$sql = "SELECT GT_R.id, GT_O.descripcion, GT_R.estado
+		$sql = "SELECT GT_R.id, GT_O.descripcion
 				FROM GT_RECURSO AS GT_R
 				INNER JOIN GT_OBSERVACIONES GT_O ON GT_O.idrecurso = GT_R.id
 				WHERE GT_R.idexpediente = $this->idexpediente 
@@ -46,8 +46,8 @@ class Observaciones extends Recurso {
 		$result = array('error' => false);                
 		$this->conn->autocommit(FALSE); //iniciar transaccion	
 		
-		$sql = "INSERT INTO GT_RECURSO(idexpediente, idgrado_proc, idusuario, idmovimiento, idruta, estado) 
-				VALUES ($this->idexpediente, $this->idgrado_proc, $this->idusuario, NULL, $this->idruta, 0)";      
+		$sql = "INSERT INTO GT_RECURSO(idexpediente, idgrado_proc, idusuario, idmovimiento, idruta) 
+				VALUES ($this->idexpediente, $this->idgrado_proc, $this->idusuario, NULL, $this->idruta)";      
 		$result_query = mysqli_query($this->conn, $sql);     
 		
 		$idrecurso;

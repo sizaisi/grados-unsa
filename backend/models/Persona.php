@@ -4,6 +4,7 @@ require_once 'Recurso.php';
 class Persona extends Recurso {	
 	private $tipo;
 	private $iddocente;
+	private $estado;
 
 	private $conn;
 	
@@ -25,7 +26,15 @@ class Persona extends Recurso {
 
 	function setTipo($tipo) {
 		$this->tipo = $tipo;
-    }
+	}
+	
+	function getEstadio() {
+		return $this->estado;
+	}
+
+	function setEstado($estado) {
+		$this->estado = $estado;
+	}
     
     public function getAsesor() {
 		$result = array('error' => false);
@@ -61,13 +70,66 @@ class Persona extends Recurso {
   
 		return $result;		
 	}      
+
+	public function getJurado() {
+		$result = array('error' => false);
+
+		$sql = "SELECT GT_R.id, REPLACE(AC_D.apn, '/', ' ') AS apn, 
+				AC_D.dic AS nro_documento, GT_P.tipo
+				FROM GT_RECURSO AS GT_R
+				INNER JOIN GT_PERSONA GT_P ON GT_P.idrecurso = GT_R.id
+				INNER JOIN GT_USUARIO AS GT_U ON GT_U.id = GT_P.iddocente
+				INNER JOIN SIAC_DOC AS AC_D ON AC_D.codper = GT_U.codi_usuario 
+				WHERE GT_R.idexpediente = $this->idexpediente 
+                AND GT_R.idgrado_proc = $this->idgrado_proc 
+				AND GT_R.idusuario = $this->idusuario
+				AND GT_P.tipo <> 'asesor'				
+				AND GT_R.idmovimiento IS NULL";	
+
+		$result_query = mysqli_query($this->conn, $sql);
+
+		if ($result_query) {			
+			$array_jurado = array();
+
+			while ($row = $result_query->fetch_assoc()) {         
+				array_push($array_jurado, $row);
+			}
+
+			$result['array_jurado'] = $array_jurado;   			
+		}
+		else {  
+			$result['error'] = true;
+			$result['message'] = "No se pudo obtener los jurados.";            
+		}					
+
+		return $result;		
+	}      
   
 	public function insertar() {     
 		$result = array('error' => false);                
 		$this->conn->autocommit(FALSE); //iniciar transaccion	
+
+		//deshabilitar el ultimo duplicado que tenga movimiento del mismo tipo (asesor, secretario, etc)
+		$sql = "UPDATE GT_PERSONA AS GT_P 
+				INNER JOIN GT_RECURSO AS GT_R ON GT_R.id = GT_P.idrecurso
+				SET GT_P.estado = 0
+				WHERE GT_R.idexpediente = $this->idexpediente 
+				AND GT_R.idgrado_proc = $this->idgrado_proc
+				AND GT_R.idmovimiento IS NOT NULL
+				AND GT_P.tipo = '$this->tipo'
+				AND GT_R.idmovimiento = (SELECT MAX(idmovimiento) 
+										 FROM GT_RECURSO 
+										 WHERE idexpediente = $this->idexpediente 
+										 AND idgrado_proc = $this->idgrado_proc
+										 AND tipo = '$this->tipo')";      
+		$result_query = mysqli_query($this->conn, $sql);     		
+  
+		if (!$result_query) {
+		   $result['error'] = $sql;                    
+		}
 		
-		$sql = "INSERT INTO GT_RECURSO(idexpediente, idgrado_proc, idusuario, idmovimiento, idruta, estado) 
-				VALUES ($this->idexpediente, $this->idgrado_proc, $this->idusuario, NULL, $this->idruta, 0)";      
+		$sql = "INSERT INTO GT_RECURSO(idexpediente, idgrado_proc, idusuario, idmovimiento, idruta) 
+				VALUES ($this->idexpediente, $this->idgrado_proc, $this->idusuario, NULL, $this->idruta)";      
 		$result_query = mysqli_query($this->conn, $sql);     
 		
 		$idrecurso;
@@ -85,7 +147,7 @@ class Persona extends Recurso {
   
 		if (!$result_query) {
 		   $result['error'] = true;                    
-		} 
+		}
 		
 		if( $result['error'] == false) { //si no hay ningun error en querys
 		   $this->conn->commit();          
@@ -121,6 +183,25 @@ class Persona extends Recurso {
 
 		if (mysqli_affected_rows($this->conn) == 0) { //no debe eliminar si el recurso ya tiene movimiento
 			$result['error'] = true;
+		}
+
+		//habilitar el ultimo duplicado que tenga movimiento del mismo tipo (asesor, secretario, etc)
+		$sql = "UPDATE GT_PERSONA AS GT_P 
+				INNER JOIN GT_RECURSO AS GT_R ON GT_R.id = GT_P.idrecurso
+				SET GT_P.estado = 1
+				WHERE GT_R.idexpediente = $this->idexpediente 
+				AND GT_R.idgrado_proc = $this->idgrado_proc
+				AND GT_R.idmovimiento IS NOT NULL
+				AND GT_P.tipo = '$this->tipo'
+				AND GT_R.idmovimiento = (SELECT MAX(idmovimiento) 
+										 FROM GT_RECURSO 
+										 WHERE idexpediente = $this->idexpediente 
+										 AND idgrado_proc = $this->idgrado_proc
+										 AND tipo = '$this->tipo')";      
+		$result_query = mysqli_query($this->conn, $sql);     		
+  
+		if (!$result_query) {
+		   $result['error'] = $sql;                    
 		}
 		
 		if( $result['error'] == false) { //si no hay ningun error en querys

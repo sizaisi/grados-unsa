@@ -6,8 +6,7 @@ class Recurso {
     protected $idgrado_proc;
     protected $idusuario;    
     protected $idmovimiento;
-    protected $idruta;
-	protected $estado;	
+    protected $idruta;		
 	
 	private $conn;
 	
@@ -61,16 +60,8 @@ class Recurso {
 
 	function setIdRuta($idruta) {
 		$this->idruta = $idruta;
-    }	
-    
-    function getEstadio() {
-		return $this->estado;
-	}
-
-	function setEstado($estado) {
-		$this->estado = $estado;
-	}		
-
+	}	
+	
 	//verificar si existe recursos en otras rutas del mismo procedimiento sin confirmacion (no hay movimiento)
 	public function verificarRecursosVecinos() {
   
