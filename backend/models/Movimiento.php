@@ -91,7 +91,7 @@ class Movimiento {
 	  }
 	
 	// registrar movimiento y actualizar procedimiento del expediente con el idgradprod_destino
-	public function mover($idgradproc_destino) {      
+	public function mover($idgradproc_origen, $idgradproc_destino) {      
       
 		$result = array('error' => false);                
 		$this->conn->autocommit(FALSE); //iniciar transaccion
@@ -101,9 +101,25 @@ class Movimiento {
 				VALUES ($this->idexpediente, $this->idusuario, $this->idruta)";      
 		$result_query = mysqli_query($this->conn, $sql);     
   
+		$idmovimiento;
+		
+		if (!$result_query) {
+		   	$result['error'] = true;                    
+		}       
+		else {
+			$idmovimiento = mysqli_insert_id($this->conn);
+		}
+
+		//asignar el idmovimiento a los recursos agregados en el expediente
+		$sql = "UPDATE GT_RECURSO SET idmovimiento = $idmovimiento
+				WHERE idexpediente = $this->idexpediente
+				AND idusuario = $this->idusuario
+				AND idgrado_proc = $idgradproc_origen";        
+		$result_query = mysqli_query($this->conn, $sql);
+  
 		if (!$result_query) {
 		   $result['error'] = true;                    
-		}     
+		}
   
 		//actualizar expediente para conocer en que procedimiento se encuentra
 		$sql = "UPDATE GT_EXPEDIENTE SET idgrado_procedimiento = $idgradproc_destino
@@ -146,6 +162,15 @@ class Movimiento {
 		//actualizar expediente para conocer en que procedimiento se encuentra
 		$sql = "UPDATE GT_EXPEDIENTE SET idgrado_procedimiento = $idgradproc_origen
 				WHERE id = $this->idexpediente";        
+		$result_query = mysqli_query($this->conn, $sql);
+  
+		if (!$result_query) {
+		   $result['error'] = true;                    
+		}
+
+		//actualizar a nulo el idmovimiento de los recursos que tienen el idmovimiento seleccionado
+		$sql = "UPDATE GT_RECURSO SET idmovimiento = NULL
+				WHERE idmovimiento = $this->id";        
 		$result_query = mysqli_query($this->conn, $sql);
   
 		if (!$result_query) {

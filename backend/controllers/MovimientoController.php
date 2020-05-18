@@ -9,9 +9,10 @@ class MovimientoController {
 		$movimiento->setIdUsuario($_POST['idusuario']);   
 		$movimiento->setIdExpediente($_POST['idexpediente']);                                         
 		$movimiento->setIdRuta($_POST['idruta']);
+		$idgradproc_origen = $_POST['idgradproc_origen'];                                                     
 		$idgradproc_destino = $_POST['idgradproc_destino'];                                                     
 
-		$result = $movimiento->mover($idgradproc_destino);
+		$result = $movimiento->mover($idgradproc_origen, $idgradproc_destino);
 
 		echo json_encode($result);        
 	}

@@ -50,6 +50,7 @@ export default {
                         idexpediente: this.expediente.id,
                         idusuario: this.idusuario,
                         idruta: ruta.id,
+                        idgradproc_origen: ruta.idgradproc_origen,
                         idgradproc_destino: ruta.idgradproc_destino                     
                     })                                    
 
