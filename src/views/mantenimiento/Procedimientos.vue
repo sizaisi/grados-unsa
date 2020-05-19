@@ -231,8 +231,7 @@ export default {
             var formData = this._toFormData(this.procedimiento)
 
             this.axios.post(`${this.url}/Procedimiento/store`, formData)
-              .then(function(response) {
-                console.log(response.data)
+              .then(function(response) {                
                 me.cerrarAddEditModal();
                 me.dismissCountDown = me.dismissSecs //contador para el alert
 
@@ -243,8 +242,6 @@ export default {
                   me.successMsg = response.data.message
                   me.getAllProcedimientos()
                 }
-              }).catch(function (error) {                       
-                console.log(error)                  
               })            
         },
         actualizarProcedimiento() {
@@ -263,9 +260,7 @@ export default {
                   me.successMsg = response.data.message
                   me.getAllProcedimientos()
                 }
-              }).catch(function (error) {                       
-                console.log(error)                  
-              })                         
+              })                    
         },
         cerrarAddEditModal() {
             this.showAddEditModal = false
