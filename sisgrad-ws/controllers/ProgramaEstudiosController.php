@@ -1,7 +1,7 @@
 <?php
 require_once 'models/ProgramaEstudios.php';
 
-class ProgramaEstudiosController {
+class ProgramaEstudiosController {	
 	
 	public function index(){
 		$programa_estudios = new ProgramaEstudios();
@@ -12,14 +12,14 @@ class ProgramaEstudiosController {
 	}
 	
 	public function store(){
+		
 		$programa_estudios = new ProgramaEstudios();
 
 		$programa_estudios->setNombre($_POST['nombre']);
 		
 		$result = $programa_estudios->insertar();
 		
-		echo json_encode($result);       
-		//echo json_encode($_POST['nombre']);       
+		echo json_encode($result);       		      
 	}
 	
 	public function update(){

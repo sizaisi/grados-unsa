@@ -1,13 +1,7 @@
 <?php
-session_start();
 require_once 'autoload.php';
 require_once 'config/db.php';
 require_once 'config/parameters.php';
-
-function show_error() {
-	$error = new ErrorController();
-	$error->index();
-}
 
 if (isset($_GET['controller'])){
 	$nombre_controlador = $_GET['controller'].'Controller';
@@ -16,7 +10,7 @@ elseif(!isset($_GET['controller']) && !isset($_GET['action'])) {
 	$nombre_controlador = controller_default;
 }
 else {
-	show_error();
+	echo "Error en la creación del controlador";
 	exit();
 }
 
@@ -32,10 +26,10 @@ if (class_exists($nombre_controlador)) {
 		$controlador->$action_default();
 	}
     else {
-		show_error();
+		echo "Error en la creación de accion del controlador";
 	}
 } 
 else {
-	show_error();
+	echo "Error en la creación de accion del controlador";
 }
 
