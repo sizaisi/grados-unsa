@@ -45,7 +45,8 @@
         :tipo_usuario="tipo_usuario"
         :expediente="expediente"
         :graduando="graduando"
-        :ruta="ruta_seleccionada"                                        
+        :ruta="ruta_seleccionada"
+        :movimiento="movimiento"
         v-if="ruta_seleccionada.etiqueta == 'denegar'"                  
       />                             
     </template>              

@@ -9,6 +9,7 @@ class MovimientoController {
 		$movimiento->setIdUsuario($_POST['idusuario']);   
 		$movimiento->setIdExpediente($_POST['idexpediente']);                                         
 		$movimiento->setIdRuta($_POST['idruta']);
+		$movimiento->setIdMovAnterior($_POST['idmov_anterior']);
 		$idgradproc_origen = $_POST['idgradproc_origen'];                                                     
 		$idgradproc_destino = $_POST['idgradproc_destino'];                                                     
 

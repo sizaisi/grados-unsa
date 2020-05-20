@@ -1,10 +1,11 @@
 <?php
 
 class Movimiento {
-	public $id;
-	public $idexpediente;
-	public $idusuario;
-	public $idruta;   
+	private $id;
+	private $idexpediente;
+	private $idusuario;
+	private $idruta;   
+	private $idmov_anterior;   
 
 	private $conn;
 	
@@ -16,33 +17,41 @@ class Movimiento {
 		return $this->id;
 	}
 
-	function getIdExpediente() {
-		return $this->idexpediente;
-	}
-
-	function getIdUsuario() {
-		return $this->idusuario;
-	}
-
-	function getIdRuta() {
-		return $this->idruta;
-	}
-
 	function setId($id) {
 		$this->id = $id;
+	}
+
+	function getIdExpediente() {
+		return $this->idexpediente;
 	}
 
 	function setIdExpediente($idexpediente) {
 		$this->idexpediente = $idexpediente;
 	}	
 
+	function getIdUsuario() {
+		return $this->idusuario;
+	}
+
 	function setIdUsuario($idusuario) {
 		$this->idusuario = $idusuario;
-	}	
+	}
+
+	function getIdRuta() {
+		return $this->idruta;
+	}
 
 	function setIdRuta($idruta) {
 		$this->idruta = $idruta;
-	}	
+	}
+	
+	function getIdMovAnteior() {
+		return $this->idmov_anterior;
+	}
+
+	function setIdMovAnterior($idmov_anterior) {
+		$this->idmov_anterior = $idmov_anterior;
+	}
 
 	//para devolver el movimiento actual de entrada a traves del idgrado-procedimiento destino
 	function getLastMovimiento($idgradproc_destino) { 
@@ -97,8 +106,8 @@ class Movimiento {
 		$this->conn->autocommit(FALSE); //iniciar transaccion
 		
 		//realizar movimiento con la ruta seleccionada
-		$sql = "INSERT INTO GT_MOVIMIENTO(idexpediente, idusuario, idruta) 
-				VALUES ($this->idexpediente, $this->idusuario, $this->idruta)";      
+		$sql = "INSERT INTO GT_MOVIMIENTO(idexpediente, idusuario, idruta, idmov_anterior) 
+				VALUES ($this->idexpediente, $this->idusuario, $this->idruta, $this->idmov_anterior)";      
 		$result_query = mysqli_query($this->conn, $sql);     
   
 		$idmovimiento;

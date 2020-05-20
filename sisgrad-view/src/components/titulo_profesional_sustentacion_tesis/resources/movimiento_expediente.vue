@@ -25,7 +25,8 @@ export default {
         idrol_area: String,
         tipo_rol: String,
         tipo_usuario: String,
-        expediente: Object,        
+        expediente: Object,  
+        movimiento: Object, //ultimo movimiento      
         ruta: Object            
     },    
     data() {
@@ -51,7 +52,8 @@ export default {
                         idusuario: this.idusuario,
                         idruta: ruta.id,
                         idgradproc_origen: ruta.idgradproc_origen,
-                        idgradproc_destino: ruta.idgradproc_destino                     
+                        idgradproc_destino: ruta.idgradproc_destino,
+                        idmov_anterior : this.movimiento.id                  
                     })                                    
 
                     this.axios.post(`${this.url}/Movimiento/mover`, formData)
@@ -94,8 +96,7 @@ export default {
             return value.charAt(0).toUpperCase() + value.slice(1)
         }
     },
-    mounted: function() {           
-
+    mounted: function() {                   
     },
 }
 </script>

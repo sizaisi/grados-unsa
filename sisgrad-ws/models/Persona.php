@@ -35,6 +35,40 @@ class Persona extends Recurso {
 	function setEstado($estado) {
 		$this->estado = $estado;
 	}
+
+	public function getAsesorExpediente() { //asesor que ya fue asignado en el procedimiento correspondiente
+		$result = array('error' => false);
+
+		$sql = "SELECT GT_R.id, REPLACE(AC_D.apn, '/', ' ') AS apn, 
+				AC_D.dic AS nro_documento, GT_P.tipo
+				FROM GT_RECURSO AS GT_R
+				INNER JOIN GT_PERSONA GT_P ON GT_P.idrecurso = GT_R.id
+				INNER JOIN GT_USUARIO AS GT_U ON GT_U.id = GT_P.iddocente
+				INNER JOIN SIAC_DOC AS AC_D ON AC_D.codper = GT_U.codi_usuario 
+				WHERE GT_R.idexpediente = $this->idexpediente   
+				AND GT_R.idmovimiento IS NOT NULL               												
+				AND GT_P.tipo = 'asesor'
+				AND GT_P.estado = 1";	
+
+		$result_query = mysqli_query($this->conn, $sql);
+
+		if ($result_query) {			
+			if (mysqli_num_rows($result_query) > 0) {
+				$row = $result_query->fetch_assoc();        
+				$result['asesor'] = $row;
+			}			
+			else {
+				$result['error'] = true;
+				$result['message'] = "No se pudo encontrar el asesor.";            
+			}			
+		}
+		else {
+			$result['error'] = true;
+			$result['message'] = "No se pudo obtener el asesor.";            
+		}		
+  
+		return $result;		
+	}      
     
     public function getAsesor() {
 		$result = array('error' => false);

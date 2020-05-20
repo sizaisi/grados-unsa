@@ -2,6 +2,16 @@
 require_once 'models/Persona.php';
 
 class PersonaController {    
+
+        public function get_asesor_expediente() {        
+                $persona = new Persona();       
+                
+                $persona->setIdExpediente($_POST['idexpediente']);                
+
+                $result = $persona->getAsesorExpediente();
+
+                echo json_encode($result);           
+        }
     
 	public function get_asesor() {        
                 $persona = new Persona();       

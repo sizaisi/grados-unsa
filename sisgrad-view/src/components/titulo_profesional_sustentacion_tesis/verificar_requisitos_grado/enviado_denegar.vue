@@ -70,7 +70,8 @@
                             :idrol_area="idrol_area"
                             :tipo_rol="tipo_rol"
                             :tipo_usuario="tipo_usuario"
-                            :expediente="expediente"                  
+                            :expediente="expediente"
+                            :movimiento="movimiento"
                             :ruta="ruta"                                                            
                         />
                     </b-tab>
@@ -110,9 +111,9 @@ export default {
         tipo_rol: String,
         tipo_usuario: String,
         expediente: Object,
-        graduando: Object,
-        movimiento: Object,
-        ruta: Object            
+        graduando: Object,        
+        ruta: Object,
+        movimiento: Object
     },
     components: {    
         observaciones,   
@@ -206,7 +207,7 @@ export default {
                 idexpediente: this.expediente.id
             })
 
-            this.axios.post(`${this.url}/UsuarioExpediente/getAsesor`, formData)
+            this.axios.post(`${this.url}/Persona/get_asesor_expediente`, formData)
             .then(function(response) {                
                 if (!response.data.error) {                
                     me.asesor = response.data.asesor
