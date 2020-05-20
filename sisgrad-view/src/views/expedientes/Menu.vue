@@ -160,7 +160,7 @@ export default {
                 }                                
             }
             else {                
-                console.log(response.data.message)
+                //console.log(response.data.message)
             }
         })
     },   
