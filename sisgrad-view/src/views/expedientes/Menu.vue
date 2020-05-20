@@ -137,15 +137,15 @@ export default {
         })
     },       
     getGradoProcedimientos() {
-        let me = this       
+        let me = this
+        let formData = this._toFormData({
+            idgrado_modalidad: this.idgrado_modalidad,
+            idrol_area: this.idrol_area,
+            idusuario: this.idusuario                         
+        })
 
-        var formData = this._toFormData({
-                idgrado_modalidad: me.idgrado_modalidad,
-                idrol_area: me.idrol_area,                         
-            })
-
-        this.axios.post(`${this.url}/GradoProcedimiento/getListByIds`, formData)
-        .then(function(response) {
+        this.axios.post(`${this.url}/GradoProcedimiento/menu_dinamico`, formData)
+        .then(function(response) {            
             if (!response.data.error) {
                 me.array_grado_procedimiento = response.data.array_grado_procedimiento
                 

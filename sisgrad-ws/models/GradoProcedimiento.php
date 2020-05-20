@@ -4,8 +4,8 @@ class GradoProcedimiento {
 	private $id;
 	private $idgrado_modalidad;
     private $idprocedimiento;
-    private $idrol;
-    private $tipo_rol;    
+    private $idrol_area;
+    private $tipo_rol; 
     private $url;
     private $orden;
 
@@ -39,12 +39,12 @@ class GradoProcedimiento {
 		$this->idprocedimiento = $idprocedimiento;
 	}
 
-	function getIdrol() {
-		return $this->idrol;
+	function getIdRolArea() {
+		return $this->idrol_area;
 	}
 
-	function setIdRol($idrol) {
-		$this->idrol = $idrol;
+	function setIdRolArea($idrol_area) {
+		$this->idrol_area = $idrol_area;
 	}
 
 	function getTipoRol() {
@@ -111,16 +111,35 @@ class GradoProcedimiento {
         return $result;
     }
 
-    public function getListByIds($idgrado_modalidad, $idrol_area){
+    public function listar_menus($idusuario) {
 
-        $result = array('error' => false);                
+        $result = array('error' => false);
+        
+        $sql = "SELECT idgrado_procedimiento FROM GT_USUARIO_GRADO_PROCEDIMIENTO WHERE idusuario = $idusuario";
+		$result_query = mysqli_query($this->conn, $sql);		
+  
+		if ($result_query && mysqli_num_rows($result_query) == 0) {
+            $sql = "SELECT GT_GP.*, GT_P.id AS idproc, GT_P.nombre AS proc_nombre, GT_P.descripcion AS proc_descripcion 
+                    FROM GT_GRADO_PROCEDIMIENTO AS GT_GP
+                    INNER JOIN GT_PROCEDIMIENTO AS GT_P ON GT_P.id = GT_GP.idprocedimiento 
+                    WHERE GT_P.condicion = 1 AND GT_GP.idgrado_modalidad = $this->idgrado_modalidad 
+                    AND GT_GP.idrol_area =  $this->idrol_area 
+                    ORDER BY GT_GP.id ASC";
+		}
+		else {
+            $array_idgrado_procedimiento = array();
 
-        $sql = "SELECT gt_gp.*, gt_p.id AS idproc, gt_p.nombre AS proc_nombre, gt_p.descripcion AS proc_descripcion " .
-               "FROM GT_GRADO_PROCEDIMIENTO AS gt_gp " .                
-               "INNER JOIN GT_PROCEDIMIENTO AS gt_p ON gt_gp.idprocedimiento = gt_p.id " .
-               "WHERE gt_p.condicion = 1 AND gt_gp.idgrado_modalidad=" . $idgrado_modalidad .
-               " AND gt_gp.idrol_area = " . $idrol_area .
-               " ORDER BY gt_gp.id ASC";
+            while($row = $result_query->fetch_assoc()) {
+                $array_idgrado_procedimiento[] = $row['idgrado_procedimiento'];
+            }
+
+			$sql = "SELECT GT_GP.*, GT_P.id AS idproc, GT_P.nombre AS proc_nombre, GT_P.descripcion AS proc_descripcion 
+                    FROM GT_GRADO_PROCEDIMIENTO AS GT_GP
+                    INNER JOIN GT_PROCEDIMIENTO AS GT_P ON GT_P.id = GT_GP.idprocedimiento 
+                    WHERE GT_P.condicion = 1 AND GT_GP.idgrado_modalidad = $this->idgrado_modalidad 
+                    AND GT_GP.idrol_area =  $this->idrol_area 
+                    AND GT_GP.id IN (" . implode(',', $array_idgrado_procedimiento) . ") ORDER BY GT_GP.id ASC";
+		}        
 
         $result_query = mysqli_query($this->conn, $sql);
 
@@ -130,7 +149,7 @@ class GradoProcedimiento {
             array_push($array_grado_procedimiento, $row);
         }
 
-        $result['array_grado_procedimiento'] = $array_grado_procedimiento;
+        $result['array_grado_procedimiento'] = $array_grado_procedimiento;        
 
         return $result;
     }
