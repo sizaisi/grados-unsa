@@ -33,54 +33,9 @@ class Usuario {
 
 	function setTipo($tipo) {
 		$this->tipo = $tipo;
-	}
-	
-	public function getGraduando($idexpediente) {              
-
-		$result = array('error' => false);		
-
-		$sql = "SELECT GT_G.*, SUBSTRING(AC_I.dic, 2) AS dni, REPLACE(AC_I.apn,'/',' ') AS apell_nombres 
-				FROM GT_USUARIO_EXPEDIENTE AS GT_UE 
-				INNER JOIN GT_USUARIO AS GT_U ON GT_U.id = GT_UE.idusuario 
-				INNER JOIN GT_GRADUANDO AS GT_G ON GT_G.cui = GT_U.codi_usuario 
-				INNER JOIN acdiden AS AC_I ON AC_I.cui = GT_G.cui 
-				WHERE GT_UE.idexpediente = $idexpediente";
+	} 
   
-		$result_query = mysqli_query($this->conn, $sql); 	
-  
-		if ($row = $result_query->fetch_assoc()) {         
-		   $graduando = $row;
-		}
-  
-		$result['graduando'] = $graduando;      
-  
-		return $result;
-	}  
-
-	public function getGradByIdExp($idexpediente) {
-
-		$result = array('error' => false);
-  
-		$sql = "SELECT gt_g.*, SUBSTRING(ac_i.dic, 2) AS dni, REPLACE(ac_i.apn,'/',' ') AS apell_nombres 
-				FROM GT_USUARIO_EXPEDIENTE AS gt_ue
-				INNER JOIN GT_USUARIO AS gt_u ON gt_ue.idusuario = gt_u.id
-				INNER JOIN GT_GRADUANDO AS gt_g ON gt_u.codi_usuario = gt_g.cui
-				INNER JOIN acdiden AS ac_i ON gt_g.cui = ac_i.cui
-				WHERE idexpediente = $idexpediente
-				ORDER BY ac_i.apn ASC";
-  
-		$result_query = mysqli_query($this->conn, $sql); 	
-  
-		if ($row = $result_query->fetch_assoc()) {         
-		   $graduando = $row;
-		}
-  
-		$result['graduando'] = $graduando;      
-  
-		return $result;
-	 }   
-  
-	 public function getIdUsuario() {
+	public function getIdUsuario() {
 		$result = array('error' => false);		
 
 		$sql = "SELECT * 

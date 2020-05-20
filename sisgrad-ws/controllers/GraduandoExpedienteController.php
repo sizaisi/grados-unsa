@@ -1,9 +1,19 @@
 <?php
-require_once 'models/UsuarioExpediente.php';
+require_once 'models/GraduandoExpediente.php';
 
-class UsuarioExpedienteController {
+class GraduandoExpedienteController {
 
-    public function getAsesor() {        
+    public function getGraduando() { 	
+        $graduando_expediente = new GraduandoExpediente();
+
+        $graduando_expediente->setIdExpediente($_POST['idexpediente']);
+
+        $result = $graduando_expediente->getGraduando();
+
+        echo json_encode($result);           
+    }
+
+    /*public function getAsesor() {        
         $usuario_expediente = new UsuarioExpediente();
         
         $usuario_expediente->setIdexpediente($_POST['idexpediente']);
@@ -34,5 +44,6 @@ class UsuarioExpedienteController {
         $result = $usuario_expediente->eliminar();        
 
         echo json_encode($result);            
-	}	
+    }	
+    */
 }
