@@ -371,7 +371,7 @@ export default {
           idexpediente: this.idexpediente,
       })
 
-      this.axios.post(`${this.url}/Usuario/getGraduando`, formData)
+      this.axios.post(`${this.url}/GraduandoExpediente/getGraduando`, formData)
       .then(function(response) {                    
         if (!response.data.error) {
             me.graduando = response.data.graduando                                                        

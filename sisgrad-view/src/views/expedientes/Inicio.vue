@@ -61,7 +61,7 @@ export default {
             })
 
             this.axios.post(`${this.url}/Usuario/getIdUsuario`, formData)
-            .then(function(response) {
+            .then(function(response) {                
                 if (!response.data.error) {
                     me.usuario = response.data.usuario                   
                     
