@@ -102,15 +102,15 @@
               </b-tabs>        
             </b-card>
           </b-tab>
-          <b-tab title="Información de Procedencia">  
+          <b-tab title="Información de Procedencia" v-if="movimiento != null">  
             <b-card no-body>         
               <b-tabs pills card vertical>   
                   <b-tab title="Estado de expediente">
                     <!-- Información procedimiento origen -->                                                                 
                     <div class="mb-3">
                       <h4 class="text-info text-center">Estado de expediente</h4>
-                    </div>      
-                    <b-row class="justify-content-lg-center" v-if="movimiento != null">
+                    </div>     
+                    <b-row class="justify-content-lg-center">
                       <b-col col lg="10">
                         <table class="table table-bordered table-borderless">
                           <tbody>  
@@ -127,8 +127,7 @@
                             </tr>
                             <tr>
                               <th class="bg-light text-right">Responsable: </th>
-                              <td v-if="movimiento.administrativo != null" v-text="movimiento.administrativo"></td>                           
-                              <td v-else v-text="movimiento.docente"></td>
+                              <td v-text="movimiento.nombre_usuario"></td>                                                         
                             </tr>
                             <tr>
                               <th class="bg-light text-right">Rol / Área: </th>
@@ -184,7 +183,7 @@
               </b-tabs>        
             </b-card>            
           </b-tab>
-          <b-tab title="Procesamiento de Expediente">                        
+          <b-tab title="Procesamiento de Expediente" v-if="movimiento != null">                        
             <!-- Compoenente del procedimiento -->                
             <component  :is="nombre_componente"                          
                         :idgrado_modalidad="grado_procedimiento.idgrado_modalidad"
@@ -314,7 +313,7 @@ export default {
       })        
 
       this.axios.post(`${this.url}/Movimiento/ultimoMovimiento`, formData)
-      .then(function(response) {        
+      .then(function(response) {                
         if (!response.data.error) {              
           me.movimiento = response.data.movimiento                     
         }
