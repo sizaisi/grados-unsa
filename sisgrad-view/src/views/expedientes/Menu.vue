@@ -43,8 +43,8 @@
                      @filtered="onFiltered" 
                      empty-filtered-text="No hay expedientes que coincidan con su búsqueda."
                   >                         
-                     <template v-slot:cell(estado_expediente)="data">
-                        <b-badge variant="warning">{{data.item.estado_expediente}}</b-badge>               
+                     <template v-slot:cell(estado)="data">
+                        <b-badge :variant="color_estados[data.item.estado]">{{data.item.estado}}</b-badge>
                      </template> 
                      <template v-slot:cell(acciones)="data">                                 
                         <b-button variant="success" size="sm" data-toggle="tooltip" data-placement="left" title="Evaluar" 
@@ -89,8 +89,8 @@ export default {
   props: ['idgrado_modalidad', 'idgrado_proc', 'idusuario', 'codi_usuario', 'idrol_area', 'tipo_rol', 'tipo_usuario'],  
   data() {
     return {                               
-        url: this.$root.API_URL, 
-        downloadable: false,         
+        url: this.$root.API_URL,
+        color_estados : this.$root.color_estados,                 
         grado_modalidad : {},
         array_grado_procedimiento : [],       
         array_expediente : [],                
@@ -98,8 +98,8 @@ export default {
             { key: 'codigo', label: 'Código', class: 'text-center' },
             { key: 'graduando', label: 'Graduando' },            
             { key: 'escuela', label: 'Escuela' },                    
-            { key: 'fecha_inicio', label: 'Fecha Inicio', class: 'text-center' },
-            { key: 'estado_expediente', label: 'Estado', class: 'text-center' },
+            { key: 'fecha_inicio', label: 'Fecha', class: 'text-center' },
+            { key: 'estado', label: 'Estado', class: 'text-center' },
             { key: 'acciones', label: 'Acciones', class: 'text-center' }
         ],    
         totalRows: 1,

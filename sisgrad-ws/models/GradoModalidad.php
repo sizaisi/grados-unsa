@@ -54,8 +54,7 @@ class GradoModalidad {
             $sql2 = "SELECT COUNT(*) AS total_expedientes 
                         FROM GT_GRADO_PROCEDIMIENTO AS GP INNER JOIN GT_EXPEDIENTE AS GE
                         ON GP.id = GE.idgrado_procedimiento
-                        WHERE GE.estado_expediente = 'En proceso'
-                        AND GP.idrol_area = $idrol_area
+                        WHERE GP.idrol_area = $idrol_area
                         AND GE.nues IN (SELECT codi_depe FROM SIAC_OPER_DEPE WHERE codi_oper='$codi_usuario') 
                         AND GP.idgrado_modalidad = ".$row['idgrado_modalidad'];
                         
@@ -93,8 +92,7 @@ class GradoModalidad {
             $sql2 = "SELECT COUNT(*) AS total_expedientes 
                         FROM GT_GRADO_PROCEDIMIENTO AS GP INNER JOIN GT_EXPEDIENTE AS GE
                         ON GP.id = GE.idgrado_procedimiento
-                        WHERE GE.estado_expediente = 'En proceso'
-                        AND GP.idrol_area = $idrol_area
+                        WHERE GP.idrol_area = $idrol_area
                         AND GE.id IN (SELECT R.idexpediente
                                         FROM GT_RECURSO R 
                                         INNER JOIN GT_PERSONA P ON P.idrecurso = R.id

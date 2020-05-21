@@ -30,7 +30,7 @@ class Expediente {
 		$result = array('error' => false);
   
 		if ($tipo_usuario == 'Administrativo') {
-			$sql = "SELECT GT_E.id, GT_E.codigo, GT_E.fecha_inicio, GT_E.estado_expediente, 
+			$sql = "SELECT GT_E.id, GT_E.codigo, GT_E.fecha_inicio, GT_E.estado, 
 						   REPLACE(AC_I.apn,'/',' ') AS graduando, AC_E.nesc AS escuela
 					FROM GT_EXPEDIENTE AS GT_E
 						INNER JOIN GT_GRADUANDO_EXPEDIENTE AS GT_GE ON GT_GE.idexpediente = GT_E.id 
@@ -45,7 +45,7 @@ class Expediente {
 		else if ($tipo_usuario == 'Docente') {			
 
 			if ($tipo_rol == 'asesor') {
-				$sql = "SELECT GT_E.id, GT_E.codigo, GT_E.fecha_inicio, GT_E.estado_expediente, 
+				$sql = "SELECT GT_E.id, GT_E.codigo, GT_E.fecha_inicio, GT_E.estado, 
 							   REPLACE(AC_I.apn,'/',' ') AS graduando, AC_E.nesc AS escuela
 						FROM GT_EXPEDIENTE AS GT_E
 							INNER JOIN GT_GRADUANDO_EXPEDIENTE AS GT_GE ON GT_GE.idexpediente = GT_E.id 
@@ -63,7 +63,7 @@ class Expediente {
 						ORDER BY GT_E.id ASC";
 			}
 			else if ($tipo_rol == 'jurado') {
-				$sql = "SELECT GT_E.id, GT_E.codigo, GT_E.fecha_inicio, GT_E.estado_expediente, 
+				$sql = "SELECT GT_E.id, GT_E.codigo, GT_E.fecha_inicio, GT_E.estado, 
 							   REPLACE(AC_I.apn,'/',' ') AS graduando, AC_E.nesc AS escuela
 						FROM GT_EXPEDIENTE AS GT_E
 							INNER JOIN GT_GRADUANDO_EXPEDIENTE AS GT_GE ON GT_GE.idexpediente = GT_E.id 
@@ -103,8 +103,7 @@ class Expediente {
 			  INNER JOIN GT_EXPEDIENTE ON GT_EXPEDIENTE.id = GT_MOVIMIENTO.idexpediente
 			  INNER JOIN GT_USUARIO ON GT_USUARIO.id = GT_MOVIMIENTO.idusuario
 			  INNER JOIN actescu ON GT_EXPEDIENTE.nues= actescu.nues
-			  WHERE GT_EXPEDIENTE.estado_expediente='En proceso' 
-			  AND GT_USUARIO.codi_usuario='$codi_usuario'";
+			  WHERE GT_USUARIO.codi_usuario='$codi_usuario'";
 	 
 		$result_query = mysqli_query($this->conn, $sql);
   

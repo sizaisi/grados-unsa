@@ -8,6 +8,13 @@ const config = {
                       aceptar:"success", aprobar:"success", 
                       anular: "danger", cambiar: "warning"
                     },
+    //para asignacion de colores a los estados del listado de expedientes
+    color_estados: { enviado:"success", derivado:"success", 
+                      devuelto:"danger", denegado:"danger",
+                      observado:"warning", rechazado:"danger", 
+                      aceptado:"success", aprobado:"success", 
+                      anulado: "danger", cambiado: "warning"
+                    },
     //para movimientos de ingreso a un procedimiento
     estados: { enviar:"enviado", derivar:"derivado", 
                 devolver:"devuelto", denegar:"denegado",

@@ -50,9 +50,10 @@ Vue.config.productionTip = false
 new Vue({
   data: {
     API_URL: config.API_URL,
-    FILE_URL: config.FILE_URL,
+    FILE_URL: config.FILE_URL,    
+    color_acciones : config.color_acciones,
+    color_estados : config.color_estados,
     estados : config.estados,
-    color_acciones : config.color_acciones,    
   },  
   methods: {         
     mostrarNotificacion(titulo, color, tiempo, icono, mensaje, posicion) {

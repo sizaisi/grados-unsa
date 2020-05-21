@@ -100,7 +100,7 @@ class Movimiento {
 	  }
 	
 	// registrar movimiento y actualizar procedimiento del expediente con el idgradprod_destino
-	public function mover($idgradproc_origen, $idgradproc_destino) {      
+	public function mover($idgradproc_origen, $idgradproc_destino, $estado_expediente) {      
       
 		$result = array('error' => false);                
 		$this->conn->autocommit(FALSE); //iniciar transaccion
@@ -131,7 +131,9 @@ class Movimiento {
 		}
   
 		//actualizar expediente para conocer en que procedimiento se encuentra
-		$sql = "UPDATE GT_EXPEDIENTE SET idgrado_procedimiento = $idgradproc_destino
+		$sql = "UPDATE GT_EXPEDIENTE 
+				SET idgrado_procedimiento = $idgradproc_destino,
+					estado = '$estado_expediente'  
 				WHERE id = $this->idexpediente";        
 		$result_query = mysqli_query($this->conn, $sql);
   
@@ -169,6 +171,7 @@ class Movimiento {
 		}     
   
 		//actualizar expediente para conocer en que procedimiento se encuentra
+		//JKN: FALTA PONER estado_anterior EN EL ESTADO DEL EXPEDIENTE USAR idmov_ant
 		$sql = "UPDATE GT_EXPEDIENTE SET idgrado_procedimiento = $idgradproc_origen
 				WHERE id = $this->idexpediente";        
 		$result_query = mysqli_query($this->conn, $sql);

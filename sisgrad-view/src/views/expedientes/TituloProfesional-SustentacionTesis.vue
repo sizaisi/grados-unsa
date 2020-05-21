@@ -313,7 +313,7 @@ export default {
           idexpediente: this.idexpediente         
       })        
 
-      this.axios.post(`${this.url}/Movimiento/getLastMovimientoByProc`, formData)
+      this.axios.post(`${this.url}/Movimiento/ultimoMovimiento`, formData)
       .then(function(response) {        
         if (!response.data.error) {              
           me.movimiento = response.data.movimiento                     

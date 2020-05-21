@@ -2,6 +2,18 @@
 require_once 'models/Movimiento.php';
 
 class MovimientoController {
+
+	// obtener ruta entrada por el procedimiento destino
+	public function ultimoMovimiento() { 
+		$movimiento = new Movimiento();
+		
+		$idgradproc_destino = $_POST['idgradproc_destino'];  		  
+		$movimiento->setIdExpediente($_POST['idexpediente']);		
+
+		$result = $movimiento->getLastMovimiento($idgradproc_destino);
+
+		echo json_encode($result);          
+	}
 	
 	public function mover() {
 		$movimiento = new Movimiento();
@@ -11,9 +23,10 @@ class MovimientoController {
 		$movimiento->setIdRuta($_POST['idruta']);
 		$movimiento->setIdMovAnterior($_POST['idmov_anterior']);
 		$idgradproc_origen = $_POST['idgradproc_origen'];                                                     
-		$idgradproc_destino = $_POST['idgradproc_destino'];                                                     
+		$idgradproc_destino = $_POST['idgradproc_destino'];
+		$estado_expediente = $_POST['estado_expediente'];                                                     
 
-		$result = $movimiento->mover($idgradproc_origen, $idgradproc_destino);
+		$result = $movimiento->mover($idgradproc_origen, $idgradproc_destino, $estado_expediente);
 
 		echo json_encode($result);        
 	}
@@ -27,17 +40,5 @@ class MovimientoController {
 		$result = $movimiento->deshacer($idgradproc_origen);
 
 		echo json_encode($result);       
-	}	
-	
-	// obtener ruta entrada por el procedimiento destino
-	public function getLastMovimientoByProc() { 
-		$movimiento = new Movimiento();
-		
-		$idgradproc_destino = $_POST['idgradproc_destino'];  		  
-		$movimiento->setIdExpediente($_POST['idexpediente']);		
-
-		$result = $movimiento->getLastMovimiento($idgradproc_destino);
-
-		echo json_encode($result);             
-	}
+	}		
 }

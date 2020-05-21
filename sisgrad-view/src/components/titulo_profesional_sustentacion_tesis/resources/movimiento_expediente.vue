@@ -32,7 +32,8 @@ export default {
     data() {
         return {             
             url: this.$root.API_URL,                        
-            color_acciones : this.$root.color_acciones            
+            color_acciones : this.$root.color_acciones,
+            estados : this.$root.estados
         }
     },
     methods: {                    
@@ -53,7 +54,8 @@ export default {
                         idruta: ruta.id,
                         idgradproc_origen: ruta.idgradproc_origen,
                         idgradproc_destino: ruta.idgradproc_destino,
-                        idmov_anterior : this.movimiento.id                  
+                        idmov_anterior : this.movimiento.id,
+                        estado_expediente: this.estados[ruta.etiqueta]
                     })                                    
 
                     this.axios.post(`${this.url}/Movimiento/mover`, formData)
