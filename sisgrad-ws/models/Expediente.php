@@ -30,41 +30,55 @@ class Expediente {
 		$result = array('error' => false);
   
 		if ($tipo_usuario == 'Administrativo') {
-			$sql = "SELECT GT_E.*, AC_E.nesc, AC_F.nfac AS facultad
+			$sql = "SELECT GT_E.id, GT_E.codigo, GT_E.fecha_inicio, GT_E.estado_expediente, 
+						   REPLACE(AC_I.apn,'/',' ') AS graduando, AC_E.nesc AS escuela
 					FROM GT_EXPEDIENTE AS GT_E
-					INNER JOIN actescu AS AC_E ON AC_E.nues = GT_E.nues
-					INNER JOIN actfacu AS AC_F ON AC_F.facu = AC_E.facu
-					WHERE GT_E.estado_expediente = 'En proceso' AND GT_E.idgrado_procedimiento=$idgrado_procedimiento
-					AND GT_E.nues IN (SELECT codi_depe FROM SIAC_OPER_DEPE WHERE codi_oper='$codi_usuario')
-					ORDER BY GT_E.fecha_inicio ASC";
+						INNER JOIN GT_GRADUANDO_EXPEDIENTE AS GT_GE ON GT_GE.idexpediente = GT_E.id 
+						INNER JOIN GT_GRADUANDO AS GT_G ON GT_G.id = GT_GE.idgraduando 		
+						INNER JOIN acdiden AS AC_I ON AC_I.cui = GT_G.cui			
+						INNER JOIN actescu AS AC_E ON AC_E.nues = GT_E.nues						
+						INNER JOIN SIAC_OPER_DEPE AC_OP ON AC_OP.codi_depe = GT_E.nues
+					WHERE GT_E.idgrado_procedimiento = $idgrado_procedimiento					
+						AND AC_OP.codi_oper = '$codi_usuario' 
+					ORDER BY GT_E.id ASC";
 		}
 		else if ($tipo_usuario == 'Docente') {			
 
 			if ($tipo_rol == 'asesor') {
-				$sql = "SELECT *             
-						FROM GT_EXPEDIENTE 
-						WHERE estado_expediente = 'En proceso' AND idgrado_procedimiento=$idgrado_procedimiento
-						AND id IN (SELECT R.idexpediente
-									FROM GT_RECURSO R
-									INNER JOIN GT_PERSONA P ON P.idrecurso = R.id
-									INNER JOIN GT_USUARIO U	ON U.id = P.iddocente
-									WHERE P.tipo = 'asesor'
-									AND P.estado = 1  
-									AND U.codi_usuario='$codi_usuario')
-						ORDER BY fecha_inicio ASC";
+				$sql = "SELECT GT_E.id, GT_E.codigo, GT_E.fecha_inicio, GT_E.estado_expediente, 
+							   REPLACE(AC_I.apn,'/',' ') AS graduando, AC_E.nesc AS escuela
+						FROM GT_EXPEDIENTE AS GT_E
+							INNER JOIN GT_GRADUANDO_EXPEDIENTE AS GT_GE ON GT_GE.idexpediente = GT_E.id 
+							INNER JOIN GT_GRADUANDO AS GT_G ON GT_G.id = GT_GE.idgraduando 		
+							INNER JOIN acdiden AS AC_I ON AC_I.cui = GT_G.cui			
+							INNER JOIN actescu AS AC_E ON AC_E.nues = GT_E.nues						
+						WHERE GT_E.idgrado_procedimiento = $idgrado_procedimiento
+							AND GT_E.id IN (SELECT R.idexpediente
+											FROM GT_RECURSO AS R
+												INNER JOIN GT_PERSONA AS P ON P.idrecurso = R.id
+												INNER JOIN GT_USUARIO AS U ON U.id = P.iddocente
+											WHERE P.tipo = 'asesor'
+												AND P.estado = 1  
+												AND U.codi_usuario='$codi_usuario')
+						ORDER BY GT_E.id ASC";
 			}
 			else if ($tipo_rol == 'jurado') {
-				$sql = "SELECT *             
-						FROM GT_EXPEDIENTE 
-						WHERE estado_expediente = 'En proceso' AND idgrado_procedimiento=$idgrado_procedimiento
-						AND id IN (SELECT R.idexpediente
-									FROM GT_RECURSO R
-									INNER JOIN GT_PERSONA P ON P.idrecurso = R.id
-									INNER JOIN GT_USUARIO U	ON U.id = P.iddocente									
+				$sql = "SELECT GT_E.id, GT_E.codigo, GT_E.fecha_inicio, GT_E.estado_expediente, 
+							   REPLACE(AC_I.apn,'/',' ') AS graduando, AC_E.nesc AS escuela
+						FROM GT_EXPEDIENTE AS GT_E
+							INNER JOIN GT_GRADUANDO_EXPEDIENTE AS GT_GE ON GT_GE.idexpediente = GT_E.id 
+							INNER JOIN GT_GRADUANDO AS GT_G ON GT_G.id = GT_GE.idgraduando 		
+							INNER JOIN acdiden AS AC_I ON AC_I.cui = GT_G.cui			
+							INNER JOIN actescu AS AC_E ON AC_E.nues = GT_E.nues						 
+						WHERE GT_E.idgrado_procedimiento = $idgrado_procedimiento
+						AND GT_E.id IN (SELECT R.idexpediente
+									FROM GT_RECURSO AS R
+									INNER JOIN GT_PERSONA AS P ON P.idrecurso = R.id
+									INNER JOIN GT_USUARIO AS U	ON U.id = P.iddocente									
 									WHERE P.tipo IN ('presidente', 'secretario', 'suplente') 
 									AND P.estado = 1 
 									AND U.codi_usuario='$codi_usuario')
-						ORDER BY fecha_inicio ASC";
+						ORDER BY GT_E.id ASC";
 			}			
 		}
 

@@ -96,8 +96,8 @@ export default {
         array_expediente : [],                
         columnas: [
             { key: 'codigo', label: 'Código', class: 'text-center' },
-            { key: 'titulo', label: 'Título' },
-            { key: 'nesc', label: 'Escuela' },                    
+            { key: 'graduando', label: 'Graduando' },            
+            { key: 'escuela', label: 'Escuela' },                    
             { key: 'fecha_inicio', label: 'Fecha Inicio', class: 'text-center' },
             { key: 'estado_expediente', label: 'Estado', class: 'text-center' },
             { key: 'acciones', label: 'Acciones', class: 'text-center' }
