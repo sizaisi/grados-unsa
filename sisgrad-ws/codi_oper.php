@@ -10,7 +10,7 @@
    
    $codi_oper = 'fips';   //facultad
    //$codi_oper = 'uifips';   //unid de investigacion
-   //$codi_oper = '4141_1'; //presidente de jurado
+   //$codi_oper = '4282_1'; //secretario de jurado
    //$codi_oper = '4686_1';  //asesor
    //$codi_oper = 'grad3';  //grados y titulos
    //$codi_oper = 'repo';  //repositorio institucional

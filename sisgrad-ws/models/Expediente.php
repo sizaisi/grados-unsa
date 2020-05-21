@@ -26,7 +26,7 @@ class Expediente {
 		$this->conn = Database::conectar();
 	}
 	
-	public function getListExpByIds($idgrado_procedimiento, $codi_usuario, $tipo_usuario, $tipo_rol) {
+	public function getList($idgrado_procedimiento, $codi_usuario, $tipo_usuario, $tipo_rol) {
 		$result = array('error' => false);
   
 		if ($tipo_usuario == 'Administrativo') {
@@ -44,10 +44,12 @@ class Expediente {
 				$sql = "SELECT *             
 						FROM GT_EXPEDIENTE 
 						WHERE estado_expediente = 'En proceso' AND idgrado_procedimiento=$idgrado_procedimiento
-						AND id IN (SELECT UE.idexpediente
-									FROM GT_USUARIO_EXPEDIENTE UE INNER JOIN GT_USUARIO U
-									ON UE.idusuario = U.id
-									WHERE UE.tipo = '$tipo_rol' 
+						AND id IN (SELECT R.idexpediente
+									FROM GT_RECURSO R
+									INNER JOIN GT_PERSONA P ON P.idrecurso = R.id
+									INNER JOIN GT_USUARIO U	ON U.id = P.iddocente
+									WHERE P.tipo = 'asesor'
+									AND P.estado = 1  
 									AND U.codi_usuario='$codi_usuario')
 						ORDER BY fecha_inicio ASC";
 			}
@@ -55,10 +57,12 @@ class Expediente {
 				$sql = "SELECT *             
 						FROM GT_EXPEDIENTE 
 						WHERE estado_expediente = 'En proceso' AND idgrado_procedimiento=$idgrado_procedimiento
-						AND id IN (SELECT UE.idexpediente
-									FROM GT_USUARIO_EXPEDIENTE UE INNER JOIN GT_USUARIO U
-									ON UE.idusuario = U.id
-									WHERE UE.tipo IN ('presidente', 'secretario', 'suplente') 
+						AND id IN (SELECT R.idexpediente
+									FROM GT_RECURSO R
+									INNER JOIN GT_PERSONA P ON P.idrecurso = R.id
+									INNER JOIN GT_USUARIO U	ON U.id = P.iddocente									
+									WHERE P.tipo IN ('presidente', 'secretario', 'suplente') 
+									AND P.estado = 1 
 									AND U.codi_usuario='$codi_usuario')
 						ORDER BY fecha_inicio ASC";
 			}			

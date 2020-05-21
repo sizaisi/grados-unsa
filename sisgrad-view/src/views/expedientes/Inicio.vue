@@ -106,7 +106,7 @@ export default {
                 })
 
             this.axios.post(`${this.url}/GradoModalidad/inicioDocente`, formData)
-                .then(function(response) {                   
+                .then(function(response) {                                     
                     if (!response.data.error) {
                         me.array_grado_modalidad = response.data.array_grado_modalidad                                                                       
                     }

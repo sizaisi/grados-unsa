@@ -3,7 +3,7 @@ require_once 'models/Expediente.php';
 
 class ExpedienteController {
 	
-	public function getListByIds() {		
+	public function getList() {		
 		$idgrado_procedimiento = $_POST['idgrado_procedimiento'];
                 $codi_usuario = $_POST['codi_usuario'];
                 $tipo_usuario = $_POST['tipo_usuario'];
@@ -11,7 +11,7 @@ class ExpedienteController {
 
                 $expediente = new Expediente();
 
-                $result = $expediente->getListExpByIds($idgrado_procedimiento, $codi_usuario, $tipo_usuario, $tipo_rol);
+                $result = $expediente->getList($idgrado_procedimiento, $codi_usuario, $tipo_usuario, $tipo_rol);
         
                 echo json_encode($result);
 	}
@@ -19,11 +19,11 @@ class ExpedienteController {
 	public function getListByCodi() {
 		$codi_usuario = $_GET['codi_usuario'];
   
-        $expediente = new Expediente();
-  
-        $result = $expediente->getListByCodi($codi_usuario);
-     
-        echo json_encode($result); 
+                $expediente = new Expediente();
+        
+                $result = $expediente->getListByCodi($codi_usuario);
+        
+                echo json_encode($result); 
 	}
 	
 	public function getMovByIdExp() {

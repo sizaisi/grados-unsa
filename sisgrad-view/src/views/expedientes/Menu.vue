@@ -8,7 +8,7 @@
          <b-tab 
             v-for="(grado_proc, index) in array_grado_procedimiento" 
             :key="index" :title="grado_proc.proc_nombre"
-            @click="getExpedientesByIds(grado_proc.id, grado_proc.tipo_rol)" 
+            @click="getExpedientes(grado_proc.id, grado_proc.tipo_rol)" 
             v-bind="activarTabGradoProcedimiento(grado_proc.id)"
          >         
             <div class="row">
@@ -152,11 +152,11 @@ export default {
                 if (me.idgrado_proc == null) {
                     //obtener los expedientes del primer grado-procedimiento (por defecto)
                     let grado_proc_inicio = me.array_grado_procedimiento[0]
-                    me.getExpedientesByIds(grado_proc_inicio.id, grado_proc_inicio.tipo_rol)
+                    me.getExpedientes(grado_proc_inicio.id, grado_proc_inicio.tipo_rol)
                 }                   
                 else {                                                            
                     //obtener los expedientes del grado-procedimiento devuelto
-                    me.getExpedientesByIds(me.idgrado_proc, me.tipo_rol)
+                    me.getExpedientes(me.idgrado_proc, me.tipo_rol)
                 }                                
             }
             else {                
@@ -164,7 +164,7 @@ export default {
             }
         })
     },   
-    getExpedientesByIds(idgrado_procedimiento, tipo_rol) {     
+    getExpedientes(idgrado_procedimiento, tipo_rol) {     
         let me = this                           
 
         var formData = this._toFormData({
@@ -174,7 +174,7 @@ export default {
             tipo_rol: tipo_rol
         })
 
-        this.axios.post(`${this.url}/Expediente/getListByIds`, formData)
+        this.axios.post(`${this.url}/Expediente/getList`, formData)
         .then(function(response) {
             if (response.data.error) {
                 me.errorMsg = response.data.message

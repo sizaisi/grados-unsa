@@ -95,12 +95,14 @@ class GradoModalidad {
                         ON GP.id = GE.idgrado_procedimiento
                         WHERE GE.estado_expediente = 'En proceso'
                         AND GP.idrol_area = $idrol_area
-                        AND GE.id IN (SELECT UE.idexpediente
-                                        FROM GT_USUARIO_EXPEDIENTE UE INNER JOIN GT_USUARIO U
-                                        ON UE.idusuario = U.id
-                                        WHERE IF(GP.tipo_rol='asesor', UE.tipo='asesor', UE.tipo IN ('presidente', 'secretario', 'suplente')) 
+                        AND GE.id IN (SELECT R.idexpediente
+                                        FROM GT_RECURSO R 
+                                        INNER JOIN GT_PERSONA P ON P.idrecurso = R.id
+                                        INNER JOIN GT_USUARIO U ON U.id = P.iddocente
+                                        WHERE IF(GP.tipo_rol='asesor', P.tipo='asesor', P.tipo IN ('presidente', 'secretario', 'suplente')) 
+                                        AND P.estado = 1 
                                         AND U.codi_usuario='$codi_usuario') 
-                        AND GP.idgrado_modalidad = ".$row['idgrado_modalidad'];            
+                        AND GP.idgrado_modalidad = ".$row['idgrado_modalidad'];
                         
             $result_query2 = mysqli_query($this->conn, $sql2);
 
@@ -112,7 +114,7 @@ class GradoModalidad {
             }            
         }
 
-        $result['array_grado_modalidad'] = $array_grado_modalidad;
+        $result['array_grado_modalidad'] = $array_grado_modalidad;        
 
         return $result;
     }
