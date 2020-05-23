@@ -307,7 +307,7 @@ export default {
   methods: {        
     getLastMovimiento() {
       let me = this
-      var formData = this._toFormData({
+      let formData = this._toFormData({
           idgradproc_destino: this.idgrado_proc, 
           idexpediente: this.idexpediente         
       })        

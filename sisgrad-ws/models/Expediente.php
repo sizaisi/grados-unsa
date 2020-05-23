@@ -30,8 +30,9 @@ class Expediente {
 		$result = array('error' => false);
   
 		if ($tipo_usuario == 'Administrativo') {
-			$sql = "SELECT GT_E.id, GT_E.codigo, GT_E.fecha_inicio, GT_E.estado, 
-						   REPLACE(AC_I.apn,'/',' ') AS graduando, AC_E.nesc AS escuela
+			$sql = "SELECT GT_E.id, GT_E.codigo, GT_E.fecha AS fecha_recepcion, GT_E.estado, 
+						   GROUP_CONCAT(REPLACE(AC_I.apn,'/',' ') SEPARATOR ' / ') AS graduando,
+						   AC_E.nesc AS escuela
 					FROM GT_EXPEDIENTE AS GT_E
 						INNER JOIN GT_GRADUANDO_EXPEDIENTE AS GT_GE ON GT_GE.idexpediente = GT_E.id 
 						INNER JOIN GT_GRADUANDO AS GT_G ON GT_G.id = GT_GE.idgraduando 		
@@ -39,14 +40,16 @@ class Expediente {
 						INNER JOIN actescu AS AC_E ON AC_E.nues = GT_E.nues						
 						INNER JOIN SIAC_OPER_DEPE AC_OP ON AC_OP.codi_depe = GT_E.nues
 					WHERE GT_E.idgrado_procedimiento = $idgrado_procedimiento					
-						AND AC_OP.codi_oper = '$codi_usuario' 
+						AND AC_OP.codi_oper = '$codi_usuario'
+					GROUP BY GT_GE.idexpediente 
 					ORDER BY GT_E.id ASC";
 		}
 		else if ($tipo_usuario == 'Docente') {			
 
 			if ($tipo_rol == 'asesor') {
-				$sql = "SELECT GT_E.id, GT_E.codigo, GT_E.fecha_inicio, GT_E.estado, 
-							   REPLACE(AC_I.apn,'/',' ') AS graduando, AC_E.nesc AS escuela
+				$sql = "SELECT GT_E.id, GT_E.codigo, GT_E.fecha AS fecha_recepcion, GT_E.estado, 
+							   GROUP_CONCAT(REPLACE(AC_I.apn,'/',' ') SEPARATOR ' / ') AS graduando,
+							   AC_E.nesc AS escuela
 						FROM GT_EXPEDIENTE AS GT_E
 							INNER JOIN GT_GRADUANDO_EXPEDIENTE AS GT_GE ON GT_GE.idexpediente = GT_E.id 
 							INNER JOIN GT_GRADUANDO AS GT_G ON GT_G.id = GT_GE.idgraduando 		
@@ -60,11 +63,13 @@ class Expediente {
 											WHERE P.tipo = 'asesor'
 												AND P.estado = 1  
 												AND U.codi_usuario='$codi_usuario')
+						GROUP BY GT_GE.idexpediente
 						ORDER BY GT_E.id ASC";
 			}
 			else if ($tipo_rol == 'jurado') {
-				$sql = "SELECT GT_E.id, GT_E.codigo, GT_E.fecha_inicio, GT_E.estado, 
-							   REPLACE(AC_I.apn,'/',' ') AS graduando, AC_E.nesc AS escuela
+				$sql = "SELECT GT_E.id, GT_E.codigo, GT_E.fecha AS fecha_recepcion, GT_E.estado, 
+							   GROUP_CONCAT(REPLACE(AC_I.apn,'/',' ') SEPARATOR ' / ') AS graduando,
+							   AC_E.nesc AS escuela
 						FROM GT_EXPEDIENTE AS GT_E
 							INNER JOIN GT_GRADUANDO_EXPEDIENTE AS GT_GE ON GT_GE.idexpediente = GT_E.id 
 							INNER JOIN GT_GRADUANDO AS GT_G ON GT_G.id = GT_GE.idgraduando 		
@@ -72,12 +77,13 @@ class Expediente {
 							INNER JOIN actescu AS AC_E ON AC_E.nues = GT_E.nues						 
 						WHERE GT_E.idgrado_procedimiento = $idgrado_procedimiento
 						AND GT_E.id IN (SELECT R.idexpediente
-									FROM GT_RECURSO AS R
-									INNER JOIN GT_PERSONA AS P ON P.idrecurso = R.id
-									INNER JOIN GT_USUARIO AS U	ON U.id = P.iddocente									
-									WHERE P.tipo IN ('presidente', 'secretario', 'suplente') 
-									AND P.estado = 1 
-									AND U.codi_usuario='$codi_usuario')
+										FROM GT_RECURSO AS R
+										INNER JOIN GT_PERSONA AS P ON P.idrecurso = R.id
+										INNER JOIN GT_USUARIO AS U	ON U.id = P.iddocente									
+										WHERE P.tipo IN ('presidente', 'secretario', 'suplente') 
+										AND P.estado = 1 
+										AND U.codi_usuario='$codi_usuario')
+						GROUP BY GT_GE.idexpediente
 						ORDER BY GT_E.id ASC";
 			}			
 		}
