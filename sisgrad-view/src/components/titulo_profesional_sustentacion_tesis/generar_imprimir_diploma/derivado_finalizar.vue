@@ -7,9 +7,32 @@
                     card        
                     active-nav-item-class="font-weight-bold text-uppercase text-danger"   
                     style="min-height: 250px"                        
-                >                                           
-                    <b-tab :title="'1. '+ruta.etiqueta.charAt(0).toUpperCase()+ruta.etiqueta.slice(1)+' expediente'" 
-                        title-item-class="disabledTab" :disabled="tabIndex2 < 0">
+                >   
+                    <b-tab title="1. Generar documento" title-item-class="disabledTab" :disabled="tabIndex2 < 0">
+                        <generacion_documento                                        
+                            :expediente="expediente"  
+                            :graduando="graduando"                                                    
+                            nombre_archivo_pdf="diploma.php"
+                            boton_nombre="Diploma"
+                            ref="documentos"
+                        />                      
+                    </b-tab>  
+                    <b-tab title="2. Añadir documento" title-item-class="disabledTab" :disabled="tabIndex2 < 1">
+                        <documentos               
+                            :expediente="expediente"
+                            :idgrado_proc="idgrado_proc"
+                            :idusuario="idusuario"                                                                    
+                            :ruta="ruta"                                                           
+                            ref="documentos"
+                            max_docs = "1"
+                            nombre_asignado = "Diploma"
+                        />
+                        <div v-if="errors.length" class="alert alert-danger" role="alert">
+                            <ul><li v-for="(error, i) in errors" :key="i">{{ error }}</li></ul>
+                        </div>       
+                    </b-tab>                   
+                    <b-tab :title="'3. '+ruta.etiqueta.charAt(0).toUpperCase()+ruta.etiqueta.slice(1)+' expediente'" 
+                        title-item-class="disabledTab" :disabled="tabIndex2 < 2">
                         <movimiento_expediente
                             :idgrado_modalidad="idgrado_modalidad"
                             :idgrado_proc="idgrado_proc"                        
@@ -28,7 +51,7 @@
             <div class="text-center">
                 <b-button-group class="mt-3">
                     <b-button class="mr-1" @click="prevTab" :disabled="tabIndex == 0">Anterior</b-button>
-                    <b-button @click="nextTab" :disabled="tabIndex == 0">Siguiente</b-button>
+                    <b-button @click="nextTab" :disabled="tabIndex == 2">Siguiente</b-button>
                 </b-button-group>     
             </div> 
         </template>
@@ -40,10 +63,12 @@
     </b-card>       
 </template>
 <script>
+import generacion_documento from '../resources/generacion_documento.vue'
+import documentos from '../resources/documentos.vue'
 import movimiento_expediente from '../resources/movimiento_expediente.vue'
 
 export default {
-    name: 'aprobado-aprobar',
+    name: 'derivado-derivar',
     props: {
         idgrado_modalidad: String,
         idgrado_proc: String,    
@@ -57,15 +82,17 @@ export default {
         ruta: Object,
         movimiento: Object
     },
-    components: {            
+    components: {    
+        generacion_documento,
+        documentos,
         movimiento_expediente,           
     },
     data() {
         return {             
             url: this.$root.API_URL,      
             tabIndex: 0,         
-            tabIndex2: 0, 
-            existeRecursoRutaVecinas : false,                                          
+            tabIndex2: 0,             
+            existeRecursoRutaVecinas : false,             
             errors: [], 
         }
     },
@@ -77,15 +104,34 @@ export default {
         },  
         nextTab() {      
             this.errors = [] 
-            let pasar = false                                       
-                       
+            let pasar = false              
+                            
+            if (this.tabIndex == 0) {
+                pasar = true
+            }         
+            
+            if (this.tabIndex == 1) {
+                pasar = this.validarTab1()
+            }         
+
             if (pasar) {
                 this.tabIndex2++
                 this.$nextTick(function () {
                     this.tabIndex++        
                 })  
             }              
-        },           
+        },   
+        validarTab1() {        
+            if (this.$refs.documentos.cantidadDocumentos() == 0) { //referencia al metodo del componente hijo
+                this.errors.push("Debe registrar documentos para el expediente seleccionado.")
+            }                        
+
+            if (!this.errors.length) {
+                return true
+            }      
+
+            return false
+        },
         //verifica si las rutas vecinas de este procedimiento se registro observaciones, archivos o personas sin confirmar
         verificarRecursoRutasVecinas() { 
             let me = this      
@@ -105,7 +151,7 @@ export default {
                     console.log(response.data.message)      
                 }
             })  
-        },                
+        },                   
         _toFormData(obj) {
             var fd = new FormData()
 
@@ -116,8 +162,8 @@ export default {
             return fd
         },                               
     },
-    mounted: function() {     
-        this.verificarRecursoRutasVecinas()                      
+    mounted: function() {             
+        this.verificarRecursoRutasVecinas()                   
     },     
 }
 </script>

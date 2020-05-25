@@ -5,13 +5,13 @@ require_once '../../utils/functions.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	/************************ VARIABLES DE FORMULARIO *********************/
-	$titulo_proyecto = $_POST['titulo_proyecto'];
-	$codigo_expediente = $_POST['codigo_expediente'];
-	$apell_nombres = $_POST['apell_nombres'];		
-	$fecha_sustentacion = $_POST['fecha_sustentacion'];	
-	$array_jurado = json_decode($_POST['array_jurado'], true);	
+	$expediente = json_decode($_POST['expediente']);
+	$graduando = json_decode($_POST['graduando']);
+	//$fecha_sustentacion = $_POST['fecha_sustentacion'];	
+	$fecha_sustentacion = '2020-05-25';	
+	$array_jurado = json_decode($_POST['jurados'], true);	
 	$idx_secreatario = array_search('secretario', array_column($array_jurado, 'tipo'));
-	$secretario = $array_jurado[$idx_secreatario]['nombre'];
+	$secretario = $array_jurado[$idx_secreatario]['apn'];
 	/**********************************************************************/
 
 	// create new PDF document
@@ -51,11 +51,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	$pdf->setCellHeightRatio(2.5);	
 	
 	$texto = 'El que suscribe secretario del jurado <b>Mg./Dr. '.$secretario.'</b> ';
-	$texto .= 'confirma mediante la presente que la redacción de la Tesis titulada <b>'.$titulo_proyecto.'</b> ';
-	$texto .= 'sustentado por el Señor(a) <b>'.$apell_nombres.'</b> ';
+	$texto .= 'confirma mediante la presente que la redacción de la Tesis titulada <b>'.$expediente->titulo.'</b> ';
+	$texto .= 'sustentado por el Señor(a) <b>'.$graduando->apell_nombres.'</b> ';
 	$texto .= 'con fecha <b>'.date("d/m/Y", strtotime($fecha_sustentacion)).'</b> ';
 	$texto .= 'cumple los requisitos de redacción y absolución de observaciones previstas durante la sustentación, ';
-	$texto .= 'en cumplimiento  con las normas previstas por la facultad de Ingenieria de Producción y Servicios, autorizando su registro en el repositorio digital.<br><br><br>';
+	$texto .= 'en cumplimiento  con las normas previstas por la <b>'.$expediente->facultad.'</b>, autorizando su registro en el repositorio digital.<br><br><br>';
 	
 	$pdf->SetFont('helvetica', '', 12);
 	$pdf->writeHTMLCell(150, '', 30, '', $texto, 0, 0, 0, true, 'J', true); 
@@ -65,7 +65,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	$pdf->writeHTMLCell(150, '', 30, '', $firma, 0, 0, 0, true, 'C', true); 
 	$pdf->Ln();
 	
-	$pdf->Output('Acta_conformidad_redaccion_tesis_'.$codigo_expediente.'.pdf', 'I');
+	//$pdf->Output('Acta_conformidad_redaccion_tesis_'.$expediente->codigo.'.pdf', 'I');
+	$pdf->Output('Acta_conformidad_redaccion_tesis_'.$expediente->codigo.'.pdf', 'D');
 }
 else {
 	echo "<h3>No tiene permiso de acceso para mostrar el archivo</h3>";

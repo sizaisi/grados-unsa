@@ -50,48 +50,51 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	// set image scale factor
 	$pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
 	// set font
-	$pdf->SetFont('helvetica', 'B', 14);
+	$pdf->SetFont('helvetica', 'B', 12);
 
 	//add page
 	$pdf->AddPage();
 
-	//add Header
-	$pdf->writeHTMLCell(150, '', 30, '', 'ACTA DICTAMEN<br>', 0, 0, 0, true, 'C', true);
-	$pdf->Ln(); 
-
-	$pdf->SetFont('helvetica', '', 12);
+    //add Header
+    $pdf->writeHTMLCell(150, '', 30, '', $expediente->facultad.' – ESCUELA PROFESIONAL DE '.$expediente->escuela.'<br>', 0, 0, 0, true, 'C', true);
+    $pdf->Ln();	
+	$pdf->writeHTMLCell(150, '', 30, '', 'ACTA DE SUSTENTACIÓN<br>', 0, 0, 0, true, 'C', true);
+	$pdf->Ln();	
 	//add content
 	//interlineado
 	$pdf->setCellHeightRatio(1.50);
-	//using cell HTMl
-	$pdf->writeHTMLCell(150, '', 30, '', 'Visto la Resolución Decanal N°<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u>, así como el expediente adjunto, el Jurado Dictaminador integrado por los docentes:<br>', 0, 0, 0, true, 'J', true);
-	$pdf->Ln(); 
-
-	$pdf->SetFont('helvetica','B',12);
-	$pdf->setCellHeightRatio(1.50);
+	//using cell HTMl	
+	$pdf->SetFont('helvetica','',10);
+    $pdf->setCellHeightRatio(2);
+    $texto1 = 'Don (ña): '.$graduando->apell_nombres . ' en Arequipa, siendo las 13:00 horas, del dia 25 de mayo del 2020 en el salón de Grados ';
+    $texto1 .= ' de la Escuela Profesional de '.$expediente->escuela.' de la Universidad Nacional de San Agustín de Arequipa, en cumplimiento de la ';
+    $texto1 .= '<b>RESOLUCIÓN DECANAL Nº 000-2019-FA/UNSA</b> se reunió el Jurado:';
+    $pdf->writeHTMLCell(150, '', 30, '', $texto1, 0, 0, 0, true, 'J', true); 
+    $pdf->Ln();     
+    $pdf->SetFont('helvetica','B',10);	
 	$lista_jurado = '<ul>';
 	$lista_jurado .= '<li><b>'.$presidente.'</b></li>';
 	$lista_jurado .= '<li><b>'.$secretario.'</b></li>';
 	$lista_jurado .= '<li><b>'.$suplente.'</b></li>';    	
-	$lista_jurado .= '</ul>';
-	
+	$lista_jurado .= '</ul>';	
 	$pdf->writeHTMLCell(150, '', 25, '', $lista_jurado, 0, 0, 0, true, 'C', true); 	
-	$pdf->Ln(); 	
-	$pdf->SetFont('helvetica','',12);
-	$pdf->setCellHeightRatio(2);
-	$pdf->writeHTMLCell(150, '', 30, '', 'Reunidos en sesión de fecha, <b>'.date("d/m/Y", strtotime($fecha_sesion)).'</b> con el objeto de <b>DICTAMINAR</b> la tesis titulada: <b>'.$expediente->titulo.'</b>', 0, 0, 0, true, 'J', true); 
-	$pdf->Ln(); 
-	$pdf->writeHTMLCell(150, '', 30, '', 'Presentado por Don(ña): <b>'.$graduando->apell_nombres.'</b>.', 0, 0, 0, true, 'J', true); 
-	$pdf->Ln(); 
-	$pdf->writeHTMLCell(150, '', 30, '', 'Luego de haber revisado y evaluado la Tesis correspondiente.', 0, 0, 0, true, 'J', true); 
-	$pdf->Ln(); 
-	$pdf->writeHTMLCell(150, '', 30, '', '<b>SE ACORDÓ:</b>', 0, 0, 0, true, 'J', true); 
-	$pdf->Ln(); 
-	$pdf->writeHTMLCell(150, '', 30, '', 'Dictaminar FAVORABLE la Tesis titulada: <b>'.$expediente->titulo.'.</b> y por tanto señalar la fecha de SUSTENTACION al Sr.(ta). <b>'.$graduando->apell_nombres.'</b> para optar por el título Profesional de <>INGENIERO EN SISTEMAS</b>, el <b>'.fecha_extendida($fecha_sustentacion).'</b> a horas <b>'.$hora_sustentacion.'</b>, con el jurado presidido por el <b>DR. '.$presidente.'</b>.', 0, 0, 0, true, 'J', true); 
-	$pdf->Ln();
-	$pdf->writeHTMLCell(150, '', 30, '', '<br>En fé de lo cual firmamos a los '.dia_actual().' días del mes de '.mes_actual().' del año '.anio_actual().'<br><br>', 0, 0, 0, true, 'J', true); 
-	$pdf->Ln(); 
-	$pdf->SetFont('helvetica','B',12);			
+    $pdf->Ln(); 	
+    $pdf->SetFont('helvetica','',10);
+    $pdf->writeHTMLCell(150, '', 30, '', 'Presidida por el primero de los nombrado.', 0, 0, 0, true, 'J', true); 
+    $pdf->Ln(); 	
+
+    $texto2 = 'Dándose inicio al Acto Público de Sustentación y Evaluación, de conformidad con el Reglamento de Grados y Títulos para optar el <b>TÍTULO PROFESIONAL EN: ';
+    $texto2 .= 'INGENIERÍA DE SISTEMAS</b> en la que Don (ña) '.$graduando->apell_nombres.' expuso la Tesis titulado: <b>'.$expediente->titulo.'</b>';
+
+	$pdf->writeHTMLCell(150, '', 30, '', $texto2, 0, 0, 0, true, 'J', true);
+    $pdf->Ln(); 	
+    $texto3 = 'Rendida la sustentación, absueltas las observaciones y preguntas formuladas por cada uno ';
+    $texto3 .= 'de los miembros del Jurado y efectuada la Evaluación correspondiente, el resultado fue:<br>';
+    $texto3 .= '______________________________________________________________<br>';
+    $texto3 .= 'En fe de los cual se asentó la presente Acta que firman los miembros del Jurado<br><br><br>';
+    $pdf->writeHTMLCell(150, '', 30, '', $texto3, 0, 0, 0, true, 'J', true);
+    $pdf->Ln();     
+	$pdf->SetFont('helvetica','B',10);			
 	
 	$html2='
 		<table>
@@ -123,7 +126,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	$pdf->Ln(); 	
 	
 	//output
-	$pdf->Output('Acta_dictamen_'.$expediente->codigo.'.pdf', 'D');	
+	$pdf->Output('Acta_dictamen_'.$expediente->codigo.'.pdf', 'D');
+	
 }
 else {
 	echo "<h3>No tiene permiso de acceso para mostrar el archivo</h3>";

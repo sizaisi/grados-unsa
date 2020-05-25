@@ -30,7 +30,8 @@ class GraduandoExpediente {
 
 		$result = array('error' => false);		
 
-		$sql = "SELECT GT_G.*, SUBSTRING(AC_I.dic, 2) AS dni, REPLACE(AC_I.apn,'/',' ') AS apell_nombres 
+		$sql = "SELECT GT_G.id, GT_G.cui, GT_G.email, GT_G.telefono_fijo, GT_G.telefono_movil, GT_G.direccion,
+				       SUBSTRING(AC_I.dic, 2) AS dni, REPLACE(AC_I.apn,'/',' ') AS apell_nombres 
 				FROM GT_GRADUANDO_EXPEDIENTE AS GT_GE 				 
 				INNER JOIN GT_GRADUANDO AS GT_G ON GT_G.id = GT_GE.idgraduando
 				INNER JOIN acdiden AS AC_I ON AC_I.cui = GT_G.cui 

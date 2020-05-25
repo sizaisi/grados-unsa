@@ -188,7 +188,7 @@ class Expediente {
   
 		$result = array('error' => false);
   
-		$sql = "SELECT GT_E.*, AC_E.nesc, AC_F.nfac AS facultad
+		$sql = "SELECT GT_E.*, AC_E.nesc AS escuela, AC_F.nfac AS facultad
 			    FROM GT_EXPEDIENTE AS GT_E
 			    INNER JOIN actescu AS AC_E ON GT_E.nues = AC_E.nues
 				INNER JOIN actfacu AS AC_F ON AC_F.facu = AC_E.facu

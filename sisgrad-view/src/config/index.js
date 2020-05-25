@@ -6,21 +6,21 @@ const config = {
                       devolver:"danger", denegar:"danger",
                       observar:"warning", rechazar:"danger", 
                       aceptar:"success", aprobar:"success", 
-                      anular: "danger", cambiar: "warning"
+                      anular: "danger", finalizar: "primary"
                     },
     //para asignacion de colores a los estados del listado de expedientes
     color_estados: { enviado:"success", derivado:"success", 
                       devuelto:"danger", denegado:"danger",
                       observado:"warning", rechazado:"danger", 
                       aceptado:"success", aprobado:"success", 
-                      anulado: "danger", cambiado: "warning"
+                      anulado: "danger", finalizado: "primary"
                     },
     //para movimientos de ingreso a un procedimiento
     estados: { enviar:"enviado", derivar:"derivado", 
                 devolver:"devuelto", denegar:"denegado",
                 observar:"observado", rechazar:"rechazado", 
                 aceptar:"aceptado", aprobar:"aprobado", 
-                anular: "anulado", cambiar: "cambiado"
+                anular: "anulado", finalizar: "finalizado"
               },
 }
 

@@ -43,7 +43,7 @@
 import movimiento_expediente from '../resources/movimiento_expediente.vue'
 
 export default {
-    name: 'aprobado-aprobar',
+    name: 'aprobado-derivar',
     props: {
         idgrado_modalidad: String,
         idgrado_proc: String,    

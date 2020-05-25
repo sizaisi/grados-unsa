@@ -46,6 +46,16 @@ class PersonaController {
 
                 echo json_encode($result);           
         }
+
+        public function jurado_confirmado_expediente() {        
+                $persona = new Persona();       
+                
+                $persona->setIdExpediente($_POST['idexpediente']);                                
+
+                $result = $persona->getJuradoConfirmadosExpediente();
+
+                echo json_encode($result);           
+        }
         
         public function get_jurado() {        
                 $persona = new Persona();       

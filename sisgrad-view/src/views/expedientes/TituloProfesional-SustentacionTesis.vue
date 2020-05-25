@@ -28,11 +28,11 @@
                         <div class="form-row">
                             <div class="form-group col-md-6">
                               <label class="text-info">Programa de estudios</label>                                   
-                              <label class="lbl-data" v-text="expediente.nesc"></label>                     
+                              <label class="lbl-data" v-text="expediente.escuela"></label>                     
                             </div>
                             <div class="form-group col-md-6">
                               <label class="text-info">Fecha de inicio de trámite</label>                                   
-                              <label class="lbl-data" v-text="expediente.fecha_inicio"></label>                     
+                              <label class="lbl-data" v-text="expediente.fing"></label>                     
                             </div>
                         </div>               
                       </form>                    
@@ -242,20 +242,18 @@ import revisar_documentacion_proyecto
   from '@/components/titulo_profesional_sustentacion_tesis/revisar_documentacion_proyecto/index.vue'
 import dictaminar_aprobacion_proyecto
   from '@/components/titulo_profesional_sustentacion_tesis/dictaminar_aprobacion_proyecto/index.vue'
-import tp_st_verificar_pagos_adjuntar_documentos
-  from '@/components/titulo_profesional_sustentacion_tesis/verificar_pagos_adjuntar_documentos.vue'
-import tp_st_emitir_acta_sustentacion
-  from '@/components/titulo_profesional_sustentacion_tesis/emitir_acta_sustentacion.vue'
-import tp_st_dictaminar_resultado_sustentacion
-  from '@/components/titulo_profesional_sustentacion_tesis/dictaminar_resultado_sustentacion.vue'
-import tp_st_emitir_acta_conformidad_redaccion_trabajo
-  from '@/components/titulo_profesional_sustentacion_tesis/emitir_acta_conformidad_redaccion_trabajo.vue'
-import tp_st_mostrar_tesis_pdf_copiar_url_repositorio
-  from '@/components/titulo_profesional_sustentacion_tesis/mostrar_tesis_pdf_copiar_url_repositorio.vue'
-import tp_st_aprobar_consejo_facultad_autorizar_emision_diploma
-  from '@/components/titulo_profesional_sustentacion_tesis/aprobar_consejo_facultad_autorizar_emision_diploma.vue'
-import tp_st_generar_imprimir_diploma
-  from '@/components/titulo_profesional_sustentacion_tesis/generar_imprimir_diploma.vue'
+import verificar_pagos_adjuntar_documentos
+  from '@/components/titulo_profesional_sustentacion_tesis/verificar_pagos_adjuntar_documentos/index.vue'
+import emitir_acta_dictamen
+  from '@/components/titulo_profesional_sustentacion_tesis/emitir_acta_dictamen/index.vue'
+import dictaminar_resultado_sustentacion
+  from '@/components/titulo_profesional_sustentacion_tesis/dictaminar_resultado_sustentacion/index.vue'
+import emitir_acta_conformidad_redaccion_trabajo
+  from '@/components/titulo_profesional_sustentacion_tesis/emitir_acta_conformidad_redaccion_trabajo/index.vue'
+import aprobar_consejo_facultad_autorizar_emision_diploma
+  from '@/components/titulo_profesional_sustentacion_tesis/aprobar_consejo_facultad_autorizar_emision_diploma/index.vue'
+import generar_imprimir_diploma
+  from '@/components/titulo_profesional_sustentacion_tesis/generar_imprimir_diploma/index.vue'
 
 export default {
   name: 'info-expediente',
@@ -270,13 +268,12 @@ export default {
     nombrar_jurado_adjuntar_resolucion,       
     revisar_documentacion_proyecto,
     dictaminar_aprobacion_proyecto,
-    tp_st_verificar_pagos_adjuntar_documentos,
-    tp_st_emitir_acta_sustentacion,
-    tp_st_dictaminar_resultado_sustentacion,
-    tp_st_emitir_acta_conformidad_redaccion_trabajo,
-    tp_st_mostrar_tesis_pdf_copiar_url_repositorio,
-    tp_st_aprobar_consejo_facultad_autorizar_emision_diploma,
-    tp_st_generar_imprimir_diploma
+    verificar_pagos_adjuntar_documentos,
+    emitir_acta_dictamen,
+    dictaminar_resultado_sustentacion,    
+    emitir_acta_conformidad_redaccion_trabajo,    
+    aprobar_consejo_facultad_autorizar_emision_diploma,
+    generar_imprimir_diploma
   },
   data() {
     return {     
