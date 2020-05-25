@@ -50,12 +50,10 @@
                 </td>                                                            
                 </tr>                                                
             </tbody>
-        </table>        
+        </table>  
         <div v-if="errors.length" class="alert alert-danger" role="alert">
-            <ul>
-                <li v-for="(error, i) in errors" :key="i">{{ error }}</li>
-            </ul>
-        </div>          
+            <ul><li v-for="(error, i) in errors" :key="i">{{ error }}</li></ul>
+        </div>                       
     </div>    
 </template>
 
@@ -66,18 +64,28 @@ export default {
         expediente: Object,
         idgrado_proc: String,    
         idusuario: String,                        
-        ruta: Object
+        ruta: Object,        
     },
     data() {
         return {             
             url: this.$root.API_URL,                                         
+            asesor_anterior : null,  //object
             asesor : null,  //object 
             docente_seleccionado : null,  //object              
-            array_docente : [],                                                          
-            errors: [], 
+            array_docente : [],
+            array_asesores_ant: [], //asesores anteriores
+            errors: [],                                                                      
         }
     },
-    methods: {                     
+    methods: {     
+        existeAsesor() {
+
+            if (this.asesor != null) {
+                return true
+            }
+            
+            return false
+        },                
         getCandidatosAsesores() { // para mostrar una lista de asesores por facultad para que ser asignado
             let me = this       
             let formData = this._toFormData({
@@ -94,6 +102,23 @@ export default {
                 }
             })
         },
+        getAsesoresAnteriores() {
+            let me = this      
+            var formData = this._toFormData({
+                idexpediente: this.expediente.id
+            })
+
+            this.axios.post(`${this.url}/Persona/get_all_asesores`, formData)
+            .then(function(response) {                
+                if (!response.data.error) {                
+                    me.array_asesores_ant = response.data.array_asesor
+                    console.log(me.array_asesores_ant)
+                }
+                else {                
+                    console.log(response.data.message)      
+                }
+            })    
+        },  
         getAsesor() {
             let me = this                  
             let formData = this._toFormData({
@@ -112,7 +137,24 @@ export default {
                 }
             })    
         },          
-        registrarAsesor() {                   
+        encontrarAsesorAnterior(iddocente) {
+            let obj = this.array_asesores_ant.find(x => x.iddocente === iddocente);
+            let index = this.array_asesores_ant.indexOf(obj);
+
+            if (index != -1) {                
+                return true                
+            }
+
+            return false
+        },
+        registrarAsesor() {       
+            this.errors = []
+
+            if (this.array_asesores_ant.length > 0 && this.encontrarAsesorAnterior(this.docente_seleccionado.id)) {              
+              this.errors.push("El docente seleccionado denego la asesoria del expediente seleccionado.")
+              return
+            } 
+            
             let me = this            
             let formData = this._toFormData({              
               idexpediente: this.expediente.id,
@@ -183,7 +225,8 @@ export default {
             return fd
         },      
     },    
-    mounted: function() {                   
+    mounted: function() {          
+        this.getAsesoresAnteriores()         
         this.getAsesor()           
         this.getCandidatosAsesores()                 
     },

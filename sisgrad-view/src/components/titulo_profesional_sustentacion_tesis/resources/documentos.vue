@@ -12,7 +12,7 @@
                 </b-col>
                 <b-col sm="12" md="4" lg="4">
                     <b-button type="submit" variant="success" title="Subir Archivo" :disabled="array_documento.length == max_docs">
-                        <b-icon icon="upload"></b-icon>
+                        <b-icon icon="file-earmark-arrow-up"></b-icon>
                     </b-button>
                 </b-col>
             </b-row>            
@@ -32,8 +32,8 @@
                 <form ref="show_file" :action="url_show_file" target="my-frame" method="post"> <!-- cambiar target a _blank para abrir pdf en nueva pestaña -->
                     <input type="hidden" name="file_id" :value="data.item.id">
                 </form>                                   
-                <b-button variant="info" size="sm" title="Descargar" @click="mostrarArchivo(data.item.nombre)" class="mr-1">
-                    <b-icon icon="download"></b-icon>
+                <b-button variant="info" size="sm" title="Visualizar" @click="mostrarArchivo(data.item.nombre)" class="mr-1">
+                    <b-icon icon="file-earmark"></b-icon>
                 </b-button>
                 <b-button @click="eliminarDocumento(data.item.id)" variant="danger" size="sm" title="Eliminar">
                     <b-icon icon="trash"></b-icon>
@@ -45,12 +45,7 @@
                     <strong>Cargando...</strong>
                 </div>
             </template>                                                 
-        </b-table>                    
-        <div v-if="errors.length" class="alert alert-danger" role="alert">
-            <ul>
-                <li v-for="(error, i) in errors" :key="i">{{ error }}</li>
-            </ul>
-        </div>    
+        </b-table>                               
 
         <!--Inicio del modal-->
         <div class="modal fade centered-modal" tabindex="-1" :class="{'mostrar' : modal}" role="dialog" aria-labelledby="myModalLabel" style="display: none;" aria-hidden="true">
@@ -100,11 +95,13 @@ export default {
             file: null,            
             estaOcupado: false,                            
             modal: 0,   
-            nombre_documento: '',         
-            errors: [], 
+            nombre_documento: '',                     
         }
     },
-    methods: {           
+    methods: {   
+        cantidadDocumentos() {
+            return this.array_documento.length
+        },                
         mostrarArchivo(nombre_documento) {                           
             this.$refs.show_file.submit()
             this.modal = 1            

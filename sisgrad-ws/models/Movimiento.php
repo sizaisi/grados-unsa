@@ -60,7 +60,7 @@ class Movimiento {
 		$result = array('error' => false);
 
 		//obtener el ultimo movimiento
-        $sql = "SELECT GT_M.id, GT_U.codi_usuario, GT_U.tipo AS tipo_usuario, GT_M.fecha, GT_R.etiqueta, GT_P.nombre AS procedimiento_origen, GT_GP.tipo_rol, GT_RA.nombre AS rol_area_origen
+        $sql = "SELECT GT_M.id, GT_U.id AS idusuario, GT_U.codi_usuario, GT_U.tipo AS tipo_usuario, GT_M.fecha, GT_R.etiqueta, GT_P.nombre AS procedimiento_origen, GT_GP.tipo_rol, GT_RA.nombre AS rol_area_origen
 				FROM GT_MOVIMIENTO AS GT_M 
 					INNER JOIN GT_USUARIO AS GT_U ON GT_U.id = GT_M.idusuario 
 					INNER JOIN GT_RUTA AS GT_R ON GT_R.id = GT_M.idruta 
@@ -80,19 +80,19 @@ class Movimiento {
 					case 'Administrativo':
 						$sql2 = "SELECT nomb_oper AS nombre_usuario  
 								 FROM SIAC_OPER
-								 WHERE codi_oper = " . $row['codi_usuario'];
+								 WHERE codi_oper = '" . $row['codi_usuario'] . "'";
 						break;
 					
 					case 'Docente':
 						$sql2 = "SELECT REPLACE(apn, '/', ' ') AS nombre_usuario  
 									FROM SIAC_DOC
-									WHERE codper = " . $row['codi_usuario'];
+									WHERE codper = '" . $row['codi_usuario'] . "'";
 						break;
 
 					case 'Estudiante': //si hay conexion con reniec obtendria datos de GT_GRADUANDO
 						$sql2 = "SELECT REPLACE(apn, '/', ' ') AS nombre_usuario  									
 									FROM acdiden 
-									WHERE cui = " . $row['codi_usuario'];
+									WHERE cui = '" . $row['codi_usuario'] . "'";
 						break;
 				}
 
@@ -197,7 +197,8 @@ class Movimiento {
 		$sql = "UPDATE GT_RECURSO SET idmovimiento = $idmovimiento
 				WHERE idexpediente = $this->idexpediente
 				AND idusuario = $this->idusuario
-				AND idgrado_proc = $idgradproc_origen";        
+				AND idgrado_proc = $idgradproc_origen
+				AND idmovimiento IS NULL";        
 		$result_query = mysqli_query($this->conn, $sql);
   
 		if (!$result_query) {

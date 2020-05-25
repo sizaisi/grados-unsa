@@ -7,19 +7,19 @@
                     card        
                     active-nav-item-class="font-weight-bold text-uppercase text-danger"   
                     style="min-height: 250px"                        
-                >   
-                    <b-tab title="1. Añadir observaciones" title-item-class="disabledTab" :disabled="tabIndex2 < 0">
-                        <observaciones                    
+                >            
+                    <b-tab title="1. Asignar nuevo asesor" title-item-class="disabledTab" :disabled="tabIndex2 < 0">
+                        <asesores
                             :expediente="expediente"
                             :idgrado_proc="idgrado_proc"
-                            :idusuario="idusuario"                                                                    
-                            :ruta="ruta"                                                            
-                            ref="observaciones"
-                        />
+                            :idusuario="idusuario"                                                
+                            :ruta="ruta"                              
+                            ref="asesores"     
+                        /> 
                         <div v-if="errors.length" class="alert alert-danger" role="alert">
                             <ul><li v-for="(error, i) in errors" :key="i">{{ error }}</li></ul>
-                        </div>           
-                    </b-tab>                    
+                        </div>                 
+                    </b-tab>                               
                     <b-tab :title="'2. '+ruta.etiqueta.charAt(0).toUpperCase()+ruta.etiqueta.slice(1)+' expediente'" 
                         title-item-class="disabledTab" :disabled="tabIndex2 < 1">
                         <movimiento_expediente
@@ -52,11 +52,11 @@
     </b-card>       
 </template>
 <script>
-import observaciones from '../resources/observaciones.vue'
+import asesores from '../resources/asesores.vue'
 import movimiento_expediente from '../resources/movimiento_expediente.vue'
 
 export default {
-    name: 'enviado-denegar',
+    name: 'denegado-derivar',
     props: {
         idgrado_modalidad: String,
         idgrado_proc: String,    
@@ -70,8 +70,8 @@ export default {
         ruta: Object,
         movimiento: Object
     },
-    components: {    
-        observaciones,
+    components: {            
+        asesores,
         movimiento_expediente,           
     },
     data() {
@@ -91,12 +91,12 @@ export default {
         },  
         nextTab() {      
             this.errors = [] 
-            let pasar = false              
-                            
+            let pasar = false    
+
             if (this.tabIndex == 0) {
                 pasar = this.validarTab1()
-            }                            
-
+            }                                    
+                       
             if (pasar) {
                 this.tabIndex2++
                 this.$nextTick(function () {
@@ -105,8 +105,8 @@ export default {
             }              
         },   
         validarTab1() {        
-            if (this.$refs.observaciones.cantidadObservaciones() == 0) { //referencia al metodo del componente hijo
-                this.errors.push("Debe registrar observaciones para el expediente seleccionado.")
+            if (!this.$refs.asesores.existeAsesor()) { //referencia al metodo del componente hijo
+                this.errors.push("Debe asignar un asesor al expediente selecccionado.")
             }                        
 
             if (!this.errors.length) {
@@ -114,7 +114,7 @@ export default {
             }      
 
             return false
-        },
+        },        
         //verifica si las rutas vecinas de este procedimiento se registro observaciones, archivos o personas sin confirmar
         verificarRecursoRutasVecinas() { 
             let me = this      

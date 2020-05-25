@@ -5,9 +5,8 @@ require_once '../../utils/functions.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	/************************ VARIABLES DE FORMULARIO *********************/
-	$titulo_proyecto = $_POST['titulo_proyecto'];
-	$codigo_expediente = $_POST['codigo_expediente'];
-	$apell_nombres = $_POST['apell_nombres'];
+	$expediente = json_decode($_POST['expediente']);	
+	$graduando = json_decode($_POST['graduando']);		
 	$asesor = json_decode($_POST['asesor']);	
 	/**********************************************************************/
 
@@ -48,9 +47,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	$pdf->setCellHeightRatio(2.5);	
 	
 	$texto = 'Yo, <b>'.$asesor->apn.'</b> docente de la facultad de Ingenieria de Producción y Servicios ';
-	$texto .= 'de la Universidad Nacional de San Agustín de Arequipa, identificado con el DNI N° <b>'.$asesor->dic.'</b> ';
+	$texto .= 'de la Universidad Nacional de San Agustín de Arequipa, identificado con el DNI N° <b>'.$asesor->nro_documento.'</b> ';
 	$texto .= 'renuncio a ser asesor del Proyecto de Tesis titulado: ';
-	$texto .= '<b>'.$titulo_proyecto.'</b> del Sr. (ta) <b>'.$apell_nombres.'</b>, ';
+	$texto .= '<b>'.$expediente->titulo.'</b> del Sr. (ta) <b>'.$graduando->apell_nombres.'</b>, ';
 	$texto .= 'por motivos personales.<br>';	
 	
 	$pdf->SetFont('helvetica', '', 12);
@@ -64,7 +63,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	$pdf->writeHTMLCell(150, '', 30, '', $firma, 0, 0, 0, true, 'C', true); 
 	$pdf->Ln();
 	
-	$pdf->Output('Informe_renuncia_asesoria_'.$codigo_expediente.'.pdf', 'I');
+	$pdf->Output('Informe_renuncia_asesoria_'.$expediente->codigo.'.pdf', 'D');
 }
 else {
 	echo "<h3>No tiene permiso de acceso para mostrar el archivo</h3>";

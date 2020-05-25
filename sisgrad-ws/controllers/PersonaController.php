@@ -24,6 +24,28 @@ class PersonaController {
 
                 echo json_encode($result);           
         }
+
+        public function get_all_asesores() {        
+                $persona = new Persona();       
+                
+                $persona->setIdExpediente($_POST['idexpediente']);                
+
+                $result = $persona->getAllAsesores();
+
+                echo json_encode($result);           
+        }
+
+        public function jurado_asignado_expediente() {        
+                $persona = new Persona();       
+                
+                $persona->setIdExpediente($_POST['idexpediente']);                
+                $persona->setIdGradoProc($_POST['idgrado_proc']);
+                $persona->setIdUsuario($_POST['idusuario']);    
+
+                $result = $persona->getJuradoAsignadoExpediente();
+
+                echo json_encode($result);           
+        }
         
         public function get_jurado() {        
                 $persona = new Persona();       

@@ -8,20 +8,32 @@
                     active-nav-item-class="font-weight-bold text-uppercase text-danger"   
                     style="min-height: 250px"                        
                 >   
-                    <b-tab title="1. Añadir observaciones" title-item-class="disabledTab" :disabled="tabIndex2 < 0">
-                        <observaciones                    
+                    <b-tab title="1. Generar documento" title-item-class="disabledTab" :disabled="tabIndex2 < 0">
+                        <generacion_documento                                        
+                            :expediente="expediente"  
+                            :graduando="graduando"                          
+                            :asesor="asesor"                                                    
+                            nombre_archivo_pdf="resolucion_asesor_tema.php"
+                            boton_nombre="Resolución asignación asesor"
+                            ref="documentos"
+                        />                      
+                    </b-tab>  
+                    <b-tab title="2. Añadir documento" title-item-class="disabledTab" :disabled="tabIndex2 < 1">
+                        <documentos               
                             :expediente="expediente"
                             :idgrado_proc="idgrado_proc"
                             :idusuario="idusuario"                                                                    
-                            :ruta="ruta"                                                            
-                            ref="observaciones"
+                            :ruta="ruta"                                                           
+                            ref="documentos"
+                            max_docs = "1"
+                            nombre_asignado = "Resolución asignación de asesor y tema"
                         />
                         <div v-if="errors.length" class="alert alert-danger" role="alert">
                             <ul><li v-for="(error, i) in errors" :key="i">{{ error }}</li></ul>
-                        </div>           
-                    </b-tab>                    
-                    <b-tab :title="'2. '+ruta.etiqueta.charAt(0).toUpperCase()+ruta.etiqueta.slice(1)+' expediente'" 
-                        title-item-class="disabledTab" :disabled="tabIndex2 < 1">
+                        </div>       
+                    </b-tab>                   
+                    <b-tab :title="'3. '+ruta.etiqueta.charAt(0).toUpperCase()+ruta.etiqueta.slice(1)+' expediente'" 
+                        title-item-class="disabledTab" :disabled="tabIndex2 < 2">
                         <movimiento_expediente
                             :idgrado_modalidad="idgrado_modalidad"
                             :idgrado_proc="idgrado_proc"                        
@@ -40,7 +52,7 @@
             <div class="text-center">
                 <b-button-group class="mt-3">
                     <b-button class="mr-1" @click="prevTab" :disabled="tabIndex == 0">Anterior</b-button>
-                    <b-button @click="nextTab" :disabled="tabIndex == 1">Siguiente</b-button>
+                    <b-button @click="nextTab" :disabled="tabIndex == 2">Siguiente</b-button>
                 </b-button-group>     
             </div> 
         </template>
@@ -52,11 +64,12 @@
     </b-card>       
 </template>
 <script>
-import observaciones from '../resources/observaciones.vue'
+import generacion_documento from '../resources/generacion_documento.vue'
+import documentos from '../resources/documentos.vue'
 import movimiento_expediente from '../resources/movimiento_expediente.vue'
 
 export default {
-    name: 'enviado-denegar',
+    name: 'aceptado-derivar',
     props: {
         idgrado_modalidad: String,
         idgrado_proc: String,    
@@ -71,7 +84,8 @@ export default {
         movimiento: Object
     },
     components: {    
-        observaciones,
+        generacion_documento,
+        documentos,
         movimiento_expediente,           
     },
     data() {
@@ -79,7 +93,8 @@ export default {
             url: this.$root.API_URL,      
             tabIndex: 0,         
             tabIndex2: 0, 
-            existeRecursoRutaVecinas : false,                                          
+            existeRecursoRutaVecinas : false, 
+            asesor : null,  //object                                         
             errors: [], 
         }
     },
@@ -94,8 +109,12 @@ export default {
             let pasar = false              
                             
             if (this.tabIndex == 0) {
+                pasar = true
+            }         
+            
+            if (this.tabIndex == 1) {
                 pasar = this.validarTab1()
-            }                            
+            }         
 
             if (pasar) {
                 this.tabIndex2++
@@ -105,8 +124,8 @@ export default {
             }              
         },   
         validarTab1() {        
-            if (this.$refs.observaciones.cantidadObservaciones() == 0) { //referencia al metodo del componente hijo
-                this.errors.push("Debe registrar observaciones para el expediente seleccionado.")
+            if (this.$refs.documentos.cantidadDocumentos() == 0) { //referencia al metodo del componente hijo
+                this.errors.push("Debe registrar documentos para el expediente seleccionado.")
             }                        
 
             if (!this.errors.length) {
@@ -134,7 +153,23 @@ export default {
                     console.log(response.data.message)      
                 }
             })  
-        },                
+        },   
+        getAsesor() {
+            let me = this      
+            var formData = this._toFormData({
+                idexpediente: this.expediente.id
+            })
+
+            this.axios.post(`${this.url}/Persona/get_asesor_expediente`, formData)
+            .then(function(response) {                
+                if (!response.data.error) {                
+                    me.asesor = response.data.asesor
+                }
+                else {                
+                    console.log(response.data.message)      
+                }
+            })    
+        },             
         _toFormData(obj) {
             var fd = new FormData()
 
@@ -146,7 +181,8 @@ export default {
         },                               
     },
     mounted: function() {     
-        this.verificarRecursoRutasVecinas()                      
+        this.verificarRecursoRutasVecinas()           
+        this.getAsesor()                   
     },     
 }
 </script>

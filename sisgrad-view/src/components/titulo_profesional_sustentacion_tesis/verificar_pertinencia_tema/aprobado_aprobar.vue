@@ -7,21 +7,9 @@
                     card        
                     active-nav-item-class="font-weight-bold text-uppercase text-danger"   
                     style="min-height: 250px"                        
-                >   
-                    <b-tab title="1. Añadir observaciones" title-item-class="disabledTab" :disabled="tabIndex2 < 0">
-                        <observaciones                    
-                            :expediente="expediente"
-                            :idgrado_proc="idgrado_proc"
-                            :idusuario="idusuario"                                                                    
-                            :ruta="ruta"                                                            
-                            ref="observaciones"
-                        />
-                        <div v-if="errors.length" class="alert alert-danger" role="alert">
-                            <ul><li v-for="(error, i) in errors" :key="i">{{ error }}</li></ul>
-                        </div>           
-                    </b-tab>                    
-                    <b-tab :title="'2. '+ruta.etiqueta.charAt(0).toUpperCase()+ruta.etiqueta.slice(1)+' expediente'" 
-                        title-item-class="disabledTab" :disabled="tabIndex2 < 1">
+                >                                           
+                    <b-tab :title="'1. '+ruta.etiqueta.charAt(0).toUpperCase()+ruta.etiqueta.slice(1)+' expediente'" 
+                        title-item-class="disabledTab" :disabled="tabIndex2 < 0">
                         <movimiento_expediente
                             :idgrado_modalidad="idgrado_modalidad"
                             :idgrado_proc="idgrado_proc"                        
@@ -40,7 +28,7 @@
             <div class="text-center">
                 <b-button-group class="mt-3">
                     <b-button class="mr-1" @click="prevTab" :disabled="tabIndex == 0">Anterior</b-button>
-                    <b-button @click="nextTab" :disabled="tabIndex == 1">Siguiente</b-button>
+                    <b-button @click="nextTab" :disabled="tabIndex == 0">Siguiente</b-button>
                 </b-button-group>     
             </div> 
         </template>
@@ -52,11 +40,10 @@
     </b-card>       
 </template>
 <script>
-import observaciones from '../resources/observaciones.vue'
 import movimiento_expediente from '../resources/movimiento_expediente.vue'
 
 export default {
-    name: 'enviado-denegar',
+    name: 'aprobado-aprobar',
     props: {
         idgrado_modalidad: String,
         idgrado_proc: String,    
@@ -70,8 +57,7 @@ export default {
         ruta: Object,
         movimiento: Object
     },
-    components: {    
-        observaciones,
+    components: {            
         movimiento_expediente,           
     },
     data() {
@@ -91,30 +77,15 @@ export default {
         },  
         nextTab() {      
             this.errors = [] 
-            let pasar = false              
-                            
-            if (this.tabIndex == 0) {
-                pasar = this.validarTab1()
-            }                            
-
+            let pasar = false                                       
+                       
             if (pasar) {
                 this.tabIndex2++
                 this.$nextTick(function () {
                     this.tabIndex++        
                 })  
             }              
-        },   
-        validarTab1() {        
-            if (this.$refs.observaciones.cantidadObservaciones() == 0) { //referencia al metodo del componente hijo
-                this.errors.push("Debe registrar observaciones para el expediente seleccionado.")
-            }                        
-
-            if (!this.errors.length) {
-                return true
-            }      
-
-            return false
-        },
+        },           
         //verifica si las rutas vecinas de este procedimiento se registro observaciones, archivos o personas sin confirmar
         verificarRecursoRutasVecinas() { 
             let me = this      

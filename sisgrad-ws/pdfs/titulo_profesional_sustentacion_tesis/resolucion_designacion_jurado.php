@@ -5,16 +5,12 @@ require_once '../../utils/functions.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	/************************ VARIABLES DE FORMULARIO *********************/
-	$expediente = json_decode($_POST['expediente']);
-
-	$codigo_expediente = $expediente->codigo;
-	$titulo_proyecto = $expediente->titulo;
-	$nesc = $expediente->nesc;
-	$array_nombres = $_POST['array_nombres'];
-	$apell_nombres = $array_nombres[0]; //nombres y apellidos del primer graduando
-	$array_jurado = $_POST['array_jurado'];
+	$expediente = json_decode($_POST['expediente']);			
+	$graduando = json_decode($_POST['graduando']);			
 	$asesor = json_decode($_POST['asesor']);
-	$fecha_sorteo = $_POST['fecha_sorteo'];
+	$array_jurado = json_decode($_POST['jurados']);
+	//$fecha_sorteo = $_POST['fecha_sorteo'];
+	$fecha_sorteo = '2020-05-24';
 	/**********************************************************************/
 
 	// create new PDF document
@@ -53,9 +49,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	$pdf->writeHTMLCell(170, '', 20, '', 'Arequipa, '.dia_actual().' de '.mes_actual().' del '.anio_actual().'<br>', 0, 0, 0, true, 'L', true); 
 	$pdf->Ln(); 
 
-	$texto1 = 'Vista la solicitud de Don(ña): <b>'.$apell_nombres.'</b> quien solicita nombramiento de jurado
-			   para optar el grado académico de Bachiller en <b> '.$nesc.'</b> 
-			   y sustentar su trabajo de investigación titulado: <b>'.$titulo_proyecto.'</b><br>';
+	$texto1 = 'Vista la solicitud de Don(ña): <b>'.$graduando->apell_nombres.'</b> quien solicita nombramiento de jurado
+			   para optar el grado académico de Bachiller en <b> '.$expediente->nesc.'</b> 
+			   y sustentar su trabajo de investigación titulado: <b>'.$expediente->titulo.'</b><br>';
 	$pdf->SetFont('helvetica', '', 12);
 	$pdf->writeHTMLCell(170, '', 20, '', $texto1, 0, 0, 0, true, 'J', true);
 	$pdf->Ln(); 
@@ -71,18 +67,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	$pdf->Ln();
 	$lista_jurado = '<ul>';
 
-	foreach(json_decode($array_jurado) as $jurado) {
-		$lista_jurado .= '<li><b>'.$jurado->nombre.' ('.$jurado->tipo.')</b></li>';    
+	foreach($array_jurado as $jurado) {
+		$lista_jurado .= '<li><b>'.$jurado->apn.' ('.$jurado->tipo.')</b></li>';    
 	}
 
-	$lista_jurado .= '<li><b>'.$asesor->apn.' (asesor)</b></li>';    
+	$lista_jurado .= '<li><b>'.$asesor->apn.' ('.$asesor->tipo.')</b></li>';    
 
 	$lista_jurado .= '</ul>';
 	$texto4 = '<b>SE DECRETA: </b><br><br>Nombrar el Jurado integrado por los Señores Docentes:'.$lista_jurado.'<br>';
 	$pdf->SetFont('helvetica', '', 12);
 	$pdf->writeHTMLCell(170, '', 20, '', $texto4, 0, 0, 0, true, 'J', true);
 	$pdf->Ln();
-	$texto5 = 'El Jurado revisará el Trabajo de Investigación adjunto titulado: <b>'.$titulo_proyecto.'</b><br>';
+	$texto5 = 'El Jurado revisará el Trabajo de Investigación adjunto titulado: <b>'.$expediente->titulo.'</b><br>';
 	$pdf->SetFont('helvetica', '', 12);
 	$pdf->writeHTMLCell(170, '', 20, '', $texto5, 0, 0, 0, true, 'J', true);
 	$pdf->Ln();
@@ -98,10 +94,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	$pdf->Ln();
 
 	$pdf->SetFont('helvetica','B',12);
-	$pdf->writeHTMLCell(170, '', 20, '', '<span style="text-decoration:overline">Decano de la Facultad de Ingeniería de Producción y Servicios</span>', 0, 0, 0, true, 'L', true); 
+	$pdf->writeHTMLCell(170, '', 20, '', '<span style="text-decoration:overline">DECANO DE LA '.$expediente->facultad.'</span>', 0, 0, 0, true, 'L', true); 
 	$pdf->Ln();
 
-	$pdf->Output('Resolucion_nombramiento_jurados_'.$codigo_expediente.'.pdf', 'I');
+	$pdf->Output('Resolucion_nombramiento_jurados_'.$expediente->codigo.'.pdf', 'D');
 }
 else {
 	echo "<h3>No tiene permiso de acceso para mostrar el archivo</h3>";

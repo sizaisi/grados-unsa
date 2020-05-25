@@ -21,8 +21,8 @@
       </fieldset>
     </div>   
 
-    <template v-if="estados[movimiento.etiqueta] == 'enviado' && ruta_seleccionada != null">                 
-      <enviado_aprobar
+    <template v-if="estados[movimiento.etiqueta] == 'aprobado' && ruta_seleccionada != null">                 
+      <aprobado_derivar
         :idgrado_modalidad="idgrado_modalidad"
         :idgrado_proc="idgrado_proc"
         :idusuario="idusuario"
@@ -34,29 +34,31 @@
         :graduando="graduando"
         :ruta="ruta_seleccionada"
         :movimiento="movimiento"
-        v-if="ruta_seleccionada.etiqueta == 'aprobar'"                         
-      />              
-      <enviado_denegar
-        :idgrado_modalidad="idgrado_modalidad"
-        :idgrado_proc="idgrado_proc"
-        :idusuario="idusuario"
-        :codi_usuario="codi_usuario"
-        :idrol_area="idrol_area"
-        :tipo_rol="tipo_rol"
-        :tipo_usuario="tipo_usuario"
-        :expediente="expediente"
-        :graduando="graduando"
-        :ruta="ruta_seleccionada"
-        :movimiento="movimiento"
-        v-if="ruta_seleccionada.etiqueta == 'denegar'"                  
-      />                             
-    </template>              
+        v-if="ruta_seleccionada.etiqueta == 'derivar'"                         
+      />                    
+    </template>       
+    <template v-else-if="estados[movimiento.etiqueta] == 'denegado' && ruta_seleccionada != null">
+        <denegado_derivar
+            :idgrado_modalidad="idgrado_modalidad"
+            :idgrado_proc="idgrado_proc"
+            :idusuario="idusuario"
+            :codi_usuario="codi_usuario"
+            :idrol_area="idrol_area"
+            :tipo_rol="tipo_rol"
+            :tipo_usuario="tipo_usuario"
+            :expediente="expediente"
+            :graduando="graduando"
+            :ruta="ruta_seleccionada"
+            :movimiento="movimiento"
+            v-if="ruta_seleccionada.etiqueta == 'derivar'"                  
+        />                             
+    </template>       
   </div>    
 </template>
 
 <script>
-import enviado_aprobar from './enviado_aprobar.vue'
-import enviado_denegar from './enviado_denegar.vue'
+import aprobado_derivar from './aprobado_derivar.vue'
+import denegado_derivar from './denegado_derivar.vue'
 
 export default {  
   name: 'index',  
@@ -73,8 +75,8 @@ export default {
     movimiento: Object,
   },
   components: {    
-    enviado_aprobar,
-    enviado_denegar
+    aprobado_derivar,
+    denegado_derivar
   },
   data() {
     return {             

@@ -56,7 +56,7 @@ import observaciones from '../resources/observaciones.vue'
 import movimiento_expediente from '../resources/movimiento_expediente.vue'
 
 export default {
-    name: 'enviado-denegar',
+    name: 'derivado-observar',
     props: {
         idgrado_modalidad: String,
         idgrado_proc: String,    

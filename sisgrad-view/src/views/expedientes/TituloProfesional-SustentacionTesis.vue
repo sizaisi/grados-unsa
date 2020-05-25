@@ -226,22 +226,22 @@
 <script>
 import verificar_requisitos_grado 
   from '@/components/titulo_profesional_sustentacion_tesis/verificar_requisitos_grado/index.vue'
-import tp_st_verificar_pertenencia_tema 
-  from '@/components/titulo_profesional_sustentacion_tesis/verificar_pertinencia_tema.vue'
-import tp_st_nombrar_jurado_adjuntar_resolucion 
-  from '@/components/titulo_profesional_sustentacion_tesis/nombrar_jurado_adjuntar_resolucion.vue'
-import designar_docente_asesor_comision_calificacion_borrador
-  from '@/components/titulo_profesional_sustentacion_tesis/designar_docente_asesor_comision_calificacion_borrador/index.vue'  
-import tp_st_resolver_asignacion_asesoria_proyecto
-  from '@/components/titulo_profesional_sustentacion_tesis/resolver_asignacion_asesoria_proyecto.vue'
-import tp_st_emitir_resolucion_asignacion_asesor_tema
-  from '@/components/titulo_profesional_sustentacion_tesis/emitir_resolucion_asignacion_asesor_tema.vue'
-import tp_st_dar_conformidad_asesoramiento_proyecto
-  from '@/components/titulo_profesional_sustentacion_tesis/dar_conformidad_asesoramiento_proyecto.vue'
-import tp_st_revisar_documentacion_proyecto
-  from '@/components/titulo_profesional_sustentacion_tesis/revisar_documentacion_proyecto.vue'
-import tp_st_dictaminar_aprobacion_proyecto
-  from '@/components/titulo_profesional_sustentacion_tesis/dictaminar_aprobacion_proyecto.vue'
+import verificar_pertinencia_tema 
+  from '@/components/titulo_profesional_sustentacion_tesis/verificar_pertinencia_tema/index.vue'
+import designar_asesor_comision_calificacion
+  from '@/components/titulo_profesional_sustentacion_tesis/designar_asesor_comision_calificacion/index.vue'  
+import resolver_asignacion_asesoria_proyecto
+  from '@/components/titulo_profesional_sustentacion_tesis/resolver_asignacion_asesoria_proyecto/index.vue'
+import emitir_resolucion_asignacion_asesor_tema
+  from '@/components/titulo_profesional_sustentacion_tesis/emitir_resolucion_asignacion_asesor_tema/index.vue'
+import dar_conformidad_asesoramiento_proyecto
+  from '@/components/titulo_profesional_sustentacion_tesis/dar_conformidad_asesoramiento_proyecto/index.vue'
+import nombrar_jurado_adjuntar_resolucion 
+  from '@/components/titulo_profesional_sustentacion_tesis/nombrar_jurado_adjuntar_resolucion/index.vue'
+import revisar_documentacion_proyecto
+  from '@/components/titulo_profesional_sustentacion_tesis/revisar_documentacion_proyecto/index.vue'
+import dictaminar_aprobacion_proyecto
+  from '@/components/titulo_profesional_sustentacion_tesis/dictaminar_aprobacion_proyecto/index.vue'
 import tp_st_verificar_pagos_adjuntar_documentos
   from '@/components/titulo_profesional_sustentacion_tesis/verificar_pagos_adjuntar_documentos.vue'
 import tp_st_emitir_acta_sustentacion
@@ -262,14 +262,14 @@ export default {
   props: ['nombre_componente', 'idgrado_proc', 'idexpediente', 'idusuario', 'codi_usuario', 'idrol_area', 'tipo_rol', 'tipo_usuario'],
   components: {
     verificar_requisitos_grado,
-    tp_st_verificar_pertenencia_tema,
-    tp_st_nombrar_jurado_adjuntar_resolucion,
-    designar_docente_asesor_comision_calificacion_borrador,
-    tp_st_resolver_asignacion_asesoria_proyecto,
-    tp_st_emitir_resolucion_asignacion_asesor_tema,
-    tp_st_dar_conformidad_asesoramiento_proyecto,
-    tp_st_revisar_documentacion_proyecto,
-    tp_st_dictaminar_aprobacion_proyecto,
+    verificar_pertinencia_tema,
+    designar_asesor_comision_calificacion,
+    resolver_asignacion_asesoria_proyecto,
+    emitir_resolucion_asignacion_asesor_tema,
+    dar_conformidad_asesoramiento_proyecto,
+    nombrar_jurado_adjuntar_resolucion,       
+    revisar_documentacion_proyecto,
+    dictaminar_aprobacion_proyecto,
     tp_st_verificar_pagos_adjuntar_documentos,
     tp_st_emitir_acta_sustentacion,
     tp_st_dictaminar_resultado_sustentacion,
@@ -313,8 +313,8 @@ export default {
       })        
 
       this.axios.post(`${this.url}/Movimiento/ultimoMovimiento`, formData)
-      .then(function(response) {                
-        if (!response.data.error) {              
+      .then(function(response) {                      
+        if (!response.data.error) {                        
           me.movimiento = response.data.movimiento                     
         }
         else {              
@@ -450,7 +450,7 @@ export default {
     margin-bottom: 0;    
   }  
   .estado {
-    font-size: 0.85em;
+    font-size: 0.80em;
   }
 </style>
 

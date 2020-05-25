@@ -21,8 +21,8 @@
       </fieldset>
     </div>   
 
-    <template v-if="estados[movimiento.etiqueta] == 'enviado' && ruta_seleccionada != null">                 
-      <enviado_aprobar
+    <template v-if="estados[movimiento.etiqueta] == 'derivado' && ruta_seleccionada != null">                 
+      <derivado_aceptar
         :idgrado_modalidad="idgrado_modalidad"
         :idgrado_proc="idgrado_proc"
         :idusuario="idusuario"
@@ -34,9 +34,9 @@
         :graduando="graduando"
         :ruta="ruta_seleccionada"
         :movimiento="movimiento"
-        v-if="ruta_seleccionada.etiqueta == 'aprobar'"                         
+        v-if="ruta_seleccionada.etiqueta == 'aceptar'"                         
       />              
-      <enviado_denegar
+      <derivado_denegar
         :idgrado_modalidad="idgrado_modalidad"
         :idgrado_proc="idgrado_proc"
         :idusuario="idusuario"
@@ -55,8 +55,8 @@
 </template>
 
 <script>
-import enviado_aprobar from './enviado_aprobar.vue'
-import enviado_denegar from './enviado_denegar.vue'
+import derivado_aceptar from './derivado_aceptar.vue'
+import derivado_denegar from './derivado_denegar.vue'
 
 export default {  
   name: 'index',  
@@ -73,8 +73,8 @@ export default {
     movimiento: Object,
   },
   components: {    
-    enviado_aprobar,
-    enviado_denegar
+    derivado_aceptar,
+    derivado_denegar
   },
   data() {
     return {             

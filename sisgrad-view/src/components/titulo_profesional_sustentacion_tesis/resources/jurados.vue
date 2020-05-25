@@ -88,7 +88,10 @@ export default {
         errors: [],        
     }
   },
-  methods: {            
+  methods: {   
+    cantidadJurados() {
+        return this.array_jurado.length
+    },         
     getCandidatosJurados() { // para mostrar una lista de asesores por facultad para que ser asignado        
         let me = this       
         let formData = this._toFormData({

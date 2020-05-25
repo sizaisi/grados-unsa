@@ -21,8 +21,8 @@
       </fieldset>
     </div>   
 
-    <template v-if="estados[movimiento.etiqueta] == 'enviado' && ruta_seleccionada != null">                 
-      <enviado_aprobar
+    <template v-if="estados[movimiento.etiqueta] == 'derivado' && ruta_seleccionada != null">                 
+      <derivado_aprobar
         :idgrado_modalidad="idgrado_modalidad"
         :idgrado_proc="idgrado_proc"
         :idusuario="idusuario"
@@ -36,7 +36,7 @@
         :movimiento="movimiento"
         v-if="ruta_seleccionada.etiqueta == 'aprobar'"                         
       />              
-      <enviado_denegar
+      <derivado_observar
         :idgrado_modalidad="idgrado_modalidad"
         :idgrado_proc="idgrado_proc"
         :idusuario="idusuario"
@@ -48,15 +48,15 @@
         :graduando="graduando"
         :ruta="ruta_seleccionada"
         :movimiento="movimiento"
-        v-if="ruta_seleccionada.etiqueta == 'denegar'"                  
+        v-if="ruta_seleccionada.etiqueta == 'observar'"                  
       />                             
     </template>              
   </div>    
 </template>
 
 <script>
-import enviado_aprobar from './enviado_aprobar.vue'
-import enviado_denegar from './enviado_denegar.vue'
+import derivado_aprobar from './derivado_aprobar.vue'
+import derivado_observar from './derivado_observar.vue'
 
 export default {  
   name: 'index',  
@@ -73,8 +73,8 @@ export default {
     movimiento: Object,
   },
   components: {    
-    enviado_aprobar,
-    enviado_denegar
+    derivado_aprobar,
+    derivado_observar
   },
   data() {
     return {             
@@ -94,7 +94,7 @@ export default {
         this.axios.post(`${this.url}/Ruta/getRutasByProc`, formData)
         .then(function(response) {          
           if (!response.data.error) {              
-              me.array_ruta = response.data.array_ruta                             
+              me.array_ruta = response.data.array_ruta                                         
           }
           else {              
               console.log(response.data.message)

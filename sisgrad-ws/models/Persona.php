@@ -39,12 +39,14 @@ class Persona extends Recurso {
 	public function getAsesorExpediente() { //asesor que ya fue asignado en el procedimiento correspondiente
 		$result = array('error' => false);
 
-		$sql = "SELECT GT_R.id, REPLACE(AC_D.apn, '/', ' ') AS apn, 
-				AC_D.dic AS nro_documento, GT_P.tipo
+		$sql = "SELECT GT_R.id, GT_P.iddocente, REPLACE(AC_D.apn, '/', ' ') AS apn, 
+				AC_D.dic AS nro_documento, GT_P.tipo, AC_F.nfac AS facultad
 				FROM GT_RECURSO AS GT_R
 				INNER JOIN GT_PERSONA GT_P ON GT_P.idrecurso = GT_R.id
 				INNER JOIN GT_USUARIO AS GT_U ON GT_U.id = GT_P.iddocente
 				INNER JOIN SIAC_DOC AS AC_D ON AC_D.codper = GT_U.codi_usuario 
+				INNER JOIN actdepa AS AC_DE ON AC_DE.depa = AC_D.depend
+				INNER JOIN actfacu AS AC_F ON AC_F.facu = AC_DE.facu
 				WHERE GT_R.idexpediente = $this->idexpediente   
 				AND GT_R.idmovimiento IS NOT NULL               												
 				AND GT_P.tipo = 'asesor'
@@ -59,7 +61,7 @@ class Persona extends Recurso {
 			}			
 			else {
 				$result['error'] = true;
-				$result['message'] = "No se pudo encontrar el asesor.";            
+				$result['message'] = "No se ha asignado un asesor.";            
 			}			
 		}
 		else {
@@ -88,14 +90,9 @@ class Persona extends Recurso {
 		$result_query = mysqli_query($this->conn, $sql);
 
 		if ($result_query) {			
-			if (mysqli_num_rows($result_query) > 0) {
-				$row = $result_query->fetch_assoc();        
+			if ($row = $result_query->fetch_assoc()) {				        
 				$result['asesor'] = $row;
-			}			
-			else {
-				$result['error'] = true;
-				$result['message'] = "No se pudo encontrar el asesor.";            
-			}			
+			}									
 		}
 		else {
 			$result['error'] = true;
@@ -103,7 +100,112 @@ class Persona extends Recurso {
 		}		
   
 		return $result;		
+	}   
+	
+	public function getAllAsesores() {
+		$result = array('error' => false);
+
+		$sql = "SELECT GT_R.id, GT_P.iddocente, REPLACE(AC_D.apn, '/', ' ') AS apn, 
+				       AC_D.dic AS nro_documento, GT_P.tipo
+				FROM GT_RECURSO AS GT_R
+					INNER JOIN GT_PERSONA GT_P ON GT_P.idrecurso = GT_R.id
+					INNER JOIN GT_USUARIO AS GT_U ON GT_U.id = GT_P.iddocente
+					INNER JOIN SIAC_DOC AS AC_D ON AC_D.codper = GT_U.codi_usuario 
+				WHERE GT_R.idexpediente = $this->idexpediente   
+					AND GT_R.idmovimiento IS NOT NULL               												
+					AND GT_P.tipo = 'asesor'
+				ORDER BY GT_R.id ASC";
+
+		$result_query = mysqli_query($this->conn, $sql);
+
+		if ($result_query) {			
+			$array_asesor = array();
+
+			while ($row = $result_query->fetch_assoc()) {         
+				array_push($array_asesor, $row);
+			}
+
+			$result['array_asesor'] = $array_asesor;   			
+		}
+		else {  
+			$result['error'] = true;
+			$result['message'] = "No se pudo obtener los asesores.";            
+		}					
+
+		return $result;		
 	}      
+
+	public function getJuradoAsignadoExpediente() { //jurado asignado a un expediente
+		$result = array('error' => false);
+
+		$sql = "SELECT GT_R.id, GT_P.iddocente, REPLACE(AC_D.apn, '/', ' ') AS apn, 
+				AC_D.dic AS nro_documento, GT_P.tipo, AC_F.nfac AS facultad
+				FROM GT_RECURSO AS GT_R
+				INNER JOIN GT_PERSONA GT_P ON GT_P.idrecurso = GT_R.id
+				INNER JOIN GT_USUARIO AS GT_U ON GT_U.id = GT_P.iddocente
+				INNER JOIN SIAC_DOC AS AC_D ON AC_D.codper = GT_U.codi_usuario 
+				INNER JOIN actdepa AS AC_DE ON AC_DE.depa = AC_D.depend
+				INNER JOIN actfacu AS AC_F ON AC_F.facu = AC_DE.facu
+				WHERE GT_R.idexpediente = $this->idexpediente 
+                AND GT_R.idgrado_proc = $this->idgrado_proc 
+				AND GT_R.idusuario = $this->idusuario   				
+				AND GT_P.tipo IN ('presidente', 'secretario', 'suplente') 
+				AND GT_P.estado = 1";	
+
+		$result_query = mysqli_query($this->conn, $sql);
+
+		if ($result_query) {			
+			$array_jurado_asignado = array();
+
+			while ($row = $result_query->fetch_assoc()) {         
+				array_push($array_jurado_asignado, $row);
+			}
+
+			$result['array_jurado_asignado'] = $array_jurado_asignado;   			
+		}
+		else {  
+			$result['error'] = true;
+			$result['message'] = "No se pudo obtener los jurados asignados.";            
+		}					
+
+		return $result;		
+	} 
+
+	public function getJuradoConfirmadosExpediente() { //jurado confirmado a un expediente
+		$result = array('error' => false);
+
+		$sql = "SELECT GT_R.id, GT_P.iddocente, REPLACE(AC_D.apn, '/', ' ') AS apn, 
+				AC_D.dic AS nro_documento, GT_P.tipo, AC_F.nfac AS facultad
+				FROM GT_RECURSO AS GT_R
+				INNER JOIN GT_PERSONA GT_P ON GT_P.idrecurso = GT_R.id
+				INNER JOIN GT_USUARIO AS GT_U ON GT_U.id = GT_P.iddocente
+				INNER JOIN SIAC_DOC AS AC_D ON AC_D.codper = GT_U.codi_usuario 
+				INNER JOIN actdepa AS AC_DE ON AC_DE.depa = AC_D.depend
+				INNER JOIN actfacu AS AC_F ON AC_F.facu = AC_DE.facu
+				WHERE GT_R.idexpediente = $this->idexpediente   
+				AND GT_R.idmovimiento IS NOT NULL               												
+				AND GT_P.tipo IN ('presidente', 'secretario', 'suplente') 
+				AND GT_P.estado = 1";	
+
+		$result_query = mysqli_query($this->conn, $sql);
+
+		if ($result_query) {			
+			$array_jurado_confirmado = array();
+
+			while ($row = $result_query->fetch_assoc()) {         
+				array_push($array_jurado_confirmado, $row);
+			}
+
+			$result['array_jurado_confirmado'] = $array_jurado_confirmado;   			
+		}
+		else {  
+			$result['error'] = true;
+			$result['message'] = "No se pudo obtener los jurados confirmados.";            
+		}					
+
+		return $result;		
+	} 
+  
 
 	public function getJurado() {
 		$result = array('error' => false);
@@ -151,11 +253,7 @@ class Persona extends Recurso {
 				AND GT_R.idgrado_proc = $this->idgrado_proc
 				AND GT_R.idmovimiento IS NOT NULL
 				AND GT_P.tipo = '$this->tipo'
-				AND GT_R.idmovimiento = (SELECT MAX(idmovimiento) 
-										 FROM GT_RECURSO 
-										 WHERE idexpediente = $this->idexpediente 
-										 AND idgrado_proc = $this->idgrado_proc
-										 AND tipo = '$this->tipo')";      
+				AND GT_P.estado = 1";      
 		$result_query = mysqli_query($this->conn, $sql);     		
   
 		if (!$result_query) {
@@ -219,19 +317,15 @@ class Persona extends Recurso {
 			$result['error'] = true;
 		}
 
-		//habilitar el ultimo duplicado que tenga movimiento del mismo tipo (asesor, secretario, etc)
-		$sql = "UPDATE GT_PERSONA AS GT_P 
-				INNER JOIN GT_RECURSO AS GT_R ON GT_R.id = GT_P.idrecurso
-				SET GT_P.estado = 1
-				WHERE GT_R.idexpediente = $this->idexpediente 
-				AND GT_R.idgrado_proc = $this->idgrado_proc
-				AND GT_R.idmovimiento IS NOT NULL
-				AND GT_P.tipo = '$this->tipo'
-				AND GT_R.idmovimiento = (SELECT MAX(idmovimiento) 
-										 FROM GT_RECURSO 
-										 WHERE idexpediente = $this->idexpediente 
-										 AND idgrado_proc = $this->idgrado_proc
-										 AND tipo = '$this->tipo')";      
+		//habilitar el ultimo duplicado que tenga movimiento del mismo tipo (asesor, secretario, etc)										 
+		$sql = "UPDATE GT_PERSONA
+			    SET estado = 1
+				WHERE tipo = '$this->tipo'
+				AND idrecurso = (SELECT MAX(id) 
+								 FROM GT_RECURSO
+								 WHERE idexpediente = $this->idexpediente 
+								 AND idgrado_proc = $this->idgrado_proc
+								 AND idmovimiento IS NOT NULL)";
 		$result_query = mysqli_query($this->conn, $sql);     		
   
 		if (!$result_query) {

@@ -21,8 +21,8 @@
       </fieldset>
     </div>   
 
-    <template v-if="estados[movimiento.etiqueta] == 'enviado' && ruta_seleccionada != null">                 
-      <enviado_aprobar
+    <template v-if="estados[movimiento.etiqueta] == 'aprobado' && ruta_seleccionada != null">                 
+      <aprobado_aprobar
         :idgrado_modalidad="idgrado_modalidad"
         :idgrado_proc="idgrado_proc"
         :idusuario="idusuario"
@@ -36,7 +36,7 @@
         :movimiento="movimiento"
         v-if="ruta_seleccionada.etiqueta == 'aprobar'"                         
       />              
-      <enviado_denegar
+      <aprobado_denegar
         :idgrado_modalidad="idgrado_modalidad"
         :idgrado_proc="idgrado_proc"
         :idusuario="idusuario"
@@ -55,8 +55,8 @@
 </template>
 
 <script>
-import enviado_aprobar from './enviado_aprobar.vue'
-import enviado_denegar from './enviado_denegar.vue'
+import aprobado_aprobar from './aprobado_aprobar.vue'
+import aprobado_denegar from './aprobado_denegar.vue'
 
 export default {  
   name: 'index',  
@@ -73,8 +73,8 @@ export default {
     movimiento: Object,
   },
   components: {    
-    enviado_aprobar,
-    enviado_denegar
+    aprobado_aprobar,
+    aprobado_denegar
   },
   data() {
     return {             
