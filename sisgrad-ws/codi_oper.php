@@ -1,14 +1,13 @@
-<?php
-   
-   /*include "../../include/conection.inc.php";
-   include "../../include/codigos_menu.inc";
+<?php   
+   include "../../../include/conection.inc.php";
+   include "../../../include/codigos_menu.inc";
    $acceso=do_conection();
     if(!$cerrar)
-       require "../../include/sesiones/acse_busc_sesi.php";*/
+       require "../../../include/sesiones/acse_busc_sesi.php";
 
    header("Content-Type: text/json");        
    
-   $codi_oper = 'fips';   //facultad
+   //$codi_oper = 'fips';   //facultad
    //$codi_oper = 'uifips';   //unid de investigacion
    //$codi_oper = '3889_1'; //presidente de jurado
    //$codi_oper = '4686_1';  //asesor anterior
@@ -27,5 +26,4 @@
    }
 
    echo json_encode($result);   
-   
 ?>

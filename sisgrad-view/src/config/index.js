@@ -1,6 +1,8 @@
 const config = {
-    API_URL: '//localhost/grados-unsa/sisgrad-ws',    
-    FILE_URL: '//localhost/grados-unsa/sisgrad-ws/utils/show_file.php',    
+    API_URL: '//190.119.145.150:8023/sisacad/graduacion/grados-unsa/sisgrad-ws',    
+    FILE_URL: '//190.119.145.150:8023/sisacad/graduacion/grados-unsa/sisgrad-ws/utils/show_file.php',
+    //API_URL: '//localhost/grados-unsa/sisgrad-ws',    
+    //FILE_URL: '//localhost/grados-unsa/sisgrad-ws/utils/show_file.php',    
     //para asignacion de colores a los movimientos o rutas de salida de los procedimientos
     color_acciones: { enviar:"success", derivar:"success", 
                       devolver:"danger", denegar:"danger",
