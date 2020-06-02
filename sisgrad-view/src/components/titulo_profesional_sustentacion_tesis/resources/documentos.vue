@@ -86,7 +86,7 @@ export default {
     data() {
         return {             
             url: this.$root.API_URL,                              
-            url_show_file : this.$root.FILE_URL,                        
+            url_show_file : this.$root.API_URL+'/utils/show_file.php',                        
             array_documento : [],               
             columnas_documento: [               
                 { key: 'nombre', label: 'Nombre' },                        
@@ -121,7 +121,7 @@ export default {
                     me.array_documento = response.data.array_documento                    
                 }
                 else {
-                    console.log(response.data.message)
+                    //console.log(response.data.message)
                 }
             })   
         },       

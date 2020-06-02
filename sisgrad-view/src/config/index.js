@@ -1,6 +1,13 @@
 const config = {
-    API_URL: '//190.119.145.150:8023/sisacad/graduacion/grados-unsa/sisgrad-ws',    
-    FILE_URL: '//190.119.145.150:8023/sisacad/graduacion/grados-unsa/sisgrad-ws/utils/show_file.php',
+    /***** SISACAD *****/
+    //API_URL: '//190.119.145.150:8023/sisacad/graduacion/grados-unsa/sisgrad-ws',    
+    //FILE_URL: '//190.119.145.150:8023/sisacad/graduacion/grados-unsa/sisgrad-ws/utils/show_file.php',
+
+    /***** SISDOCE *****/
+    API_URL: '//190.119.145.150:8022/sisacad/sisdoce/graduacion/grados-unsa/sisgrad-ws',
+    //FILE_URL: '//190.119.145.150:8023/sisacad/graduacion/grados-unsa/sisgrad-ws/utils/show_file.php',
+
+    /***** LOCAL *****/
     //API_URL: '//localhost/grados-unsa/sisgrad-ws',    
     //FILE_URL: '//localhost/grados-unsa/sisgrad-ws/utils/show_file.php',    
     //para asignacion de colores a los movimientos o rutas de salida de los procedimientos
