@@ -20,8 +20,8 @@
                     <b-tab title="2. Añadir documento" title-item-class="disabledTab" :disabled="tabIndex2 < 1">
                         <documentos               
                             :expediente="expediente"
-                            :idgrado_proc="idgrado_proc"
-                            :idusuario="idusuario"                                                                    
+                            :idgrado_proc="grado_procedimiento.id"
+                            :idusuario="usuario.id"                                                                    
                             :ruta="ruta"                                                           
                             ref="documentos"
                             max_docs = "1"
@@ -34,13 +34,10 @@
                     <b-tab :title="'3. '+ruta.etiqueta.charAt(0).toUpperCase()+ruta.etiqueta.slice(1)+' expediente'" 
                         title-item-class="disabledTab" :disabled="tabIndex2 < 2">
                         <movimiento_expediente
-                            :idgrado_modalidad="idgrado_modalidad"
-                            :idgrado_proc="idgrado_proc"                        
-                            :idusuario="idusuario"
-                            :codi_usuario="codi_usuario"
-                            :idrol_area="idrol_area"
-                            :tipo_rol="tipo_rol"
-                            :tipo_usuario="tipo_usuario"
+                            :grado_modalidad="grado_modalidad"
+                            :grado_procedimiento="grado_procedimiento"                        
+                            :usuario="usuario"
+                            :tipo_rol="tipo_rol"                            
                             :expediente="expediente"
                             :movimiento="movimiento"
                             :ruta="ruta"                                                            
@@ -70,13 +67,10 @@ import movimiento_expediente from '../resources/movimiento_expediente.vue'
 export default {
     name: 'derivado-derivar',
     props: {
-        idgrado_modalidad: String,
-        idgrado_proc: String,    
-        idusuario: String,
-        codi_usuario: String,
-        idrol_area: String,
-        tipo_rol: String,
-        tipo_usuario: String,
+        grado_modalidad: Object,
+        grado_procedimiento: Object,            
+        usuario: Object,
+        tipo_rol: String,        
         expediente: Object,
         graduando: Object,        
         ruta: Object,
@@ -137,8 +131,8 @@ export default {
             let me = this      
             var formData = this._toFormData({
                 idexpediente: this.expediente.id,
-                idgrado_proc: this.idgrado_proc,
-                idusuario: this.idusuario,                
+                idgrado_proc: this.grado_procedimiento.id,
+                idusuario: this.usuario.id,                
                 idruta: this.ruta.id
             })
 

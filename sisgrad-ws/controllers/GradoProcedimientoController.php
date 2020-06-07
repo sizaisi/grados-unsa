@@ -13,17 +13,8 @@ class GradoProcedimientoController {
 
 		echo json_encode($result);            
 	}
-
-	public function getGradoProcedimiento() {
-		$grado_procedimiento = new GradoProcedimiento();		
-		$grado_procedimiento->setId($_POST['idgrado_procedimiento']);
-
-		$result = $grado_procedimiento->getGradoProcedimiento();
-
-		echo json_encode($result);            
-	}
-
-	public function menu_dinamico() {		
+	
+	public function menus() {		
 		$grado_procedimiento = new GradoProcedimiento();      
 
 		$grado_procedimiento->setIdGradoModalidad($_POST['idgrado_modalidad']);

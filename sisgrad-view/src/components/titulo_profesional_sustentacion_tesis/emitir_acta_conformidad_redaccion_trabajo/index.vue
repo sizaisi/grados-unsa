@@ -23,13 +23,10 @@
 
     <template v-if="estados[movimiento.etiqueta] == 'aprobado' && ruta_seleccionada != null">                 
       <aprobado_enviado_derivar
-        :idgrado_modalidad="idgrado_modalidad"
-        :idgrado_proc="idgrado_proc"
-        :idusuario="idusuario"
-        :codi_usuario="codi_usuario"
-        :idrol_area="idrol_area"
-        :tipo_rol="tipo_rol"
-        :tipo_usuario="tipo_usuario"
+        :grado_modalidad="grado_modalidad"
+        :grado_procedimiento="grado_procedimiento"
+        :usuario="usuario"
+        :tipo_rol="tipo_rol"        
         :expediente="expediente"
         :graduando="graduando"
         :ruta="ruta_seleccionada"
@@ -39,13 +36,10 @@
     </template>       
     <template v-else-if="estados[movimiento.etiqueta] == 'enviado' && ruta_seleccionada != null">
         <aprobado_enviado_derivar
-            :idgrado_modalidad="idgrado_modalidad"
-            :idgrado_proc="idgrado_proc"
-            :idusuario="idusuario"
-            :codi_usuario="codi_usuario"
-            :idrol_area="idrol_area"
-            :tipo_rol="tipo_rol"
-            :tipo_usuario="tipo_usuario"
+            :grado_modalidad="grado_modalidad"
+            :grado_procedimiento="grado_procedimiento"
+            :usuario="usuario"
+            :tipo_rol="tipo_rol"            
             :expediente="expediente"
             :graduando="graduando"
             :ruta="ruta_seleccionada"
@@ -58,25 +52,20 @@
 
 <script>
 import aprobado_enviado_derivar from './aprobado_enviado_derivar.vue'
-//import enviado_derivar from './enviado_derivar.vue'
 
 export default {  
   name: 'index',  
   props: {
-    idgrado_modalidad: String,
-    idgrado_proc: String,    
-    idusuario: String,
-    codi_usuario: String,
-    idrol_area: String,
-    tipo_rol: String,
-    tipo_usuario: String,
+    grado_modalidad: Object,
+    grado_procedimiento: Object,        
+    usuario: Object,
+    tipo_rol: String,    
     expediente: Object,
     graduando: Object,
     movimiento: Object,
   },
   components: {    
-    aprobado_enviado_derivar,
-    //enviado_derivar
+    aprobado_enviado_derivar,    
   },
   data() {
     return {             
@@ -90,7 +79,7 @@ export default {
     getRutas() {
         let me = this
         var formData = this._toFormData({
-            idgradproc_origen: this.idgrado_proc,            
+            idgradproc_origen: this.grado_procedimiento.id,            
         })        
 
         this.axios.post(`${this.url}/Ruta/getRutasByProc`, formData)

@@ -3,9 +3,10 @@
    <div class="container p-4" style="background-color: #fff;">
       <div class="row">         
          <div class="col text-center">         
-            <h3 class="text-info" v-if="codi_usuario == null" v-text="'No existe sesión de usuario'"></h3>		
-            <h3 class="text-info" v-else-if="array_grado_modalidad.length > 0" v-text="'Solicitudes pendientes'"></h3>		
-            <h3 class="text-info" v-else v-text="'No existen solicitudes pendientes'"></h3>		
+            <template v-if="codi_usuario != null">
+                <h3 class="text-info" v-if="array_grado_modalidad.length > 0" v-text="'Solicitudes pendientes'"></h3>		
+                <h3 class="text-info" v-else v-text="'No existen solicitudes pendientes'"></h3>		    
+            </template>            
          </div>          		
       </div>
       <div class="row text-center mt-3" v-for="(group, index) in objectGroups" :key="index">
@@ -18,12 +19,9 @@
                   pill 
                   variant="info"                   
                   :to="{ name: 'menu-procedimientos', 
-                         params: { 
-                            idgrado_modalidad: grado_modalidad.idgrado_modalidad, 
-                            idusuario: usuario.id,
-                            codi_usuario: usuario.codi_usuario,
-                            idrol_area: usuario.idrol_area,
-                            tipo_usuario: usuario.tipo,
+                         params: {                             
+                            grado_modalidad: grado_modalidad,                             
+                            usuario: usuario
                          } 
                     }">
                   Ver expedientes
@@ -54,9 +52,23 @@ export default {
         }
     },
     methods: {
-        getIdUsuario() {            
+        getCodiOper() {
+            let me = this
+
+            this.axios.get(`${this.url}/codi_oper.php`)
+            .then(function(response) {                  
+                if (!response.data.error) {
+                    me.codi_usuario = response.data.codi_oper                                                                        
+                    me.getUsuario()                                                                                              
+                }
+                else {
+                    me.$root.mostrarNotificacion('Advertencia!', 'warning', 4000, 'error', response.data.message, 'bottom-right')
+                }                  
+            })
+        },
+        getUsuario() {            
             let me = this       
-            var formData = this._toFormData({
+            let formData = this._toFormData({
                 codi_usuario: this.codi_usuario
             })
 
@@ -73,62 +85,44 @@ export default {
                     }                    
                 }
                 else {                                        
-                    me.$bvToast.toast(response.data.message, {
-                        title: 'Error!',
-                        variant: 'danger',
-                        toaster: 'b-toaster-bottom-right',                    
-                    })              
+                    console.log(response.data.message)            
                 }
             })
         },     
         getAllGradoModadalidadAdminitrativo() {    
             let me = this        
-            var formData = this._toFormData({                           
-                    codi_usuario: this.usuario.codi_usuario,                         
-                    idrol_area: this.usuario.idrol_area,                         
-                })
+            let formData = this._toFormData({                           
+                codi_usuario: this.usuario.codi_usuario,                         
+                idrol_area: this.usuario.idrol_area,                         
+            })
 
             this.axios.post(`${this.url}/GradoModalidad/inicioAdminitrativo`, formData)
-                .then(function(response) {                   
-                    if (!response.data.error) {
-                        me.array_grado_modalidad = response.data.array_grado_modalidad                                                                       
-                    }
-                    else {
-                       console.log(response.data.message)
-                    }
-                })
+            .then(function(response) {                              
+                if (!response.data.error) {
+                    me.array_grado_modalidad = response.data.array_grado_modalidad                                                                       
+                }
+                else {
+                    console.log(response.data.message)
+                }
+            })
         }, 
         getAllGradoModadalidadDocente() {                
             let me = this        
-            var formData = this._toFormData({                           
-                    codi_usuario: this.usuario.codi_usuario,                         
-                    idrol_area: this.usuario.idrol_area,                         
-                })
+            let formData = this._toFormData({                           
+                codi_usuario: this.usuario.codi_usuario,                         
+                idrol_area: this.usuario.idrol_area,                         
+            })
 
             this.axios.post(`${this.url}/GradoModalidad/inicioDocente`, formData)
-                .then(function(response) {                                     
-                    if (!response.data.error) {
-                        me.array_grado_modalidad = response.data.array_grado_modalidad                                                                       
-                    }
-                    else {
-                       console.log(response.data.message)
-                    }
-                })
-        },   
-        getCodiOper() {
-            let me = this
-
-            this.axios.get(`${this.url}/codi_oper.php`)
-                .then(function(response) {                  
-                    if (response.data.error) {
-                        me.codi_usuario = null                                                                   
-                    }
-                    else {
-                        me.codi_usuario = response.data.codi_oper                                                                        
-                        me.getIdUsuario()                        
-                    }                  
-                })
-        },   
+            .then(function(response) {                                     
+                if (!response.data.error) {
+                    me.array_grado_modalidad = response.data.array_grado_modalidad                                                                       
+                }
+                else {
+                    console.log(response.data.message)
+                }
+            })
+        },              
         _toFormData(obj) {
             var fd = new FormData()
 

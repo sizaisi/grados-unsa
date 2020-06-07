@@ -50,7 +50,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	$pdf->Ln(); 
 
 	$texto1 = 'Vista la solicitud de Don(ña): <b>'.$graduando->apell_nombres.'</b> quien solicita nombramiento de jurado
-			   para optar el grado académico de Bachiller en <b> '.$expediente->nesc.'</b> 
+			   para optar el grado académico de Bachiller en <b> '.$expediente->escuela.'</b> 
 			   y sustentar su trabajo de investigación titulado: <b>'.$expediente->titulo.'</b><br>';
 	$pdf->SetFont('helvetica', '', 12);
 	$pdf->writeHTMLCell(170, '', 20, '', $texto1, 0, 0, 0, true, 'J', true);

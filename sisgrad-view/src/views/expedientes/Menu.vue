@@ -2,7 +2,7 @@
   <div>
    <div class="container-fluid pt-2 pb-3" style="background-color: #fff;">
       <h4 class="text-center mt-3 text-info" 
-          v-text="grado_modalidad.nomb_grado_titulo+ ' - '+grado_modalidad.nomb_mod_obtencion">
+          v-text="grado_modalidad.nombre_grado_titulo + ' - ' + grado_modalidad.nombre_modalidad_obtencion">
       </h4>    
       <b-tabs active-nav-item-class="font-weight-bold text-uppercase text-danger" content-class="mt-3" fill>
          <b-tab 
@@ -44,27 +44,32 @@
                                 :filter="filter"
                                 @filtered="onFiltered" 
                                 empty-filtered-text="No hay expedientes que coincidan con su búsqueda."
+                                :busy="isBusy"                                
                             >                         
                                 <template v-slot:cell(estado)="data">
                                     <b-badge :variant="color_estados[data.item.estado]">{{data.item.estado}}</b-badge>
                                 </template> 
                                 <template v-slot:cell(acciones)="data">                                 
                                     <b-button variant="success" size="sm" data-toggle="tooltip" data-placement="left" title="Evaluar" 
-                                    :to="{ name: 'info-expediente'+idgrado_modalidad, 
+                                    :to="{ name: 'info-expediente' + grado_modalidad.id, 
                                             params: { nombre_componente: grado_proc.url_formulario, 
-                                                        idgrado_proc: grado_proc.id,  
-                                                        idexpediente: data.item.id,  
-                                                        idusuario: idusuario, 
-                                                        codi_usuario: codi_usuario,  
-                                                        idrol_area: idrol_area, 
+                                                        grado_modalidad: grado_modalidad,                                                          
+                                                        grado_procedimiento: grado_proc,  
+                                                        idexpediente: data.item.id,                                                          
+                                                        usuario: usuario,
                                                         tipo_rol: grado_proc.tipo_rol,
-                                                        tipo_usuario: tipo_usuario, 
                                                     } 
                                             }"
                                     >
                                     <i class="fa fa-edit"></i> Evaluar
                                     </b-button>                        
-                                </template>    
+                                </template>  
+                                <template v-slot:table-busy>
+                                    <div class="text-center text-danger my-2">
+                                        <b-spinner class="align-middle"></b-spinner>
+                                        <strong>Cargando...</strong>
+                                    </div>
+                                </template>  
                             </b-table>   
                             <b-row>
                                 <b-col offset-md="6" md="6" class="my-1">
@@ -112,6 +117,7 @@
                                 :filter="filter"
                                 @filtered="onFiltered" 
                                 empty-filtered-text="No hay expedientes que coincidan con su búsqueda."
+                                :busy="isBusy"
                             >                         
                                 <template v-slot:cell(estado)="data">
                                     <b-badge :variant="color_estados[data.item.estado]">{{data.item.estado}}</b-badge>
@@ -122,6 +128,12 @@
                                         <i class="fa fa-edit"></i> Deshacer
                                     </b-button>                        
                                 </template>    
+                                <template v-slot:table-busy>
+                                    <div class="text-center text-danger my-2">
+                                        <b-spinner class="align-middle"></b-spinner>
+                                        <strong>Cargando...</strong>
+                                    </div>
+                                </template>
                             </b-table>   
                             <b-row>
                                 <b-col offset-md="6" md="6" class="my-1">
@@ -146,14 +158,18 @@
 
 <script>
 export default {
-  name: 'menu-procedimientos', 
-  props: ['idgrado_modalidad', 'idgrado_proc', 'idusuario', 'codi_usuario', 'idrol_area', 'tipo_rol', 'tipo_usuario'],  
+  name: 'menu-procedimientos',   
+  props: {    
+    grado_modalidad: Object,    
+    grado_procedimiento: Object,        
+    usuario: Object,
+    tipo_rol: String,
+  },    
   data() {
     return {                               
         url: this.$root.API_URL,
         color_estados : this.$root.color_estados,
-        estados : this.$root.estados,              
-        grado_modalidad : {},
+        estados : this.$root.estados,                      
         array_grado_procedimiento : [],       
         array_expediente : [],  
         array_exp_enviados: [],              
@@ -178,56 +194,40 @@ export default {
         perPage: 5,
         pageOptions: [5, 10, 15],
         filter: null,  
+        isBusy: false,
     }
   },  
   methods: {        
     activarTabGradoProcedimiento(idgrado_proc) {          
       //si el idgrado_proc de uno los tabs es igual al idgrado_proc devuelto activarlo
-      if (idgrado_proc == this.idgrado_proc) {
+      if (this.grado_procedimiento != null && idgrado_proc == this.grado_procedimiento.id) {
         return { [`active`]: '' }         
       }
       else {
         return null
       }        
-    },    
-    getGradoModalidad() {      
-        let me = this          
-        
-        var formData = this._toFormData({
-            idgrado_modalidad: me.idgrado_modalidad,                  
-        })
-
-        this.axios.post(`${this.url}/GradoModalidad/get`, formData)
-        .then(function(response) {
-            if (response.data.error) {
-                me.errorMsg = response.data.message
-            }
-            else {
-                me.grado_modalidad = response.data.grado_modalidad                            
-            }
-        })
-    },       
+    }, 
     getGradoProcedimientos() {
         let me = this
         let formData = this._toFormData({
-            idgrado_modalidad: this.idgrado_modalidad,
-            idrol_area: this.idrol_area,
-            idusuario: this.idusuario                         
+            idgrado_modalidad: this.grado_modalidad.id,
+            idrol_area: this.usuario.idrol_area,
+            idusuario: this.usuario.id
         })
 
-        this.axios.post(`${this.url}/GradoProcedimiento/menu_dinamico`, formData)
+        this.axios.post(`${this.url}/GradoProcedimiento/menus`, formData)
         .then(function(response) {            
             if (!response.data.error) {
                 me.array_grado_procedimiento = response.data.array_grado_procedimiento
                 
-                if (me.idgrado_proc == null) {
+                if (me.grado_procedimiento == null) {
                     //obtener los expedientes del primer grado-procedimiento (por defecto)
                     let grado_proc_inicio = me.array_grado_procedimiento[0]
                     me.getExpedientes(grado_proc_inicio.id, grado_proc_inicio.tipo_rol)
                 }                   
                 else {                                                            
                     //obtener los expedientes del grado-procedimiento devuelto
-                    me.getExpedientes(me.idgrado_proc, me.tipo_rol)
+                    me.getExpedientes(me.grado_procedimiento.id, me.tipo_rol)
                 }                                
             }
             else {                
@@ -237,31 +237,33 @@ export default {
     },   
     getExpedientes(idgrado_procedimiento, tipo_rol) {     
         let me = this                           
-
-        var formData = this._toFormData({
+        let formData = this._toFormData({
             idgrado_procedimiento: idgrado_procedimiento,                         
-            codi_usuario: this.codi_usuario,
-            tipo_usuario: this.tipo_usuario,
+            codi_usuario: this.usuario.codi_usuario,
+            tipo_usuario: this.usuario.tipo,
             tipo_rol: tipo_rol
         })
+        this.toggleBusy()
 
         this.axios.post(`${this.url}/Expediente/getList`, formData)
-        .then(function(response) {
-            if (response.data.error) {
-                me.errorMsg = response.data.message
+        .then(function(response) {            
+            if (!response.data.error) {
+                me.array_expediente = response.data.array_expediente
+                me.totalRows = me.array_expediente.length;                     
             }
             else {
-                me.array_expediente = response.data.array_expediente
-                me.totalRows = me.array_expediente.length;     
+                console.log(response.data.message)
             }
+            me.toggleBusy()
         })            
     },
     getExpedientesEnviados(idgrado_procedimiento) {     
         let me = this                                   
         let formData = this._toFormData({
-            idusuario: this.idusuario,
+            idusuario: this.usuario.id,
             idgradproc_origen: idgrado_procedimiento            
         })
+        this.toggleBusy()
 
         this.axios.post(`${this.url}/Movimiento/expedientes_enviados`, formData)
         .then(function(response) {            
@@ -270,8 +272,9 @@ export default {
                 me.totalRows = me.array_exp_enviados.length;                     
             }
             else {
-                //console.log(response.data.message)
+                console.log(response.data.message)
             }
+            me.toggleBusy()
         })
     },    
     deshacer(idmovimiento, idexpediente, idgradproc_origen, fecha_ant, etiqueta) { // movimiento para derivar el expediente al siguiente procedimiento
@@ -320,13 +323,15 @@ export default {
         this.totalRows = filteredItems.length
         this.currentPage = 1
     },
+    toggleBusy() {
+        this.isBusy = !this.isBusy
+    },
     _countDownChanged(dismissCountDown) {
         this.dismissCountDown = dismissCountDown
     },               
   },
   mounted: function() {         
-    if (this.idgrado_modalidad != null) { //si se ha establecido id grado modalidad
-      this.getGradoModalidad()
+    if (this.grado_modalidad != null) { //si se ha establecido id grado modalidad      
       this.getGradoProcedimientos()    
     }
     else {

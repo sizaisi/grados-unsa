@@ -23,13 +23,10 @@
 
     <template v-if="estados[movimiento.etiqueta] == 'aprobado' && ruta_seleccionada != null">                 
       <aprobado_aprobar
-        :idgrado_modalidad="idgrado_modalidad"
-        :idgrado_proc="idgrado_proc"
-        :idusuario="idusuario"
-        :codi_usuario="codi_usuario"
-        :idrol_area="idrol_area"
-        :tipo_rol="tipo_rol"
-        :tipo_usuario="tipo_usuario"
+        :grado_modalidad="grado_modalidad"
+        :grado_procedimiento="grado_procedimiento"        
+        :usuario="usuario"
+        :tipo_rol="tipo_rol"        
         :expediente="expediente"
         :graduando="graduando"
         :ruta="ruta_seleccionada"
@@ -37,13 +34,10 @@
         v-if="ruta_seleccionada.etiqueta == 'aprobar'"                         
       />              
       <aprobado_denegar
-        :idgrado_modalidad="idgrado_modalidad"
-        :idgrado_proc="idgrado_proc"
-        :idusuario="idusuario"
-        :codi_usuario="codi_usuario"
-        :idrol_area="idrol_area"
-        :tipo_rol="tipo_rol"
-        :tipo_usuario="tipo_usuario"
+        :grado_modalidad="grado_modalidad"
+        :grado_procedimiento="grado_procedimiento"
+        :usuario="usuario"     
+        :tipo_rol="tipo_rol"        
         :expediente="expediente"
         :graduando="graduando"
         :ruta="ruta_seleccionada"
@@ -51,13 +45,10 @@
         v-if="ruta_seleccionada.etiqueta == 'denegar'"                  
       />       
       <aprobado_rechazar
-        :idgrado_modalidad="idgrado_modalidad"
-        :idgrado_proc="idgrado_proc"
-        :idusuario="idusuario"
-        :codi_usuario="codi_usuario"
-        :idrol_area="idrol_area"
-        :tipo_rol="tipo_rol"
-        :tipo_usuario="tipo_usuario"
+        :grado_modalidad="grado_modalidad"
+        :grado_procedimiento="grado_procedimiento"
+        :usuario="usuario"        
+        :tipo_rol="tipo_rol"        
         :expediente="expediente"
         :graduando="graduando"
         :ruta="ruta_seleccionada"
@@ -67,13 +58,10 @@
     </template>              
     <template v-else-if="estados[movimiento.etiqueta] == 'enviado' && ruta_seleccionada != null">                 
       <enviado_aprobar
-        :idgrado_modalidad="idgrado_modalidad"
-        :idgrado_proc="idgrado_proc"
-        :idusuario="idusuario"
-        :codi_usuario="codi_usuario"
-        :idrol_area="idrol_area"
-        :tipo_rol="tipo_rol"
-        :tipo_usuario="tipo_usuario"
+        :grado_modalidad="grado_modalidad"
+        :grado_procedimiento="grado_procedimiento"
+        :usuario="usuario"
+        :tipo_rol="tipo_rol"        
         :expediente="expediente"
         :graduando="graduando"
         :ruta="ruta_seleccionada"
@@ -81,13 +69,10 @@
         v-if="ruta_seleccionada.etiqueta == 'aprobar'"                         
       />              
       <enviado_denegar
-        :idgrado_modalidad="idgrado_modalidad"
-        :idgrado_proc="idgrado_proc"
-        :idusuario="idusuario"
-        :codi_usuario="codi_usuario"
-        :idrol_area="idrol_area"
-        :tipo_rol="tipo_rol"
-        :tipo_usuario="tipo_usuario"
+        :grado_modalidad="grado_modalidad"
+        :grado_procedimiento="grado_procedimiento"
+        :usuario="usuario"        
+        :tipo_rol="tipo_rol"        
         :expediente="expediente"
         :graduando="graduando"
         :ruta="ruta_seleccionada"
@@ -95,13 +80,10 @@
         v-if="ruta_seleccionada.etiqueta == 'denegar'"                  
       />       
       <enviado_rechazar
-        :idgrado_modalidad="idgrado_modalidad"
-        :idgrado_proc="idgrado_proc"
-        :idusuario="idusuario"
-        :codi_usuario="codi_usuario"
-        :idrol_area="idrol_area"
-        :tipo_rol="tipo_rol"
-        :tipo_usuario="tipo_usuario"
+        :grado_modalidad="grado_modalidad"
+        :grado_procedimiento="grado_procedimiento"
+        :usuario="usuario"        
+        :tipo_rol="tipo_rol"        
         :expediente="expediente"
         :graduando="graduando"
         :ruta="ruta_seleccionada"
@@ -123,13 +105,10 @@ import enviado_rechazar from './enviado_rechazar.vue'
 export default {  
   name: 'index',  
   props: {
-    idgrado_modalidad: String,
-    idgrado_proc: String,    
-    idusuario: String,
-    codi_usuario: String,
-    idrol_area: String,
-    tipo_rol: String,
-    tipo_usuario: String,
+    grado_modalidad: Object,
+    grado_procedimiento: Object,    
+    usuario: Object,
+    tipo_rol: String,    
     expediente: Object,
     graduando: Object,
     movimiento: Object,
@@ -153,8 +132,8 @@ export default {
   methods: {              
     getRutas() {
         let me = this
-        var formData = this._toFormData({
-            idgradproc_origen: this.idgrado_proc,            
+        let formData = this._toFormData({
+            idgradproc_origen: this.grado_procedimiento.id,            
         })        
 
         this.axios.post(`${this.url}/Ruta/getRutasByProc`, formData)

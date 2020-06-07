@@ -1,8 +1,8 @@
 <template>
   <div>      
    <div class="container" style="background-color: #fff; padding:20px;">                                          
-      <h5 class="text-center nav-link active font-weight-bold text-uppercase text-danger" v-text="grado_procedimiento.nombre"></h5>          
-      <p class="narrow text-center" v-text="grado_procedimiento.descripcion"></p>      
+      <h5 class="text-center nav-link active font-weight-bold text-uppercase text-danger" v-text="grado_procedimiento.proc_nombre"></h5>          
+      <p class="narrow text-center" v-text="grado_procedimiento.proc_descripcion"></p>      
       <b-card no-body>
         <b-tabs card justified active-nav-item-class="font-weight-bold text-uppercase text-danger">  
           <b-tab title="Información de Expediente" active> 
@@ -186,13 +186,10 @@
           <b-tab title="Procesamiento de Expediente" v-if="movimiento != null">                        
             <!-- Compoenente del procedimiento -->                
             <component  :is="nombre_componente"                          
-                        :idgrado_modalidad="grado_procedimiento.idgrado_modalidad"
-                        :idgrado_proc="idgrado_proc"                        
-                        :idusuario="idusuario"
-                        :codi_usuario="codi_usuario"
-                        :idrol_area="idrol_area"
+                        :grado_modalidad="grado_modalidad"
+                        :grado_procedimiento="grado_procedimiento"                        
+                        :usuario="usuario"                        
                         :tipo_rol="tipo_rol"
-                        :tipo_usuario="tipo_usuario"
                         :expediente="expediente"
                         :graduando="graduando" 
                         :movimiento="movimiento"                      
@@ -205,13 +202,11 @@
         <b-button 
           :to="{ name: 'menu-procedimientos', 
                  params: { 
-                   idgrado_modalidad: grado_procedimiento.idgrado_modalidad, 
-                   idgrado_proc: idgrado_proc, 
-                   idusuario: idusuario,
-                   codi_usuario: codi_usuario,
-                   idrol_area: idrol_area,
-                   tipo_rol: tipo_rol,
-                   tipo_usuario: tipo_usuario
+                   //idgrado_modalidad: grado_procedimiento.idgrado_modalidad, 
+                   grado_modalidad: grado_modalidad, 
+                   grado_procedimiento: grado_procedimiento, 
+                   usuario: usuario,
+                   tipo_rol: tipo_rol
                  } 
               }" 
           variant="outline-warning"
@@ -256,8 +251,15 @@ import generar_imprimir_diploma
   from '@/components/titulo_profesional_sustentacion_tesis/generar_imprimir_diploma/index.vue'
 
 export default {
-  name: 'info-expediente',
-  props: ['nombre_componente', 'idgrado_proc', 'idexpediente', 'idusuario', 'codi_usuario', 'idrol_area', 'tipo_rol', 'tipo_usuario'],
+  name: 'info-expediente',  
+  props: {
+    nombre_componente: String,
+    grado_modalidad: Object,        
+    grado_procedimiento: Object,
+    idexpediente: String,    
+    usuario: Object,
+    tipo_rol: String
+  },    
   components: {
     verificar_requisitos_grado,
     verificar_pertinencia_tema,
@@ -278,8 +280,7 @@ export default {
   data() {
     return {     
       url: this.$root.API_URL,      
-      url_show_file : `${this.$root.API_URL}/utils/show_file.php`,        
-      grado_procedimiento : {},     
+      url_show_file : `${this.$root.API_URL}/utils/show_file.php`,                
       expediente : null,  
       graduando : null, // autor del proyecto de graduacion
       movimiento : null, // ultimo movimiento ingresado al procedimiento y expediente seleccionado
@@ -305,7 +306,7 @@ export default {
     getLastMovimiento() {
       let me = this
       let formData = this._toFormData({
-          idgradproc_destino: this.idgrado_proc, 
+          idgradproc_destino: this.grado_procedimiento.id, 
           idexpediente: this.idexpediente         
       })        
 
@@ -326,29 +327,12 @@ export default {
     mostrarArchivoUltimos(id) {               
         this.$refs.show_file_ultimo.file_id.value = id
         this.$refs.show_file_ultimo.submit()
-    },        
-    getGradoProcedimiento() {  // para mostrar el nombre del procedimiento seleccionado
-        let me = this       
-
-        var formData = this._toFormData({
-            idgrado_procedimiento: this.idgrado_proc,            
-        })
-
-        this.axios.post(`${this.url}/GradoProcedimiento/getGradoProcedimiento`, formData)
-        .then(function(response) {
-          if (response.data.error) {
-              me.errorMsg = response.data.message
-          }
-          else {
-              me.grado_procedimiento = response.data.grado_procedimiento                                                         
-          }
-        })             
-    },   
+    },              
     getExpediente() {  // para mostrar los datos del expediente
       let me = this
       
-      var formData = this._toFormData({
-          idexpediente: this.idexpediente,
+      let formData = this._toFormData({
+        idexpediente: this.idexpediente,
       })
 
       this.axios.post(`${this.url}/Expediente/getExpById`, formData)
@@ -363,8 +347,8 @@ export default {
     },                                                             
     getGraduando() {  // para mostrar la informacion del graduando o graduandos
       let me = this       
-      var formData = this._toFormData({
-          idexpediente: this.idexpediente,
+      let formData = this._toFormData({
+        idexpediente: this.idexpediente,
       })
 
       this.axios.post(`${this.url}/GraduandoExpediente/getGraduando`, formData)
@@ -396,7 +380,7 @@ export default {
     getArchivosProcOrigen() {
         let me = this
         var formData = this._toFormData({
-          idgrado_proc: this.idgrado_proc, //procedimiento actual seria el destino
+          idgrado_proc: this.grado_procedimiento.id, //procedimiento actual seria el destino
           idexpediente: this.idexpediente,
         })       
 
@@ -423,8 +407,7 @@ export default {
   mounted: function() { 
     
     if (this.idexpediente != null) { //si se ha establecido id del expediente      
-      this.getLastMovimiento()
-      this.getGradoProcedimiento()
+      this.getLastMovimiento()      
       this.getExpediente()
       this.getGraduando()
       this.getArchivos()  

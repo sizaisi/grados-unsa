@@ -18,13 +18,10 @@
 export default {
     name: 'movimiento-expediente',
     props: {
-        idgrado_modalidad: String,
-        idgrado_proc: String,    
-        idusuario: String,
-        codi_usuario: String,
-        idrol_area: String,
-        tipo_rol: String,
-        tipo_usuario: String,
+        grado_modalidad: Object,
+        grado_procedimiento: Object,    
+        usuario: Object,
+        tipo_rol: String,        
         expediente: Object,  
         movimiento: Object, //ultimo movimiento      
         ruta: Object            
@@ -50,7 +47,7 @@ export default {
                     let me = this                               
                     let formData = this._toFormData({
                         idexpediente: this.expediente.id,
-                        idusuario: this.idusuario,
+                        idusuario: this.usuario.id,
                         idruta: ruta.id,
                         idgradproc_origen: ruta.idgradproc_origen,
                         idgradproc_destino: ruta.idgradproc_destino,
@@ -64,13 +61,10 @@ export default {
                             me.$root.mostrarNotificacion('Éxito!', 'success', 5000, 'done', response.data.message, 'bottom-right')
                             me.$router.push({name: 'menu-procedimientos',                   
                                                 params: { 
-                                                    idgrado_modalidad: me.idgrado_modalidad, 
-                                                    idgrado_proc: me.idgrado_proc, 
-                                                    idusuario: me.idusuario,
-                                                    codi_usuario: me.codi_usuario,
-                                                    idrol_area: me.idrol_area,
-                                                    tipo_rol: me.tipo_rol,
-                                                    tipo_usuario: me.tipo_usuario,
+                                                    grado_modalidad: me.grado_modalidad, 
+                                                    grado_procedimiento: me.grado_procedimiento, 
+                                                    usuario: me.usuario,                                                    
+                                                    tipo_rol: me.tipo_rol
                                                 }
                                             })                  
                         }

@@ -41,19 +41,7 @@ class GradoModalidadController {
       	$result = $modalidad_obtencion->getActives();
 
       	echo json_encode($result);         
-	}
-	
-	public function get(){
-		//$idgrado_modalidad = $_GET['idgrado_modalidad'];
-		$idgrado_modalidad = $_POST['idgrado_modalidad'];
-
-		$grado_modalidad = new GradoModalidad();
-		$grado_modalidad->setId($idgrado_modalidad);
-  
-		$result = $grado_modalidad->getGradoModalidad();
-  
-		echo json_encode($result);          
-	}
+	}	
 
 	public function index(){
 		$grado_modalidad = new GradoModalidad();

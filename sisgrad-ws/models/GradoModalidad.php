@@ -38,12 +38,12 @@ class GradoModalidad {
 	public function getAllGradoModalidadAdministrativo($codi_usuario, $idrol_area) {
         $result = array('error' => false);
 
-        $sql = "SELECT GM.id AS idgrado_modalidad, GT.nombre AS nombre_grado_titulo, GMO.nombre AS nombre_modalidad_obtencion
+        $sql = "SELECT GM.id, GT.nombre AS nombre_grado_titulo, GMO.nombre AS nombre_modalidad_obtencion
                 FROM GT_GRADO_MODALIDAD AS GM 
                 INNER JOIN GT_GRADO_TITULO AS GT ON GM.idgrado_titulo = GT.id 
                 INNER JOIN GT_MODALIDAD_OBTENCION AS GMO ON GM.idmodalidad_obtencion = GMO.id
                 WHERE GM.condicion = 1
-                ORDER BY nombre_grado_titulo ASC, idgrado_modalidad ASC";
+                ORDER BY nombre_grado_titulo ASC, GM.id ASC";
 
         $result_query = mysqli_query($this->conn, $sql);
 
@@ -56,7 +56,7 @@ class GradoModalidad {
                         ON GP.id = GE.idgrado_procedimiento
                         WHERE GP.idrol_area = $idrol_area
                         AND GE.nues IN (SELECT codi_depe FROM SIAC_OPER_DEPE WHERE codi_oper='$codi_usuario') 
-                        AND GP.idgrado_modalidad = ".$row['idgrado_modalidad'];
+                        AND GP.idgrado_modalidad = ".$row['id'];
                         
             $result_query2 = mysqli_query($this->conn, $sql2);
 
@@ -76,12 +76,12 @@ class GradoModalidad {
     public function getAllGradoModalidadDocente($codi_usuario, $idrol_area) {
         $result = array('error' => false);
 
-        $sql = "SELECT GM.id AS idgrado_modalidad, GT.nombre AS nombre_grado_titulo, GMO.nombre AS nombre_modalidad_obtencion
+        $sql = "SELECT GM.id, GT.nombre AS nombre_grado_titulo, GMO.nombre AS nombre_modalidad_obtencion
                 FROM GT_GRADO_MODALIDAD AS GM 
                 INNER JOIN GT_GRADO_TITULO AS GT ON GM.idgrado_titulo = GT.id 
                 INNER JOIN GT_MODALIDAD_OBTENCION AS GMO ON GM.idmodalidad_obtencion = GMO.id
                 WHERE GM.condicion = 1
-                ORDER BY nombre_grado_titulo ASC, idgrado_modalidad ASC";
+                ORDER BY nombre_grado_titulo ASC, GM.id ASC";
 
         $result_query = mysqli_query($this->conn, $sql);
 
@@ -100,7 +100,7 @@ class GradoModalidad {
                                         WHERE IF(GP.tipo_rol='asesor', P.tipo='asesor', P.tipo IN ('presidente', 'secretario', 'suplente')) 
                                         AND P.estado = 1 
                                         AND U.codi_usuario='$codi_usuario') 
-                        AND GP.idgrado_modalidad = ".$row['idgrado_modalidad'];
+                        AND GP.idgrado_modalidad = ".$row['id'];
                         
             $result_query2 = mysqli_query($this->conn, $sql2);
 
@@ -115,25 +115,7 @@ class GradoModalidad {
         $result['array_grado_modalidad'] = $array_grado_modalidad;        
 
         return $result;
-    }
-
-    public function getGradoModalidad() {
-        $result = array('error' => false);
-
-        $sql = "SELECT GT.nombre AS nomb_grado_titulo, MO.nombre AS nomb_mod_obtencion
-                FROM GT_GRADO_MODALIDAD AS GM 
-                INNER JOIN GT_GRADO_TITULO AS GT ON GM.idgrado_titulo = GT.id
-                INNER JOIN GT_MODALIDAD_OBTENCION AS MO ON GM.idmodalidad_obtencion = MO.id
-                WHERE GM.id = $this->id"; 
-
-        $result_query = mysqli_query($this->conn, $sql);
-
-        $row = $result_query->fetch_assoc();
-
-        $result['grado_modalidad'] = $row;
-
-        return $result;
-    }
+    }    
 
     public function getAllGradoModalidad(){
         $result = array('error' => false);

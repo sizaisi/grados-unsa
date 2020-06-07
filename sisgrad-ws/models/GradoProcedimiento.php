@@ -70,22 +70,6 @@ class GradoProcedimiento {
 	function setOrden($orden) {
 		$this->orden = $orden;
 	}
-	
-	public function getGradoProcedimiento(){
-        $result = array('error' => false);
-
-        $sql = "SELECT GT_GP.idgrado_modalidad, GT_P.nombre, GT_P.descripcion
-                FROM GT_GRADO_PROCEDIMIENTO GT_GP
-                INNER JOIN GT_PROCEDIMIENTO GT_P ON GT_GP.idprocedimiento = GT_P.id
-                WHERE GT_GP.id = $this->id";
-        $result_query = mysqli_query($this->conn, $sql);        
-
-        $row = $result_query->fetch_assoc();      
-
-        $result['grado_procedimiento'] = $row;      
-
-        return $result;
-    }
 
     public function getAllGradoProcedimiento(){
         $result = array('error' => false);
