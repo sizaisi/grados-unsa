@@ -85,7 +85,7 @@ export default {
               me.array_ruta = response.data.array_ruta                             
           }
           else {              
-              console.log(response.data.message)
+              //console.log(response.data.message)
           }
         })   
     },                  

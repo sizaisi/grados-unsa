@@ -72,7 +72,7 @@ export default {
                     me.array_grado_modalidad = response.data.array_grado_modalidad                                                                       
                 }
                 else {
-                    console.log(response.data.message)
+                    //console.log(response.data.message)
                 }
             })
         }, 
@@ -89,7 +89,7 @@ export default {
                     me.array_grado_modalidad = response.data.array_grado_modalidad                                                                       
                 }
                 else {
-                    console.log(response.data.message)
+                    //console.log(response.data.message)
                 }
             })
         },              

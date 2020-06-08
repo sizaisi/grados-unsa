@@ -79,7 +79,7 @@ export default {
                     me.array_grado_procedimiento = response.data.array_grado_procedimiento
                 }
                 else {                
-                    console.log(response.data.message)
+                    //console.log(response.data.message)
                 }
             })
         },   

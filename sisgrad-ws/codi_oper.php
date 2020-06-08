@@ -1,9 +1,15 @@
 <?php   
+   /***administrativo */
    /*include "../../../include/conection.inc.php";
    include "../../../include/codigos_menu.inc";
    $acceso=do_conection();
     if(!$cerrar)
        require "../../../include/sesiones/acse_busc_sesi.php";*/
+
+   /***docente */
+   /*include "../../../librerias/conection.inc.php";
+   $acceso=do_conection();
+   require "../../../librerias/sesiones/acse_busc_sesi.php";*/
 
    header("Content-Type: text/json");        
    
@@ -11,7 +17,7 @@
    //$codi_oper = 'fips';   //facultad
    //$codi_oper = 'uifips';   //unid de investigacion
    //$codi_oper = '4282_1'; //presidente de jurado
-   $codi_oper = '4686_1';  //asesor anterior adriazola
+   //$codi_oper = '4686_1';  //asesor anterior adriazola
    //$codi_oper = '4282_1';  //nuevo asesor  
    //$codi_oper = '0030_1';  //ultimo asesor     
    //$codi_oper = 'grad3';  //grados y titulos

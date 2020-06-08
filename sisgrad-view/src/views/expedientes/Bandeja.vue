@@ -217,7 +217,7 @@ export default {
                 me.totalRows = me.array_expediente.length;                     
             }
             else {
-                console.log(response.data.message)
+                //console.log(response.data.message)
             }
             me.toggleBusy()
         })            
@@ -237,7 +237,7 @@ export default {
                 me.totalRows = me.array_exp_enviados.length;                     
             }
             else {
-                console.log(response.data.message)
+               //console.log(response.data.message)
             }
             me.toggleBusy()
         })
