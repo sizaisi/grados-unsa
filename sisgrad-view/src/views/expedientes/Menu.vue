@@ -215,7 +215,7 @@ export default {
             idusuario: this.usuario.id
         })
 
-        this.axios.post(`${this.url}/GradoProcedimiento/menus`, formData)
+        this.axios.post(`${this.url}/GradoProcedimiento/gradoProcedimientos`, formData)
         .then(function(response) {            
             if (!response.data.error) {
                 me.array_grado_procedimiento = response.data.array_grado_procedimiento

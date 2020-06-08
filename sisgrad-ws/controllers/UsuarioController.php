@@ -12,6 +12,17 @@ class UsuarioController {
         
                 echo json_encode($result);               
         }    
+
+        public function menus() {
+		$usuario = new Usuario();
+		
+                $usuario->setCodiUsuario($_POST['codi_usuario']);
+                $codi_menu_grup = $_POST['codi_menu_grup'];        
+
+                $result = $usuario->getMenus($codi_menu_grup);
+        
+                echo json_encode($result);               
+        }
 	
 	public function getDocentes() {               
                 $idexpediente = $_POST['idexpediente'];        

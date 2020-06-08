@@ -52,7 +52,44 @@ class Usuario {
 		   	$result['message'] = "No se pudo encontrar el usuario.";
 		} 
 		return $result;
-	 }
+	}
+
+	public function getMenus($codi_menu_grup) {  
+		$result = array('error' => false);
+
+        $sql = "SELECT DISTINCT (AC_MS.codi_msub), AC_MS.nomb_msub AS nombre
+                FROM SIAC_OPER_MENU AS AC_SOM
+				INNER JOIN SIAC_MENU AS AC_M ON AC_M.codi_menu = AC_SOM.codi_menu
+				INNER JOIN SIAC_MENU_SUBG AS AC_MS ON AC_MS.codi_msub = AC_M.codi_msub				                 
+                WHERE AC_SOM.codi_oper = '$this->codi_usuario' 
+				AND AC_MS.esta_msub = 'A' 
+				AND AC_MS.codi_megr = $codi_menu_grup";
+
+        $result_query = mysqli_query($this->conn, $sql);
+
+        $array_menu = array();
+
+        while ($row = $result_query->fetch_assoc()) {            
+            $sql2 = "SELECT nomb_menu AS nombre, dire_menu AS componente
+                     FROM SIAC_MENU  
+                     WHERE codi_msub = ".$row['codi_msub'];
+                        
+			$result_query2 = mysqli_query($this->conn, $sql2);            
+			
+			$array_submenu = array();
+
+            while ($row2 = $result_query2->fetch_assoc()) {                            
+                array_push($array_submenu, $row2);
+			}            
+
+			$row['submenu'] = $array_submenu;                        			
+			array_push($array_menu, $row);
+        }
+
+        $result['array_menu'] = $array_menu;        
+
+        return $result;
+	}      
   
 	 //Obtener los asesores o jurados solo de la facultad a la que pertenece la socitud del expediente
 	 public function getDocentes($idexpediente) {
@@ -87,5 +124,5 @@ class Usuario {
 		}	      
   
 		return $result;
-	 }      
+	}      
 }

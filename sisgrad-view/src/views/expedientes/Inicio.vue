@@ -2,11 +2,9 @@
 <div>
    <div class="container p-4" style="background-color: #fff;">
       <div class="row">         
-         <div class="col text-center">         
-            <template v-if="codi_usuario != null">
-                <h3 class="text-info" v-if="array_grado_modalidad.length > 0" v-text="'Solicitudes pendientes'"></h3>		
-                <h3 class="text-info" v-else v-text="'No existen solicitudes pendientes'"></h3>		    
-            </template>            
+         <div class="col text-center">                     
+            <h3 class="text-info" v-if="array_grado_modalidad.length > 0" v-text="'Solicitudes pendientes'"></h3>		
+            <h3 class="text-info" v-else v-text="'No existen solicitudes pendientes'"></h3>		                
          </div>          		
       </div>
       <div class="row text-center mt-3" v-for="(group, index) in objectGroups" :key="index">
@@ -16,15 +14,15 @@
                <h2 class="timer count-title count-number" v-text="grado_modalidad.total_expedientes"></h2>      
                <p class="count-text">Solicitudes pendientes</p><br>               
                <b-button 
-                  pill 
-                  variant="info"                   
-                  :to="{ name: 'menu-procedimientos', 
-                         params: {                             
-                            grado_modalidad: grado_modalidad,                             
-                            usuario: usuario
-                         } 
+                    pill 
+                    variant="info"                   
+                    :to="{ name: 'menu-procedimientos', 
+                            params: {                             
+                                grado_modalidad: grado_modalidad,                             
+                                usuario: usuario
+                            } 
                     }">
-                  Ver expedientes
+                        Ver expedientes
                </b-button>
             </div>
          </div>                            
@@ -36,13 +34,14 @@
 <script>
 
 export default {
-    name: 'inicio', 
+    name: 'inicio',     
+    props: {            
+        usuario: Object        
+    }, 
     data() {
         return {                               
             url: this.$root.API_URL,
-            array_grado_modalidad : [],  
-            codi_usuario: null,                
-            usuario : {},      
+            array_grado_modalidad : [],                         
             itemsPerRow: 3, //mostrar nro de items por fila
         }
     },
@@ -51,43 +50,14 @@ export default {
             return Array.from(Array(Math.ceil(this.array_grado_modalidad.length / this.itemsPerRow)).keys())
         }
     },
-    methods: {
-        getCodiOper() {
-            let me = this
-
-            this.axios.get(`${this.url}/codi_oper.php`)
-            .then(function(response) {                  
-                if (!response.data.error) {
-                    me.codi_usuario = response.data.codi_oper                                                                        
-                    me.getUsuario()                                                                                              
-                }
-                else {
-                    me.$root.mostrarNotificacion('Advertencia!', 'warning', 4000, 'error', response.data.message, 'bottom-right')
-                }                  
-            })
-        },
-        getUsuario() {            
-            let me = this       
-            let formData = this._toFormData({
-                codi_usuario: this.codi_usuario
-            })
-
-            this.axios.post(`${this.url}/Usuario/getIdUsuario`, formData)
-            .then(function(response) {                
-                if (!response.data.error) {
-                    me.usuario = response.data.usuario                   
-                    
-                    if (me.usuario.tipo == 'Administrativo') {
-                        me.getAllGradoModadalidadAdminitrativo()
-                    }
-                    else if(me.usuario.tipo == 'Docente') {
-                        me.getAllGradoModadalidadDocente()
-                    }                    
-                }
-                else {                                        
-                    console.log(response.data.message)            
-                }
-            })
+    methods: {                
+        getGradosModalidades() {                         
+            if (this.usuario.tipo == 'Administrativo') {
+                this.getAllGradoModadalidadAdminitrativo()
+            }
+            else if(this.usuario.tipo == 'Docente') {
+                this.getAllGradoModadalidadDocente()
+            }                                
         },     
         getAllGradoModadalidadAdminitrativo() {    
             let me = this        
@@ -133,8 +103,8 @@ export default {
             return fd
         },         
     },
-    mounted: function() {
-        this.getCodiOper()            
+    mounted: function() {                           
+        this.getGradosModalidades()            
     },
 }
 </script>

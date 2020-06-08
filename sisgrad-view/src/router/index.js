@@ -16,7 +16,7 @@ import ModalidadObtencion from '../views/mantenimiento/ModalidadObtencion.vue'
 import Rutas from '../views/mantenimiento/Rutas.vue'
 import GradoModalidad from '../views/mantenimiento/GradoModalidad.vue'
 import RolArea from '../views/mantenimiento/RolArea.vue'
-import Procedimientos from '../views/mantenimiento/Procedimientos.vue'
+import Procedimiento from '../views/mantenimiento/Procedimientos.vue'
 import Cargo from '../views/mantenimiento/Cargo.vue'
 import Autoridad from '../views/mantenimiento/Autoridad.vue'
 import CargoAutoridad from '../views/mantenimiento/CargoAutoridad.vue'
@@ -32,7 +32,8 @@ const routes = [
   {
     path: '/expedientes/inicio',
     name: 'inicio',
-    component: Inicio
+    component: Inicio,  
+    props: true  
   },
   {
     path: '/expedientes/menu',
@@ -45,6 +46,12 @@ const routes = [
     name: 'info-expediente4', //4=>id grado modalidad (titulo profesional - sustentacion tesis)
     component: TituloProfesionalSustentacionTesis,
     props: true
+  },
+  {
+    path: '/reportes',
+    name: 'reportes',
+    component: Home,  
+    props: true  
   },
   {
     path: '/mantenimiento/rutas',
@@ -77,9 +84,9 @@ const routes = [
     component: RolArea
   },
   {
-    path: '/mantenimiento/procedimientos',
-    name: 'procedimientos',
-    component: Procedimientos
+    path: '/mantenimiento/procedimiento',
+    name: 'procedimiento',
+    component: Procedimiento
   },
   {
     path: '/mantenimiento/grado-modalidad',
@@ -100,6 +107,12 @@ const routes = [
     path: '/mantenimiento/cargo-autoridad',
     name: 'cargo-autoridad',
     component: CargoAutoridad
+  },
+  {
+    path: '/configuracion',
+    name: 'configuracion',
+    component: Home,  
+    props: true  
   },
 ]
 

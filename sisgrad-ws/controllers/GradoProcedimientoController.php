@@ -14,7 +14,7 @@ class GradoProcedimientoController {
 		echo json_encode($result);            
 	}
 	
-	public function menus() {		
+	public function gradoProcedimientos() {		
 		$grado_procedimiento = new GradoProcedimiento();      
 
 		$grado_procedimiento->setIdGradoModalidad($_POST['idgrado_modalidad']);
