@@ -1,8 +1,23 @@
 <template>
   <div>      
    <div class="container" style="background-color: #fff; padding:20px;">                                          
-      <h5 class="text-center nav-link active font-weight-bold text-uppercase text-danger" v-text="grado_procedimiento.proc_nombre"></h5>          
+      <h5 class="text-center font-weight-bold text-uppercase text-danger" v-text="grado_procedimiento.proc_nombre"></h5>          
       <p class="narrow text-center" v-text="grado_procedimiento.proc_descripcion"></p>      
+      <div class="text-center m-3">                           
+          <b-button 
+          :to="{ name: 'bandeja', 
+                      params: {                             
+                          usuario: usuario,
+                          grado_modalidad: grado_modalidad,
+                          grado_procedimiento: grado_procedimiento,                               
+                      } 
+                }"
+              variant="outline-info"
+          > 
+              <b-icon icon="arrow-left-short"></b-icon>
+              Atras
+          </b-button>
+      </div> 
       <b-card no-body>
         <b-tabs card justified active-nav-item-class="font-weight-bold text-uppercase text-danger">  
           <b-tab title="Información de Expediente" active> 
@@ -174,12 +189,12 @@
                       </template>                     
                     </b-table>                   
                   </b-tab>                
-                  <b-tab title="Observaciones">
-                    <!-- Información observaciones recientes -->                                                                 
+                  <!--<b-tab title="Observaciones">
+                    //Información observaciones procedimiento procedencia
                     <div class="mb-4">
                       <h4 class="text-info text-center">Observaciones</h4>
                     </div>                               
-                  </b-tab>   
+                  </b-tab>-->
               </b-tabs>        
             </b-card>            
           </b-tab>
@@ -188,8 +203,7 @@
             <component  :is="nombre_componente"                          
                         :grado_modalidad="grado_modalidad"
                         :grado_procedimiento="grado_procedimiento"                        
-                        :usuario="usuario"                        
-                        :tipo_rol="tipo_rol"
+                        :usuario="usuario"                                                
                         :expediente="expediente"
                         :graduando="graduando" 
                         :movimiento="movimiento"                      
@@ -197,24 +211,7 @@
             />            
           </b-tab>
         </b-tabs>    
-      </b-card>
-      <div class="text-center mt-3">                           
-        <b-button 
-          :to="{ name: 'menu-procedimientos', 
-                 params: { 
-                   //idgrado_modalidad: grado_procedimiento.idgrado_modalidad, 
-                   grado_modalidad: grado_modalidad, 
-                   grado_procedimiento: grado_procedimiento, 
-                   usuario: usuario,
-                   tipo_rol: tipo_rol
-                 } 
-              }" 
-          variant="outline-warning"
-        > 
-          <b-icon icon="arrow-left-short"></b-icon>
-          Volver
-        </b-button>
-      </div>      
+      </b-card>         
    </div>   
 </div>   
 </template>
@@ -254,11 +251,10 @@ export default {
   name: 'info-expediente',  
   props: {
     nombre_componente: String,
+    usuario: Object,    
     grado_modalidad: Object,        
     grado_procedimiento: Object,
-    idexpediente: String,    
-    usuario: Object,
-    tipo_rol: String
+    idexpediente: String    
   },    
   components: {
     verificar_requisitos_grado,

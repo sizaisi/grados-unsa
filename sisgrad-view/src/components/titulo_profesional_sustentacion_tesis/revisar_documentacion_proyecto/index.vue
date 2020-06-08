@@ -57,8 +57,7 @@ export default {
   props: {
     grado_modalidad: Object,
     grado_procedimiento: Object,    
-    usuario: Object,
-    tipo_rol: String,    
+    usuario: Object,       
     expediente: Object,
     graduando: Object,
     movimiento: Object,

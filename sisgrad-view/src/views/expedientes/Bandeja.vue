@@ -1,18 +1,24 @@
 <template>
   <div>
-   <div class="container-fluid pt-2 pb-3" style="background-color: #fff;">
-      <h4 class="text-center mt-3 text-info" 
-          v-text="grado_modalidad.nombre_grado_titulo + ' - ' + grado_modalidad.nombre_modalidad_obtencion">
-      </h4>    
-      <b-tabs active-nav-item-class="font-weight-bold text-uppercase text-danger" content-class="mt-3" fill>
-         <b-tab 
-            v-for="(grado_proc, index) in array_grado_procedimiento" 
-            :key="index" :title="grado_proc.proc_nombre"
-            @click="getExpedientes(grado_proc.id, grado_proc.tipo_rol)" 
-            v-bind="activarTabGradoProcedimiento(grado_proc.id)"
-         >  
+   <div class="container-fluid p-4" style="background-color: #fff;">
+        <h5 class="text-center font-weight-bold text-uppercase text-danger" v-text="grado_procedimiento.proc_nombre + ': Expedientes'"></h5>      
+        <div class="text-center m-3">                           
+            <b-button 
+            :to="{ name: 'procedimientos', 
+                        params: {                             
+                            usuario: usuario,
+                            grado_modalidad: grado_modalidad                                
+                        } 
+                 }"
+                variant="outline-info"
+            > 
+                <b-icon icon="arrow-left-short"></b-icon>
+                Atras
+            </b-button>
+        </div> 
+        <b-card no-body>
             <b-tabs pills card vertical>
-                <b-tab title="Recibidos" @click="getExpedientes(grado_proc.id, grado_proc.tipo_rol)" active>                
+                <b-tab title="Recibidos" @click="getExpedientes(grado_procedimiento.id, grado_procedimiento.tipo_rol)" active>                
                     <div class="row">
                         <div class="col-lg-12">
                             <b-row>
@@ -52,18 +58,17 @@
                                 <template v-slot:cell(acciones)="data">                                 
                                     <b-button variant="success" size="sm" data-toggle="tooltip" data-placement="left" title="Evaluar" 
                                     :to="{ name: 'info-expediente' + grado_modalidad.id, 
-                                            params: { nombre_componente: grado_proc.url_formulario, 
+                                            params: {   nombre_componente: grado_procedimiento.url_formulario, 
+                                                        usuario: usuario,                                                        
                                                         grado_modalidad: grado_modalidad,                                                          
-                                                        grado_procedimiento: grado_proc,  
-                                                        idexpediente: data.item.id,                                                          
-                                                        usuario: usuario,
-                                                        tipo_rol: grado_proc.tipo_rol,
+                                                        grado_procedimiento: grado_procedimiento,  
+                                                        idexpediente: data.item.id,                                                                                                                  
                                                     } 
                                             }"
                                     >
                                     <i class="fa fa-edit"></i> Evaluar
                                     </b-button>                        
-                                </template>  
+                                </template>
                                 <template v-slot:table-busy>
                                     <div class="text-center text-danger my-2">
                                         <b-spinner class="align-middle"></b-spinner>
@@ -85,7 +90,7 @@
                         </div>
                     </div>                                       
                 </b-tab>
-                <b-tab title="Enviados" @click="getExpedientesEnviados(grado_proc.id)"> 
+                <b-tab title="Enviados" @click="getExpedientesEnviados(grado_procedimiento.id)"> 
                     <div class="row">
                         <div class="col-lg-12">
                             <b-row>
@@ -149,9 +154,8 @@
                         </div>
                     </div>                 
                 </b-tab>
-            </b-tabs>                               
-         </b-tab>         
-      </b-tabs>
+            </b-tabs>                                        
+        </b-card>
    </div>  
 </div>   
 </template>
@@ -159,18 +163,16 @@
 <script>
 export default {
   name: 'menu-procedimientos',   
-  props: {    
-    grado_modalidad: Object,    
-    grado_procedimiento: Object,        
+  props: {        
     usuario: Object,
-    tipo_rol: String,
+    grado_modalidad: Object,
+    grado_procedimiento: Object        
   },    
   data() {
     return {                               
         url: this.$root.API_URL,
         color_estados : this.$root.color_estados,
-        estados : this.$root.estados,                      
-        array_grado_procedimiento : [],       
+        estados : this.$root.estados,                                
         array_expediente : [],  
         array_exp_enviados: [],              
         columnas: [
@@ -197,44 +199,7 @@ export default {
         isBusy: false,
     }
   },  
-  methods: {        
-    activarTabGradoProcedimiento(idgrado_proc) {          
-      //si el idgrado_proc de uno los tabs es igual al idgrado_proc devuelto activarlo
-      if (this.grado_procedimiento != null && idgrado_proc == this.grado_procedimiento.id) {
-        return { [`active`]: '' }         
-      }
-      else {
-        return null
-      }        
-    }, 
-    getGradoProcedimientos() {
-        let me = this
-        let formData = this._toFormData({
-            idgrado_modalidad: this.grado_modalidad.id,
-            idrol_area: this.usuario.idrol_area,
-            idusuario: this.usuario.id
-        })
-
-        this.axios.post(`${this.url}/GradoProcedimiento/gradoProcedimientos`, formData)
-        .then(function(response) {            
-            if (!response.data.error) {
-                me.array_grado_procedimiento = response.data.array_grado_procedimiento
-                
-                if (me.grado_procedimiento == null) {
-                    //obtener los expedientes del primer grado-procedimiento (por defecto)
-                    let grado_proc_inicio = me.array_grado_procedimiento[0]
-                    me.getExpedientes(grado_proc_inicio.id, grado_proc_inicio.tipo_rol)
-                }                   
-                else {                                                            
-                    //obtener los expedientes del grado-procedimiento devuelto
-                    me.getExpedientes(me.grado_procedimiento.id, me.tipo_rol)
-                }                                
-            }
-            else {                
-                //console.log(response.data.message)
-            }
-        })
-    },   
+  methods: {            
     getExpedientes(idgrado_procedimiento, tipo_rol) {     
         let me = this                           
         let formData = this._toFormData({
@@ -331,8 +296,8 @@ export default {
     },               
   },
   mounted: function() {         
-    if (this.grado_modalidad != null) { //si se ha establecido id grado modalidad      
-      this.getGradoProcedimientos()    
+    if (this.grado_procedimiento != null) { //si se ha establecido id grado modalidad      
+      this.getExpedientes(this.grado_procedimiento.id, this.grado_procedimiento.tipo_rol)    
     }
     else {
       this.$router.push({ name: 'home' }); 

@@ -12,7 +12,7 @@
                         <observaciones                    
                             :expediente="expediente"
                             :idgrado_proc="grado_procedimiento.id"
-                            :idusuario="usuario.id" 
+                            :idusuario="usuario.id"  
                             :ruta="ruta"                                                            
                             ref="observaciones"
                         />
@@ -25,8 +25,7 @@
                         <movimiento_expediente
                             :grado_modalidad="grado_modalidad"
                             :grado_procedimiento="grado_procedimiento"                        
-                            :usuario="usuario"
-                            :tipo_rol="tipo_rol"                            
+                            :usuario="usuario"                                                        
                             :expediente="expediente"
                             :movimiento="movimiento"
                             :ruta="ruta"                                                            
@@ -53,12 +52,11 @@ import observaciones from '../resources/observaciones.vue'
 import movimiento_expediente from '../resources/movimiento_expediente.vue'
 
 export default {
-    name: 'enviado-denegar',
+    name: 'aprobado-rechazar',
     props: {
         grado_modalidad: Object,
         grado_procedimiento: Object,    
-        usuario: Object,
-        tipo_rol: String,        
+        usuario: Object,                
         expediente: Object,
         graduando: Object,        
         ruta: Object,

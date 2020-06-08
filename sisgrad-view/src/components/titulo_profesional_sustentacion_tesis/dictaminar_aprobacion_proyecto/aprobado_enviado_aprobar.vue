@@ -7,26 +7,13 @@
                     card        
                     active-nav-item-class="font-weight-bold text-uppercase text-danger"   
                     style="min-height: 250px"                        
-                >   
-                    <b-tab title="1. Añadir observaciones" title-item-class="disabledTab" :disabled="tabIndex2 < 0">
-                        <observaciones                    
-                            :expediente="expediente"
-                            :idgrado_proc="grado_procedimiento.id"
-                            :idusuario="usuario.id"  
-                            :ruta="ruta"                                                            
-                            ref="observaciones"
-                        />
-                        <div v-if="errors.length" class="alert alert-danger" role="alert">
-                            <ul><li v-for="(error, i) in errors" :key="i">{{ error }}</li></ul>
-                        </div>           
-                    </b-tab>                    
-                    <b-tab :title="'2. '+ruta.etiqueta.charAt(0).toUpperCase()+ruta.etiqueta.slice(1)+' expediente'" 
-                        title-item-class="disabledTab" :disabled="tabIndex2 < 1">
+                >                                           
+                    <b-tab :title="'1. '+ruta.etiqueta.charAt(0).toUpperCase()+ruta.etiqueta.slice(1)+' expediente'" 
+                        title-item-class="disabledTab" :disabled="tabIndex2 < 0">
                         <movimiento_expediente
                             :grado_modalidad="grado_modalidad"
                             :grado_procedimiento="grado_procedimiento"                        
-                            :usuario="usuario"
-                            :tipo_rol="tipo_rol"                            
+                            :usuario="usuario"                                                        
                             :expediente="expediente"
                             :movimiento="movimiento"
                             :ruta="ruta"                                                            
@@ -37,7 +24,7 @@
             <div class="text-center">
                 <b-button-group class="mt-3">
                     <b-button class="mr-1" @click="prevTab" :disabled="tabIndex == 0">Anterior</b-button>
-                    <b-button @click="nextTab" :disabled="tabIndex == 1">Siguiente</b-button>
+                    <b-button @click="nextTab" :disabled="tabIndex == 0">Siguiente</b-button>
                 </b-button-group>     
             </div> 
         </template>
@@ -49,23 +36,20 @@
     </b-card>       
 </template>
 <script>
-import observaciones from '../resources/observaciones.vue'
 import movimiento_expediente from '../resources/movimiento_expediente.vue'
 
 export default {
-    name: 'aprobado-rechazar',
+    name: 'aprobado-aprobar',
     props: {
         grado_modalidad: Object,
         grado_procedimiento: Object,    
-        usuario: Object,
-        tipo_rol: String,        
+        usuario: Object,                
         expediente: Object,
         graduando: Object,        
         ruta: Object,
         movimiento: Object
     },
-    components: {    
-        observaciones,
+    components: {            
         movimiento_expediente,           
     },
     data() {
@@ -85,34 +69,19 @@ export default {
         },  
         nextTab() {      
             this.errors = [] 
-            let pasar = false              
-                            
-            if (this.tabIndex == 0) {
-                pasar = this.validarTab1()
-            }                            
-
+            let pasar = false                                       
+                       
             if (pasar) {
                 this.tabIndex2++
                 this.$nextTick(function () {
                     this.tabIndex++        
                 })  
             }              
-        },   
-        validarTab1() {        
-            if (this.$refs.observaciones.cantidadObservaciones() == 0) { //referencia al metodo del componente hijo
-                this.errors.push("Debe registrar observaciones para el expediente seleccionado.")
-            }                        
-
-            if (!this.errors.length) {
-                return true
-            }      
-
-            return false
-        },
+        },           
         //verifica si las rutas vecinas de este procedimiento se registro observaciones, archivos o personas sin confirmar
         verificarRecursoRutasVecinas() { 
             let me = this      
-            var formData = this._toFormData({
+            let formData = this._toFormData({
                 idexpediente: this.expediente.id,
                 idgrado_proc: this.grado_procedimiento.id,
                 idusuario: this.usuario.id,                

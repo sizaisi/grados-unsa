@@ -25,8 +25,7 @@
       <derivado_aprobar
         :grado_modalidad="grado_modalidad"
         :grado_procedimiento="grado_procedimiento"
-        :usuario="usuario"
-        :tipo_rol="tipo_rol"
+        :usuario="usuario"        
         :expediente="expediente"
         :graduando="graduando"
         :ruta="ruta_seleccionada"
@@ -36,8 +35,7 @@
       <derivado_rechazar
         :grado_modalidad="grado_modalidad"
         :grado_procedimiento="grado_procedimiento"
-        :usuario="usuario"        
-        :tipo_rol="tipo_rol"        
+        :usuario="usuario"                        
         :expediente="expediente"
         :graduando="graduando"
         :ruta="ruta_seleccionada"
@@ -57,8 +55,7 @@ export default {
   props: {
     grado_modalidad: Object,
     grado_procedimiento: Object,    
-    usuario: Object,
-    tipo_rol: String,
+    usuario: Object,    
     expediente: Object,
     graduando: Object,
     movimiento: Object,

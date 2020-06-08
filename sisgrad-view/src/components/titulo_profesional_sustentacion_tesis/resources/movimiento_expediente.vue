@@ -20,8 +20,7 @@ export default {
     props: {
         grado_modalidad: Object,
         grado_procedimiento: Object,    
-        usuario: Object,
-        tipo_rol: String,        
+        usuario: Object,        
         expediente: Object,  
         movimiento: Object, //ultimo movimiento      
         ruta: Object            
@@ -63,8 +62,7 @@ export default {
                                                 params: { 
                                                     grado_modalidad: me.grado_modalidad, 
                                                     grado_procedimiento: me.grado_procedimiento, 
-                                                    usuario: me.usuario,                                                    
-                                                    tipo_rol: me.tipo_rol
+                                                    usuario: me.usuario,                                                                                                        
                                                 }
                                             })                  
                         }

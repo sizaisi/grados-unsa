@@ -22,7 +22,7 @@ class GradoProcedimientoController {
 
 		$idusuario = $_POST['idusuario'];
 
-		$result = $grado_procedimiento->listar_menus($idusuario);
+		$result = $grado_procedimiento->getGradoProcedimientos($idusuario);
 
 		echo json_encode($result);           
 	}

@@ -95,7 +95,7 @@ class GradoProcedimiento {
         return $result;
     }
 
-    public function listar_menus($idusuario) {
+    public function getGradoProcedimientos($idusuario) {
 
         $result = array('error' => false);
         
@@ -103,11 +103,14 @@ class GradoProcedimiento {
 		$result_query = mysqli_query($this->conn, $sql);		
   
 		if ($result_query && mysqli_num_rows($result_query) == 0) {
-            $sql = "SELECT GT_GP.*, GT_P.id AS idproc, GT_P.nombre AS proc_nombre, GT_P.descripcion AS proc_descripcion 
+            $sql = "SELECT GT_GP.*, GT_P.id AS idproc, COUNT(GT_E.id) AS total_expedientes,
+                    GT_P.nombre AS proc_nombre, GT_P.descripcion AS proc_descripcion 
                     FROM GT_GRADO_PROCEDIMIENTO AS GT_GP
                     INNER JOIN GT_PROCEDIMIENTO AS GT_P ON GT_P.id = GT_GP.idprocedimiento 
+                    INNER JOIN GT_EXPEDIENTE AS GT_E ON GT_E.idgrado_procedimiento = GT_GP.id
                     WHERE GT_P.condicion = 1 AND GT_GP.idgrado_modalidad = $this->idgrado_modalidad 
-                    AND GT_GP.idrol_area =  $this->idrol_area 
+                    AND GT_GP.idrol_area =  $this->idrol_area
+                    GROUP BY GT_GP.id 
                     ORDER BY GT_GP.id ASC";
 		}
 		else {

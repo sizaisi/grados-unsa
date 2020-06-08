@@ -21,105 +21,61 @@
       </fieldset>
     </div>   
 
-    <template v-if="estados[movimiento.etiqueta] == 'aprobado' && ruta_seleccionada != null">                 
-      <aprobado_aprobar
+    <template v-if="(estados[movimiento.etiqueta] == 'aprobado' || estados[movimiento.etiqueta] == 'enviado') && (ruta_seleccionada != null)">                 
+      <aprobado_enviado_aprobar
         :grado_modalidad="grado_modalidad"
         :grado_procedimiento="grado_procedimiento"        
-        :usuario="usuario"
-        :tipo_rol="tipo_rol"        
+        :usuario="usuario"             
         :expediente="expediente"
         :graduando="graduando"
         :ruta="ruta_seleccionada"
         :movimiento="movimiento"
         v-if="ruta_seleccionada.etiqueta == 'aprobar'"                         
       />              
-      <aprobado_denegar
+      <aprobado_enviado_denegar
         :grado_modalidad="grado_modalidad"
         :grado_procedimiento="grado_procedimiento"
-        :usuario="usuario"     
-        :tipo_rol="tipo_rol"        
+        :usuario="usuario"               
         :expediente="expediente"
         :graduando="graduando"
         :ruta="ruta_seleccionada"
         :movimiento="movimiento"
         v-if="ruta_seleccionada.etiqueta == 'denegar'"                  
       />       
-      <aprobado_rechazar
+      <aprobado_enviado_rechazar
         :grado_modalidad="grado_modalidad"
         :grado_procedimiento="grado_procedimiento"
-        :usuario="usuario"        
-        :tipo_rol="tipo_rol"        
+        :usuario="usuario"                
         :expediente="expediente"
         :graduando="graduando"
         :ruta="ruta_seleccionada"
         :movimiento="movimiento"
         v-if="ruta_seleccionada.etiqueta == 'rechazar'"                  
       />                             
-    </template>              
-    <template v-else-if="estados[movimiento.etiqueta] == 'enviado' && ruta_seleccionada != null">                 
-      <enviado_aprobar
-        :grado_modalidad="grado_modalidad"
-        :grado_procedimiento="grado_procedimiento"
-        :usuario="usuario"
-        :tipo_rol="tipo_rol"        
-        :expediente="expediente"
-        :graduando="graduando"
-        :ruta="ruta_seleccionada"
-        :movimiento="movimiento"
-        v-if="ruta_seleccionada.etiqueta == 'aprobar'"                         
-      />              
-      <enviado_denegar
-        :grado_modalidad="grado_modalidad"
-        :grado_procedimiento="grado_procedimiento"
-        :usuario="usuario"        
-        :tipo_rol="tipo_rol"        
-        :expediente="expediente"
-        :graduando="graduando"
-        :ruta="ruta_seleccionada"
-        :movimiento="movimiento"
-        v-if="ruta_seleccionada.etiqueta == 'denegar'"                  
-      />       
-      <enviado_rechazar
-        :grado_modalidad="grado_modalidad"
-        :grado_procedimiento="grado_procedimiento"
-        :usuario="usuario"        
-        :tipo_rol="tipo_rol"        
-        :expediente="expediente"
-        :graduando="graduando"
-        :ruta="ruta_seleccionada"
-        :movimiento="movimiento"
-        v-if="ruta_seleccionada.etiqueta == 'rechazar'"                  
-      />                             
-    </template>              
+    </template>                  
   </div>    
 </template>
 
 <script>
-import aprobado_aprobar from './aprobado_aprobar.vue'
-import aprobado_denegar from './aprobado_denegar.vue'
-import aprobado_rechazar from './aprobado_rechazar.vue'
-import enviado_aprobar from './enviado_aprobar.vue'
-import enviado_denegar from './enviado_denegar.vue'
-import enviado_rechazar from './enviado_rechazar.vue'
+import aprobado_enviado_aprobar from './aprobado_enviado_aprobar.vue'
+import aprobado_enviado_denegar from './aprobado_enviado_denegar.vue'
+import aprobado_enviado_rechazar from './aprobado_enviado_rechazar.vue'
+
 
 export default {  
   name: 'index',  
   props: {
     grado_modalidad: Object,
     grado_procedimiento: Object,    
-    usuario: Object,
-    tipo_rol: String,    
+    usuario: Object,       
     expediente: Object,
     graduando: Object,
     movimiento: Object,
   },
   components: {    
-    aprobado_aprobar,
-    aprobado_denegar,
-    aprobado_rechazar,
-    enviado_aprobar,
-    enviado_denegar,
-    enviado_rechazar
+    aprobado_enviado_aprobar,
+    aprobado_enviado_denegar,
+    aprobado_enviado_rechazar,    
   },
   data() {
     return {             

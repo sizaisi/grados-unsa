@@ -4,7 +4,8 @@ import Home from '../views/Home.vue'
 
 /* Expedientes */
 import Inicio from '../views/expedientes/Inicio.vue'
-import Menu from '../views/expedientes/Menu.vue'
+import Procedimientos from '../views/expedientes/Procedimientos.vue'
+import Bandeja from '../views/expedientes/Bandeja.vue'
 import TituloProfesionalSustentacionTesis 
   from '../views/expedientes/TituloProfesional-SustentacionTesis.vue'
 
@@ -36,9 +37,15 @@ const routes = [
     props: true  
   },
   {
-    path: '/expedientes/menu',
-    name: 'menu-procedimientos',
-    component: Menu,
+    path: '/expedientes/procedimientos',
+    name: 'procedimientos',
+    component: Procedimientos,  
+    props: true  
+  },
+  {
+    path: '/expedientes/bandeja',
+    name: 'bandeja',
+    component: Bandeja,
     props: true
   },
   {

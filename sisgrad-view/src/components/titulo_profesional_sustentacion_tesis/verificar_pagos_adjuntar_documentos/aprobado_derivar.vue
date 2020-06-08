@@ -14,7 +14,6 @@
                             :grado_modalidad="grado_modalidad"
                             :grado_procedimiento="grado_procedimiento"                        
                             :usuario="usuario"
-                            :tipo_rol="tipo_rol"                            
                             :expediente="expediente"
                             :movimiento="movimiento"
                             :ruta="ruta"                                                            
@@ -45,7 +44,6 @@ export default {
         grado_modalidad: Object,
         grado_procedimiento: Object,    
         usuario: Object,
-        tipo_rol: String,        
         expediente: Object,
         graduando: Object,        
         ruta: Object,
