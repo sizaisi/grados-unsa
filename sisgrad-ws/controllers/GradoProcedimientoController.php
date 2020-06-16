@@ -21,8 +21,10 @@ class GradoProcedimientoController {
 		$grado_procedimiento->setIdRolArea($_POST['idrol_area']);
 
 		$idusuario = $_POST['idusuario'];
+		$codi_usuario = $_POST['codi_usuario'];
+		$tipo_usuario = $_POST['tipo_usuario'];
 
-		$result = $grado_procedimiento->getGradoProcedimientos($idusuario);
+		$result = $grado_procedimiento->getGradoProcedimientos($idusuario, $codi_usuario, $tipo_usuario);
 
 		echo json_encode($result);           
 	}

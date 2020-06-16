@@ -1,6 +1,8 @@
 .DS_Store
 node_modules
-/dist
+dist/
+../sisgrad-ws/codi_oper.php
+../sisgrad-ws/config/db.php
 
 
 # local env files

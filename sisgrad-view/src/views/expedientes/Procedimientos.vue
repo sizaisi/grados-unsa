@@ -70,7 +70,9 @@ export default {
             let formData = this._toFormData({
                 idgrado_modalidad: this.grado_modalidad.id,
                 idrol_area: this.usuario.idrol_area,
-                idusuario: this.usuario.id
+                idusuario: this.usuario.id,
+                codi_usuario: this.usuario.codi_usuario,
+                tipo_usuario: this.usuario.tipo
             })
 
             this.axios.post(`${this.url}/GradoProcedimiento/gradoProcedimientos`, formData)

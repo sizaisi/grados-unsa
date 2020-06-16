@@ -95,26 +95,68 @@ class GradoProcedimiento {
         return $result;
     }
 
-    public function getGradoProcedimientos($idusuario) {
+    public function getGradoProcedimientos($idusuario, $codi_usuario, $tipo_usuario) {
 
         $result = array('error' => false);
         
         $sql = "SELECT idgrado_procedimiento FROM GT_USUARIO_GRADO_PROCEDIMIENTO WHERE idusuario = $idusuario";
-		$result_query = mysqli_query($this->conn, $sql);		
+        $result_query = mysqli_query($this->conn, $sql);       
   
 		if ($result_query && mysqli_num_rows($result_query) == 0) {
-            $sql = "SELECT GT_GP.*, GT_P.id AS idproc, COUNT(GT_E.id) AS total_expedientes,
-                    GT_P.nombre AS proc_nombre, GT_P.descripcion AS proc_descripcion 
-                    FROM GT_GRADO_PROCEDIMIENTO AS GT_GP
-                    INNER JOIN GT_PROCEDIMIENTO AS GT_P ON GT_P.id = GT_GP.idprocedimiento 
-                    INNER JOIN GT_EXPEDIENTE AS GT_E ON GT_E.idgrado_procedimiento = GT_GP.id
-                    WHERE GT_P.condicion = 1 AND GT_GP.idgrado_modalidad = $this->idgrado_modalidad 
-                    AND GT_GP.idrol_area =  $this->idrol_area
-                    GROUP BY GT_GP.id 
-                    ORDER BY GT_GP.id ASC";
+
+            if ($tipo_usuario == 'Administrativo') {
+                $sql = "SELECT GT_GP.*, GT_P.id AS idproc, COUNT(GT_E.id) AS total_expedientes,
+                        GT_P.nombre AS proc_nombre, GT_P.descripcion AS proc_descripcion 
+                        FROM GT_GRADO_PROCEDIMIENTO AS GT_GP
+                        INNER JOIN GT_PROCEDIMIENTO AS GT_P ON GT_P.id = GT_GP.idprocedimiento 
+                        INNER JOIN GT_EXPEDIENTE AS GT_E ON GT_E.idgrado_procedimiento = GT_GP.id
+                        INNER JOIN SIAC_OPER_DEPE AC_OP ON AC_OP.codi_depe = GT_E.nues
+                        WHERE GT_P.condicion = 1 AND GT_GP.idgrado_modalidad = $this->idgrado_modalidad 
+                        AND GT_GP.idrol_area =  $this->idrol_area
+                        AND AC_OP.codi_oper = '$codi_usuario'
+                        GROUP BY GT_GP.id 
+                        ORDER BY GT_GP.id ASC";
+
+            }
+            else if ($tipo_usuario == 'Docente') {	
+                $sql = "SELECT GT_GP.*, GT_P.id AS idproc, COUNT(GT_E.id) AS total_expedientes,
+                        GT_P.nombre AS proc_nombre, GT_P.descripcion AS proc_descripcion 
+                        FROM GT_GRADO_PROCEDIMIENTO AS GT_GP
+                        INNER JOIN GT_PROCEDIMIENTO AS GT_P ON GT_P.id = GT_GP.idprocedimiento 
+                        INNER JOIN GT_EXPEDIENTE AS GT_E ON GT_E.idgrado_procedimiento = GT_GP.id                    
+                        WHERE GT_P.condicion = 1 AND GT_GP.idgrado_modalidad = $this->idgrado_modalidad 
+                        AND GT_GP.idrol_area =  $this->idrol_area
+                        AND GT_E.id IN (SELECT R.idexpediente
+                                        FROM GT_RECURSO AS R
+                                            INNER JOIN GT_PERSONA AS P ON P.idrecurso = R.id
+                                            INNER JOIN GT_USUARIO AS U ON U.id = P.iddocente
+                                        WHERE P.tipo = 'asesor'
+                                            AND P.estado = 1  
+                                            AND U.codi_usuario='$codi_usuario')                    
+                        GROUP BY GT_GP.id 
+                        ORDER BY GT_GP.id ASC";
+            }
+            else if ($tipo_rol == 'jurado') {
+                $sql = "SELECT GT_GP.*, GT_P.id AS idproc, COUNT(GT_E.id) AS total_expedientes,
+                        GT_P.nombre AS proc_nombre, GT_P.descripcion AS proc_descripcion 
+                        FROM GT_GRADO_PROCEDIMIENTO AS GT_GP
+                        INNER JOIN GT_PROCEDIMIENTO AS GT_P ON GT_P.id = GT_GP.idprocedimiento 
+                        INNER JOIN GT_EXPEDIENTE AS GT_E ON GT_E.idgrado_procedimiento = GT_GP.id                    
+                        WHERE GT_P.condicion = 1 AND GT_GP.idgrado_modalidad = $this->idgrado_modalidad 
+                        AND GT_GP.idrol_area =  $this->idrol_area
+                        AND GT_E.id IN (SELECT R.idexpediente
+										FROM GT_RECURSO AS R
+										INNER JOIN GT_PERSONA AS P ON P.idrecurso = R.id
+										INNER JOIN GT_USUARIO AS U	ON U.id = P.iddocente									
+										WHERE P.tipo IN ('presidente', 'secretario', 'suplente') 
+										AND P.estado = 1 
+										AND U.codi_usuario='$codi_usuario')
+                        GROUP BY GT_GP.id 
+                        ORDER BY GT_GP.id ASC";
+            }          
 		}
 		else {
-            $array_idgrado_procedimiento = array();
+            /*$array_idgrado_procedimiento = array();
 
             while($row = $result_query->fetch_assoc()) {
                 $array_idgrado_procedimiento[] = $row['idgrado_procedimiento'];
@@ -125,7 +167,7 @@ class GradoProcedimiento {
                     INNER JOIN GT_PROCEDIMIENTO AS GT_P ON GT_P.id = GT_GP.idprocedimiento 
                     WHERE GT_P.condicion = 1 AND GT_GP.idgrado_modalidad = $this->idgrado_modalidad 
                     AND GT_GP.idrol_area =  $this->idrol_area 
-                    AND GT_GP.id IN (" . implode(',', $array_idgrado_procedimiento) . ") ORDER BY GT_GP.id ASC";
+                    AND GT_GP.id IN (" . implode(',', $array_idgrado_procedimiento) . ") ORDER BY GT_GP.id ASC";*/
 		}        
 
         $result_query = mysqli_query($this->conn, $sql);
