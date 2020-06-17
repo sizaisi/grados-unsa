@@ -10,7 +10,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	//$fecha_sustentacion = $_POST['fecha_sustentacion'];	
 	$fecha_sustentacion = '2020-05-25';	
 	$array_jurado = json_decode($_POST['jurados'], true);	
-	$idx_secreatario = array_search('secretario', array_column($array_jurado, 'tipo'));
+	//$idx_secreatario = array_search('secretario', array_column($array_jurado, 'tipo'));
+	$idx_secreatario = array_search('secretario', array_map(function($element) {  return $element['tipo'];}, $array_jurado) );
 	$secretario = $array_jurado[$idx_secreatario]['apn'];
 	/**********************************************************************/
 

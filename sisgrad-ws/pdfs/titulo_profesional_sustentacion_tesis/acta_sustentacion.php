@@ -17,9 +17,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	//$array_jurado = json_decode($_POST['array_jurado'], true);	
 	$array_jurado = json_decode($_POST['jurados'], true);
 	
-	$idx_presidente = array_search('presidente', array_column($array_jurado, 'tipo'));
+	/*$idx_presidente = array_search('presidente', array_column($array_jurado, 'tipo'));
 	$idx_secreatario = array_search('secretario', array_column($array_jurado, 'tipo'));
-	$idx_suplente = array_search('suplente', array_column($array_jurado, 'tipo'));
+	$idx_suplente = array_search('suplente', array_column($array_jurado, 'tipo'));*/
+
+	$idx_presidente = array_search('presidente', array_map(function($element) {  return $element['tipo'];}, $array_jurado) );
+	$idx_secreatario = array_search('secretario', array_map(function($element) {  return $element['tipo'];}, $array_jurado) );
+	$idx_suplente = array_search('suplente', array_map(function($element) {  return $element['tipo'];}, $array_jurado) );
 	
 	$presidente = ucwords(strtolower($array_jurado[$idx_presidente]['apn']));
 	$secretario = ucwords(strtolower($array_jurado[$idx_secreatario]['apn']));

@@ -130,7 +130,7 @@ class GradoProcedimiento {
                                         FROM GT_RECURSO AS R
                                             INNER JOIN GT_PERSONA AS P ON P.idrecurso = R.id
                                             INNER JOIN GT_USUARIO AS U ON U.id = P.iddocente
-                                        WHERE P.tipo = 'asesor'
+                                        WHERE IF(GT_GP.tipo_rol='asesor', P.tipo='asesor', P.tipo IN ('presidente', 'secretario', 'suplente')) 
                                             AND P.estado = 1  
                                             AND U.codi_usuario='$codi_usuario')                    
                         GROUP BY GT_GP.id 

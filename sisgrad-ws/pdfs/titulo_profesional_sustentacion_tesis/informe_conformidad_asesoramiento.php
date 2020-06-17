@@ -58,6 +58,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	$pdf->SetFont('helvetica','',12);
 	$pdf->writeHTMLCell(150, '', 30, '', 'Arequipa, '.dia_actual().' de '.mes_actual().' del '.anio_actual().'<br><br><br>', 0, 0, 0, true, 'R', true); 
 	$pdf->Ln();	
+	$pdf->setXY(90, 150);
+	$pdf->Image('firma.png', '', '', 40, 40, '', '', 'T', false, 300, '', false, false, 0, false, false, false);
+
+	$pdf->setXY(90, 180);
 	$pdf->SetFont('helvetica','B',12);	
 	$firma = '<span style="text-decoration:overline">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FIRMA DE ASESOR&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>';
 	$pdf->writeHTMLCell(150, '', 30, '', $firma, 0, 0, 0, true, 'C', true); 
