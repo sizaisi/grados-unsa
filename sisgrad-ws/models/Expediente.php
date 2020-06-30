@@ -30,17 +30,31 @@ class Expediente {
 		$result = array('error' => false);
   
 		if ($tipo_usuario == 'Administrativo') {
-			$sql = "SELECT GT_E.id, GT_E.codigo, GT_E.fecha AS fecha_recepcion, GT_E.estado, 
+			/*$sql = "SELECT GT_E.id, GT_E.codigo, GT_E.fecha AS fecha_recepcion, GT_E.estado, 
 						   GROUP_CONCAT(REPLACE(AC_I.apn,'/',' ') SEPARATOR ' / ') AS graduando,
 						   AC_E.nesc AS escuela
 					FROM GT_EXPEDIENTE AS GT_E
 						INNER JOIN GT_GRADUANDO_EXPEDIENTE AS GT_GE ON GT_GE.idexpediente = GT_E.id 
-						INNER JOIN GT_GRADUANDO AS GT_G ON GT_G.id = GT_GE.idgraduando 		
-						INNER JOIN acdiden AS AC_I ON AC_I.cui = GT_G.cui			
+						INNER JOIN GT_GRADUANDO AS GT_G ON GT_G.id = GT_GE.idgraduando 											
 						INNER JOIN actescu AS AC_E ON AC_E.nues = GT_E.nues						
-						INNER JOIN SIAC_OPER_DEPE AC_OP ON AC_OP.codi_depe = GT_E.nues
+						INNER JOIN SIAC_OPER_DEPE AC_OP ON AC_OP.codi_depe = AC_E.nues
+						INNER JOIN (SELECT AC_I.cui, AC_I.apn, AC_ID.nues, FROM acdiden AS AC_I INNER JOIN acdidal AS AC_ID ON AC_ID.cui = AC_I.cui WHERE AC_ID.cond = 'E')
+						 AS AC_I ON AC_I.cui = GT_G.cui
 					WHERE GT_E.idgrado_procedimiento = $idgrado_procedimiento					
-						AND AC_OP.codi_oper = '$codi_usuario'
+						AND AC_OP.codi_oper = '$codi_usuario'						
+					GROUP BY GT_GE.idexpediente 
+					ORDER BY GT_E.id ASC";*/
+			$sql = "SELECT GT_E.id, GT_E.codigo, GT_E.fecha AS fecha_recepcion, GT_E.estado, 
+							GROUP_CONCAT(REPLACE(AC_I.apn,'/',' ') SEPARATOR ' / ') AS graduando,
+							AC_E.nesc AS escuela
+					FROM GT_EXPEDIENTE AS GT_E
+						INNER JOIN GT_GRADUANDO_EXPEDIENTE AS GT_GE ON GT_GE.idexpediente = GT_E.id 
+						INNER JOIN GT_GRADUANDO AS GT_G ON GT_G.id = GT_GE.idgraduando 											
+						INNER JOIN acdiden AS AC_I ON AC_I.cui = GT_G.cui
+						INNER JOIN actescu AS AC_E ON AC_E.nues = GT_E.nues						
+						INNER JOIN SIAC_OPER_DEPE AC_OP ON AC_OP.codi_depe = AC_E.nues						
+					WHERE GT_E.idgrado_procedimiento = $idgrado_procedimiento					
+						AND AC_OP.codi_oper = '$codi_usuario'						
 					GROUP BY GT_GE.idexpediente 
 					ORDER BY GT_E.id ASC";
 		}
