@@ -109,7 +109,7 @@
             </div>
             <div class="modal-body">
               <h5 class="text-danger text-center" v-text="messageDeleteModal"></h5>
-              <p class="font-weight-bold text-center" v-text="cargo_autoridad.id"></p>
+              <p class="font-weight-bold text-center" v-text="cargo_autoridad.cargo + ' / ' + cargo_autoridad.autoridad"></p>
             </div>
             <div class="modal-footer">
               <b-button variant="secondary" @click="cerrarDeleteModal">Cancelar</b-button>
@@ -129,14 +129,16 @@ export default {
     name: 'cargo-autoridad',  
     data() {
         return { 
-            url: '//localhost/grados-unsa/backend2',
+            url: this.$root.API_URL,
             array_cargo_autoridad : [],
             array_cargos: [],
             array_autoridades: [],
             cargo_autoridad : {
               id: '',
               idcargo: '',
+              cargo: '',
               idautoridad: '',
+              autoridad: '',
               fecha_inicio: '',
               fecha_fin: '',
             },
@@ -156,10 +158,11 @@ export default {
             },
             columnas: [
               { key: 'id', label: 'ID', sortable: true, class: 'text-center' },
-              { key: 'cargoname', label: 'Cargo', sortable: true, class: 'text-left' },
-              { key: 'autoridadname', label: 'Autoridad', class: 'text-center' },
+              { key: 'cargo', label: 'Cargo', sortable: true, class: 'text-center' },
+              { key: 'autoridad', label: 'Autoridad', class: 'text-left' },
               { key: 'fecha_inicio', label: 'Fecha Inicio', class: 'text-center' },
               { key: 'fecha_fin', label: 'Fecha Fin', class: 'text-center' },
+              { key: 'condicion', label: 'Condición', class: 'text-center' },
               { key: 'acciones', label: 'Acciones', class: 'text-center' }
             ]                                       
         }
@@ -169,7 +172,7 @@ export default {
           let me = this
 
           this.axios.post(`${this.url}/CargoAutoridad/readCargo`)
-            .then(function (response){
+            .then(function (response) {              
               if (response.data.error) {
                 me.errorMsg = response.data.message
               }
@@ -193,8 +196,8 @@ export default {
               else { 
                 me.array_autoridades.push({ value: '', text: 'Seleccione Autoridad...', disabled: true })
                 
-                for(var autoridad of response.data.array_cargo_autoridades){
-                  me.array_autoridades.push({value: autoridad.autoridadid, text: autoridad.autoridadname})
+                for(var autoridad of response.data.array_actives_autoridad){
+                  me.array_autoridades.push({value: autoridad.id, text: autoridad.nombre})
                 }
               }
           })
@@ -213,7 +216,10 @@ export default {
               })
         },
         abrirAddEditModal(accion, data = []) {
-            this.showAddEditModal = true            
+            this.showAddEditModal = true   
+            
+            this.getCargos()
+            this.getAutoridades()
 
             switch(accion) {
                 case 'registrar':
@@ -282,9 +288,13 @@ export default {
             this.showAddEditModal = false
             this.cargo_autoridad.id = ''
             this.cargo_autoridad.idcargo = ''
+            this.cargo_autoridad.cargo = ''
             this.cargo_autoridad.idautoridad = ''
+            this.cargo_autoridad.autoridad = ''
             this.cargo_autoridad.fecha_inicio = ''
             this.cargo_autoridad.fecha_fin = ''
+            this.array_cargos = []
+            this.array_autoridades =  []
             this.errorMsg = ''
             this.successMsg = ''
         },
@@ -298,7 +308,9 @@ export default {
                     this.messageDeleteModal = '¿Desea activar este Cargo Autoridad?'
                     this.cargo_autoridad.id = data.id
                     this.cargo_autoridad.idcargo = data.idcargo
+                    this.cargo_autoridad.cargo = data.cargo
                     this.cargo_autoridad.idautoridad = data.idautoridad
+                    this.cargo_autoridad.autoridad = data.autoridad
                     this.cargo_autoridad.fecha_inicio = data.fecha_inicio
                     this.cargo_autoridad.fecha_fin = data.fecha_fin
                     this.tipoAccion = 'activar'
@@ -310,7 +322,9 @@ export default {
                     this.messageDeleteModal = '¿Desea desactivar este Cargo Autoridad?'
                     this.cargo_autoridad.id = data.id
                     this.cargo_autoridad.idcargo = data.idcargo
+                    this.cargo_autoridad.cargo = data.cargo
                     this.cargo_autoridad.idautoridad = data.idautoridad
+                    this.cargo_autoridad.autoridad = data.autoridad 
                     this.cargo_autoridad.fecha_inicio = data.fecha_inicio
                     this.cargo_autoridad.fecha_fin = data.fecha_fin
                     this.tipoAccion = 'desactivar'

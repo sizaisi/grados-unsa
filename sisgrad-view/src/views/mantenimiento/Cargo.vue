@@ -72,13 +72,13 @@
               <div class="modal-body">
                 <form role="form">
                     <div class="form-group">
-                        <label for="cargo">Cargo:</label>
-                        <input type="text" v-model="cargo.nombre" name="cargo" class="form-control" id="cargo"/>                        
+                        <label for="codigo">Código:</label>
+                        <input type="text" v-model="cargo.codigo" name="cargo" class="form-control" id="codigo"/>                        
                     </div>
                     <div class="form-group">
-                        <label for="tipo-select">Tipo:</label>
-                        <b-form-select id="tipo-select" v-model="cargo.tipo" :options="array_tipos"></b-form-select>       
-                    </div>
+                        <label for="nombre">Nombre:</label>
+                        <input type="text" v-model="cargo.nombre" name="cargo" class="form-control" id="nombre"/>                        
+                    </div>                    
                 </form>
               </div>
               <div class="modal-footer">
@@ -121,14 +121,12 @@ export default {
     name: 'cargo',  
     data() {
         return { 
-            url: '//localhost/grados-unsa/backend2',
-            array_cargo : [],
-            array_tipos : ['Actual', 
-                           'Antiguo'],
+            url: this.$root.API_URL,
+            array_cargo : [],            
             cargo : {
               id: '',
-              nombre: '',
-              tipo: '',
+              codigo: '',
+              nombre: '',              
             },
             titleAddEditModal : '',
             titleDeleteModal : '',
@@ -146,8 +144,8 @@ export default {
             },
             columnas: [
               { key: 'id', label: 'ID', sortable: true, class: 'text-center' },
-              { key: 'nombre', label: 'Nombre', sortable: true, class: 'text-left' },
-              { key: 'tipo', label: 'Tipo', class: 'text-center' },
+              { key: 'codigo', label: 'Código', class: 'text-center' },
+              { key: 'nombre', label: 'Nombre', sortable: true, class: 'text-left' },              
               { key: 'condicion', label: 'Condición', class: 'text-center' },
               { key: 'acciones', label: 'Acciones', class: 'text-center' }
             ]                                       
@@ -159,11 +157,11 @@ export default {
 
             this.axios.get(`${this.url}/Cargo/index`)
               .then(function(response) {
-                if (response.data.error) {
-                  me.errorMsg = response.data.message
+                if (!response.data.error) {
+                  me.array_cargo = response.data.array_cargo                                    
                 }
                 else {
-                  me.array_cargo = response.data.array_cargo                  
+                  console.log(response.data.message)
                 }
               })
         },
@@ -175,8 +173,8 @@ export default {
                 {
                     this.titleAddEditModal = 'Registrar Cargo'
                     this.cargo.id = ''
-                    this.cargo.nombre = ''
-                    this.cargo.tipo = ''
+                    this.cargo.codigo = ''
+                    this.cargo.nombre = ''                    
                     this.tipoAccion = 'registrar'
                     break
                 }
@@ -184,8 +182,8 @@ export default {
                 {
                     this.titleAddEditModal = 'Actualizar Cargo'
                     this.cargo.id = data.id
-                    this.cargo.nombre = data.nombre
-                    this.cargo.tipo = data.tipo
+                    this.cargo.codigo = data.codigo
+                    this.cargo.nombre = data.nombre                    
                     this.tipoAccion = 'actualizar'
                     break
                 }
@@ -201,12 +199,12 @@ export default {
                 me.cerrarAddEditModal();
                 me.dismissCountDown = me.dismissSecs //contador para el alert
 
-                if (response.data.error) {
-                  me.errorMsg = response.data.message
+                if (!response.data.error) {
+                  me.successMsg = response.data.message
+                  me.getAllCargo()                  
                 }
                 else {
-                  me.successMsg = response.data.message
-                  me.getAllCargo()
+                  me.errorMsg = response.data.message
                 }
             })            
         },
@@ -217,23 +215,24 @@ export default {
 
             this.axios.post(`${this.url}/Cargo/update`, formData)
               .then(function(response) {
+                console.log(response)
                 me.cerrarAddEditModal();
                 me.dismissCountDown = me.dismissSecs //contador para el alert
 
-                if (response.data.error) {
-                  me.errorMsg = response.data.message
+                if (!response.data.error) {
+                  me.successMsg = response.data.message
+                  me.getAllCargo()                  
                 }
                 else {
-                  me.successMsg = response.data.message
-                  me.getAllCargo()
+                  me.errorMsg = response.data.message
                 }
             })            
         },
         cerrarAddEditModal() {
             this.showAddEditModal = false
             this.cargo.id = ''
-            this.cargo.nombre = ''
-            this.cargo.tipo = ''
+            this.cargo.codigo = ''
+            this.cargo.nombre = ''            
             this.errorMsg = ''
             this.successMsg = ''
         },
@@ -246,8 +245,8 @@ export default {
                     this.titleDeleteModal = 'Activar Cargo'
                     this.messageDeleteModal = '¿Desea activar este Cargo?'
                     this.cargo.id = data.id
-                    this.cargo.nombre = data.nombre
-                    this.cargo.tipo = data.tipo
+                    this.cargo.codigo = data.codigo
+                    this.cargo.nombre = data.nombre                    
                     this.tipoAccion = 'activar'
                     break
                 }
@@ -256,8 +255,8 @@ export default {
                     this.titleDeleteModal = 'Desactivar Cargo'
                     this.messageDeleteModal = '¿Desea desactivar este Cargo?'
                     this.cargo.id = data.id
-                    this.cargo.nombre = data.nombre
-                    this.cargo.tipo = data.tipo
+                    this.cargo.codigo = data.codigo
+                    this.cargo.nombre = data.nombre                    
                     this.tipoAccion = 'desactivar'
                     break
                 }
@@ -272,20 +271,20 @@ export default {
               me.cerrarDeleteModal()
               me.dismissCountDown = me.dismissSecs //contador para el alert
 
-              if (response.data.error) {
-                me.errorMsg = response.data.message
+              if (!response.data.error) {
+                me.successMsg = response.data.message
+                me.getAllCargo()                
               }
               else {
-                me.successMsg = response.data.message
-                me.getAllCargo()
+                me.errorMsg = response.data.message
               }
             })
         },
         cerrarDeleteModal() {
             this.showDeleteModal = false
             this.cargo.id = ''
-            this.cargo.nombre = ''
-            this.cargo.tipo = ''
+            this.cargo.codigo = ''
+            this.cargo.nombre = ''            
             this.errorMsg = ''
             this.successMsg = ''
         },

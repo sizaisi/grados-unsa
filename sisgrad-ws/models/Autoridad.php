@@ -55,16 +55,16 @@ class Autoridad {
     public function getActives(){
         $result = array('error' => false);
 
-        $sql = "SELECT * FROM GT_AUTORIDAD where condicion = 1";
+        $sql = "SELECT * FROM GT_AUTORIDAD WHERE condicion = 1";
         $result_query = mysqli_query($this->conn, $sql);
 
-        $array_autoridad = array();
+        $array_actives_autoridad = array();
 
         while ($row = $result_query->fetch_assoc()) {
-            array_push($array_autoridad, $row);
+            array_push($array_actives_autoridad, $row);
         }
 
-        $result['array_autoridad'] = $array_autoridad;
+        $result['array_actives_autoridad'] = $array_actives_autoridad;
 
         return $result;
     }

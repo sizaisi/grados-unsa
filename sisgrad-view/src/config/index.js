@@ -1,9 +1,9 @@
 const config = {
     /***** SISACAD *****/
-    //API_URL: '//190.119.145.150:8023/sisacad/graduacion/grados-unsa/sisgrad-ws',
+    API_URL: '//190.119.145.150:8023/sisacad/graduacion/grados-unsa/sisgrad-ws',
 
     /***** SISDOCE *****/
-    API_URL: '//190.119.145.150:8022/sisacad/sisdoce/graduacion/grados-unsa/sisgrad-ws',
+    //API_URL: '//190.119.145.150:8022/sisacad/sisdoce/graduacion/grados-unsa/sisgrad-ws',
 
     /***** LOCAL *****/
     //API_URL: '//localhost/grados-unsa/sisgrad-ws',    

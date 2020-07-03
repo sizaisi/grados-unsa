@@ -1,9 +1,9 @@
 <?php
 
 class Cargo {
-	private $id;
-    private $nombre;
-    private $tipo;
+    private $id;
+    private $codigo;
+    private $nombre;    
     
     private $conn;
 	
@@ -13,28 +13,28 @@ class Cargo {
 	
 	function getId() {
 		return $this->id;
+    }
+    
+    function getCodigo() {
+		return $this->codigo;
 	}
 
 	function getNombre() {
 		return $this->nombre;
-    }
+    }       
     
-    function getTipo() {
-		return $this->tipo;
-	}
-
 	function setId($id) {
 		$this->id = $id;
+    }
+    
+    function setCodigo($codigo) {
+		$this->codigo = $codigo; 
 	}
 
 	function setNombre($nombre) {
 		$this->nombre = $nombre; 
-    }	
-    
-    function setTipo($tipo) {
-		$this->tipo = $tipo; 
-	}
-	
+    }	   
+    	
 	public function getAllCargo(){
         $result = array('error' => false);
 
@@ -55,16 +55,16 @@ class Cargo {
     public function getActives(){
         $result = array('error' => false);
 
-        $sql = "SELECT * FROM GT_CARGO where condicion = 1";
+        $sql = "SELECT * FROM GT_CARGO WHERE condicion = 1";
         $result_query = mysqli_query($this->conn, $sql);
 
-        $array_cargo = array();
+        $array_actives_cargo = array();
 
         while ($row = $result_query->fetch_assoc()) {
-            array_push($array_cargo, $row);
+            array_push($array_actives_cargo, $row);
         }
 
-        $result['array_cargo'] = $array_cargo;
+        $result['array_actives_cargo'] = $array_actives_cargo;
 
         return $result;
     }
@@ -72,7 +72,7 @@ class Cargo {
     public function insertar(){
         $result = array('error' => false);
 
-        $sql = "INSERT INTO GT_CARGO(nombre, tipo, condicion) VALUES ('$this->nombre','$this->tipo', 1)";
+        $sql = "INSERT INTO GT_CARGO(codigo, nombre, condicion) VALUES ('$this->codigo', '$this->nombre', 1)";
         $result_query = mysqli_query($this->conn, $sql);
 
         if ($result_query) {
@@ -89,7 +89,7 @@ class Cargo {
     public function actualizar(){
         $result = array('error' => false);
 
-        $sql = "UPDATE GT_CARGO SET nombre = '$this->nombre', tipo = '$this->tipo' WHERE id = $this->id";
+        $sql = "UPDATE GT_CARGO SET codigo = '$this->codigo', nombre = '$this->nombre' WHERE id = $this->id";
 
         $result_query = mysqli_query($this->conn, $sql);
 

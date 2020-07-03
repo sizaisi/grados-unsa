@@ -14,8 +14,7 @@ class ProcedimientoController {
 	public function store(){
 		$procedimiento = new Procedimiento();
 
-		$procedimiento->setNombre($_POST['nombre']);
-		$procedimiento->setDescripcion($_POST['descripcion']);
+		$procedimiento->setNombre($_POST['nombre']);		
 
 		$result = $procedimiento->insertar();
 
@@ -26,8 +25,7 @@ class ProcedimientoController {
 		$procedimiento = new Procedimiento();
 
 		$procedimiento->setId($_POST['id']);
-		$procedimiento->setNombre($_POST['nombre']);
-		$procedimiento->setDescripcion($_POST['descripcion']);
+		$procedimiento->setNombre($_POST['nombre']);		
 
 		$result = $procedimiento->actualizar();
 

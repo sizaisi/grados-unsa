@@ -103,32 +103,67 @@
               </div>
               <div class="modal-body">
                 <form role="form">
-                    <div class="form-group">
-                      <div class="form-group">
-                        <label for="gm_select">Grado x Modalidad:</label>
-                        <b-form-select id="gm_select" :options="select_grado_modalidad" v-model="grado_procedimiento.idgrado_modalidad"></b-form-select>
-                      </div>
-                      <div class="form-group">
-                        <label for="proc_select">Procedimiento:</label>
-                        <b-form-select id="proc_select" :options="select_procedimiento" v-model="grado_procedimiento.idprocedimiento"></b-form-select>
-                      </div>
-                      <div class="form-group">
-                        <label for="rol-select">Rol-Área:</label>
-                        <b-form-select id="rol-select" :options="select_rol_area" v-model="grado_procedimiento.idrol_area"></b-form-select>                        
-                      </div>
-                      <div class="form-group" v-if="grado_procedimiento.idrol_area == 4">
-                        <label for="tipo-rol-select">Tipo-Rol:</label>
-                        <b-form-select id="tipo-rol-select" v-model="grado_procedimiento.tipo_rol" :options="['asesor', 'jurado']"></b-form-select>       
-                      </div>
-                      <div class="form-group">
-                        <label for="url_input">URL: </label>
-                        <b-form-input id="url_input" type="text" v-model="grado_procedimiento.url_formulario"></b-form-input>                        
-                      </div>
-                      <div class="form-group">
-                        <label for="url_orden">Orden: </label>
-                        <b-form-input id="url_orden" type="number" min="1" max="50" v-model="grado_procedimiento.orden"></b-form-input>                        
-                      </div>
-                    </div>
+                    <b-row>
+                      <b-col cols="12">
+                        <div class="form-group">
+                          <label for="gm_select">Grado x Modalidad:</label>
+                          <b-form-select id="gm_select" :options="select_grado_modalidad" v-model="grado_procedimiento.idgrado_modalidad"></b-form-select>
+                        </div>
+                      </b-col>
+                    </b-row>
+                    <b-row>
+                      <b-col cols="12">
+                        <div class="form-group">
+                          <label for="proc_select">Procedimiento:</label>
+                          <b-form-select id="proc_select" :options="select_procedimiento" v-model="grado_procedimiento.idprocedimiento"></b-form-select>
+                        </div>
+                      </b-col>
+                    </b-row>  
+                    <b-row>
+                      <b-col cols="12">
+                        <div class="form-group">
+                          <label for="rol-select">Rol-Área:</label>
+                          <b-form-select id="rol-select" :options="select_rol_area" v-model="grado_procedimiento.idrol_area"></b-form-select>                        
+                        </div>
+                      </b-col>
+                    </b-row>  
+                    <b-row v-if="grado_procedimiento.idrol_area == 4">
+                      <b-col cols="12">
+                        <div class="form-group">
+                          <label for="tipo-rol-select">Tipo-Rol:</label>
+                          <b-form-select id="tipo-rol-select" v-model="grado_procedimiento.tipo_rol" :options="['asesor', 'jurado']"></b-form-select>       
+                        </div>
+                      </b-col>
+                    </b-row>  
+                    <b-row>
+                      <b-col cols="8">                      
+                        <div class="form-group">
+                          <label for="url_input">URL: </label>
+                          <b-form-input id="url_input" type="text" v-model="grado_procedimiento.url_formulario"></b-form-input>                        
+                        </div>
+                      </b-col>
+                      <b-col cols="4">                      
+                        <div class="form-group">
+                          <label for="url_orden">Orden: </label>
+                          <b-form-input id="url_orden" type="number" min="1" max="50" v-model="grado_procedimiento.orden"></b-form-input>                        
+                        </div>
+                      </b-col>
+                    </b-row>
+                    <b-row>
+                      <b-col cols="12">                      
+                        <div class="form-group">
+                          <label for="url_input">Descripción: </label>
+                            <b-form-textarea
+                              id="textarea-state"
+                              v-model="grado_procedimiento.descripcion"
+                              :state="grado_procedimiento.descripcion.length >= 30"
+                              placeholder="Ingrese al menos 30 caracteres"
+                              required
+                              rows="2"
+                            ></b-form-textarea>
+                        </div>
+                      </b-col>
+                    </b-row>
                 </form>
               </div>
               <div class="modal-footer">
@@ -183,6 +218,7 @@ export default {
               tipo_rol: null,
               url_formulario: '',
               orden: 1,
+              descripcion: ''
             },
             titleAddEditModal : '',
             titleDeleteModal : '',
@@ -276,7 +312,7 @@ export default {
                 me.select_rol_area.push({ value: '', text: 'Seleccione Rol/Area...', disabled: true })
 
                 for(var rol of response.data.array_rol_area){
-                    me.select_rol_area.push({value: rol.id, text: rol.nombre})
+                  me.select_rol_area.push({value: rol.id, text: rol.nombre})
                 }
               }
           })          
@@ -297,11 +333,12 @@ export default {
                     this.titleAddEditModal = 'Actualizar Grado x Procedimiento'
                     this.grado_procedimiento.id = data.id
                     this.grado_procedimiento.idgrado_modalidad = data.idgrado_modalidad
-                    this.grado_procedimiento.idprocedimiento = data.idprocedimiento
-                    this.grado_procedimiento.orden = data.orden
-                    this.grado_procedimiento.url_formulario = data.url_formulario
+                    this.grado_procedimiento.idprocedimiento = data.idprocedimiento                                        
                     this.grado_procedimiento.idrol_area = data.idrol_area
                     this.grado_procedimiento.tipo_rol = data.idrol_area == 4 ? data.idrol_area : null
+                    this.grado_procedimiento.url_formulario = data.url_formulario
+                    this.grado_procedimiento.orden = data.orden
+                    this.grado_procedimiento.descripcion = data.descripcion                    
                     this.tipoAccion = 'actualizar'
                     break
                 }
@@ -313,7 +350,7 @@ export default {
             var formData = this._toFormData(this.grado_procedimiento)
 
             this.axios.post(`${this.url}/GradoProcedimiento/store`, formData)
-              .then(function(response) {
+              .then(function(response) {                
                 me.cerrarAddEditModal()
                 me.dismissCountDown = me.dismissSecs //contador para el alert
 
@@ -355,6 +392,7 @@ export default {
             this.grado_procedimiento.idrol_area = ''
             this.grado_procedimiento.url_formulario = ''
             this.grado_procedimiento.orden = 1
+            this.grado_procedimiento.descripcion = ''
             this.errorMsg = ''
             this.successMsg = ''
         },

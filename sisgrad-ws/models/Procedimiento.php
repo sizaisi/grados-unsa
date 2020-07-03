@@ -2,8 +2,7 @@
 
 class Procedimiento {
 	private $id;
-	private $nombre;
-	private $descripcion;
+	private $nombre;	
     
     private $conn;
 
@@ -25,15 +24,7 @@ class Procedimiento {
 
 	function setNombre($nombre) {
 		$this->nombre = $nombre;
-	}	
-
-	function getDescripcion() {
-		return $this->descripcion;
-	}
-
-	function setDescripcion($descripcion) {
-		$this->descripcion = $descripcion;
-	}
+	}		
 	
 	public function getAllProcedimiento(){
         $result = array('error' => false);
@@ -72,8 +63,7 @@ class Procedimiento {
     public function insertar(){
         $result = array('error' => false);
 
-        $sql = "INSERT INTO GT_PROCEDIMIENTO VALUES (0, '$this->nombre', " .
-                "'$this->descripcion' , 1)";
+        $sql = "INSERT INTO GT_PROCEDIMIENTO(nombre, condicion) VALUES ('$this->nombre', 1)";
         $result_query = mysqli_query($this->conn, $sql);
 
         if ($result_query) {
@@ -91,8 +81,7 @@ class Procedimiento {
     public function actualizar(){
         $result = array('error' => false);
 
-        $sql = "UPDATE GT_PROCEDIMIENTO SET nombre = '$this->nombre'," .
-                "descripcion = '$this->descripcion' WHERE id = $this->id";
+        $sql = "UPDATE GT_PROCEDIMIENTO SET nombre = '$this->nombre' WHERE id = $this->id";
 
         $result_query = mysqli_query($this->conn, $sql);
 
@@ -110,7 +99,7 @@ class Procedimiento {
     public function activar(){
         $result = array('error' => false);
 
-        $sql = "UPDATE GT_PROCEDIMIENTO SET condicion = '1' WHERE id = $this->id";
+        $sql = "UPDATE GT_PROCEDIMIENTO SET condicion = 1 WHERE id = $this->id";
 
         $result_query = mysqli_query($this->conn, $sql);
 
@@ -128,7 +117,7 @@ class Procedimiento {
     public function desactivar(){
         $result = array('error' => false);
 
-        $sql = "UPDATE GT_PROCEDIMIENTO SET condicion = '0' WHERE id = $this->id";
+        $sql = "UPDATE GT_PROCEDIMIENTO SET condicion = 0 WHERE id = $this->id";
 
         $result_query = mysqli_query($this->conn, $sql);
 

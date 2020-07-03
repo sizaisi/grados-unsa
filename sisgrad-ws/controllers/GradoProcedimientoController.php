@@ -58,10 +58,11 @@ class GradoProcedimientoController {
 
 		$grado_procedimiento->setIdGradoModalidad($_POST['idgrado_modalidad']);
 		$grado_procedimiento->setIdProcedimiento($_POST['idprocedimiento']);
-		$grado_procedimiento->setIdrol($_POST['idrol_area']);   
+		$grado_procedimiento->setIdRolArea($_POST['idrol_area']);   
 		$grado_procedimiento->setTipoRol($_POST['tipo_rol']);      
 		$grado_procedimiento->setUrl($_POST['url_formulario']);
 		$grado_procedimiento->setOrden($_POST['orden']);
+		$grado_procedimiento->setDescripcion($_POST['descripcion']);
 
 		$result = $grado_procedimiento->insertar();
 
@@ -74,10 +75,11 @@ class GradoProcedimientoController {
 		$grado_procedimiento->setId($_POST['id']);
 		$grado_procedimiento->setIdGradoModalidad($_POST['idgrado_modalidad']);
 		$grado_procedimiento->setIdProcedimiento($_POST['idprocedimiento']);
-		$grado_procedimiento->setIdrol($_POST['idrol_area']);   
+		$grado_procedimiento->setIdRolArea($_POST['idrol_area']);   
 		$grado_procedimiento->setTipoRol($_POST['tipo_rol']);      
 		$grado_procedimiento->setUrl($_POST['url_formulario']);
 		$grado_procedimiento->setOrden($_POST['orden']);
+		$grado_procedimiento->setDescripcion($_POST['descripcion']);
 
 		$result = $grado_procedimiento->actualizar();
 

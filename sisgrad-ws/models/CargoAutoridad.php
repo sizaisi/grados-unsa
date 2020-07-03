@@ -1,9 +1,9 @@
 <?php
 
 class CargoAutoridad {
-	private $id;
-    private $idautoridad;
+    private $id;
     private $idcargo;
+    private $idautoridad;    
     private $fecha_inicio;
     private $fecha_fin;
     
@@ -17,11 +17,11 @@ class CargoAutoridad {
 		return $this->id;
 	}
 
-	function getIdautoridad() {
+	function getIdAutoridad() {
 		return $this->idautoridad;
     }
     
-    function getIdcargo() {
+    function getIdCargo() {
 		return $this->idcargo;
     }
     
@@ -37,11 +37,11 @@ class CargoAutoridad {
 		$this->id = $id;
 	}
 
-	function setIdautoridad($idautoridad) {
+	function setIdAutoridad($idautoridad) {
 		$this->idautoridad = $idautoridad; 
     }	
     
-    function setIdcargo($idcargo) {
+    function setIdCargo($idcargo) {
 		$this->idcargo = $idcargo; 
     }
 
@@ -56,7 +56,7 @@ class CargoAutoridad {
 	public function getAllCargoAutoridad(){
         $result = array('error' => false);
 
-        $sql = "SELECT gt_ca.*, gt_car.nombre AS cargoname, gt_aut.nombre AS autoridadname 
+        $sql = "SELECT gt_ca.*, gt_car.nombre AS cargo, gt_aut.nombre AS autoridad
                 FROM GT_CARGO_AUTORIDAD as gt_ca 
                 INNER JOIN GT_CARGO AS gt_car ON gt_ca.idcargo = gt_car.id 
                 INNER JOIN GT_AUTORIDAD AS gt_aut ON gt_ca.idautoridad = gt_aut.id 
@@ -75,115 +75,10 @@ class CargoAutoridad {
         return $result;
     }
 
-    public function insertar(){
-        $result = array('error' => false);
-
-        $sql = "INSERT INTO GT_CARGO_AUTORIDAD(id, idcargo, idautoridad, fecha_inicio, fecha_fin) VALUES ('$this->id','$this->idcargo','$this->idautoridad', '$this->fecha_inicio', '$this->fecha_fin')";
-        $result_query = mysqli_query($this->conn, $sql);
-
-        if ($result_query) {
-            $result['message'] = "Cargo-Autoridad agregada correctamente.";
-        }
-        else {
-            $result['error'] = true;
-            $result['message'] = "No se pudo agregar Cargo-Autoridad.";
-        }      
-
-        return $result;
-    }
- 
-    public function actualizar(){
-        $result = array('error' => false);
-
-        $sql = "UPDATE GT_CARGO_AUTORIDAD SET id = '$this->id', idcargo = '$this->idcargo', idautoridad = '$this->idautoridad', fecha_inicio = '$this->fecha_inicio', fecha_fin = '$this->fecha_fin' WHERE id = $this->id";
-
-        $result_query = mysqli_query($this->conn, $sql);
-
-        if ($result_query) {
-            $result['message'] = "Cargo-Autoridad actualizada con éxito.";
-        }
-        else {
-            $result['error'] = true;
-            $result['message'] = "No se pudo actualizar el Cargo-Autoridad.";
-        }
-
-        return $result;   
-    }
-
-    public function activar(){
-        $result = array('error' => false);
-
-        $sql = "UPDATE GT_CARGO_AUTORIDAD SET condicion = '1' WHERE id = $this->id";
-
-        $result_query = mysqli_query($this->conn, $sql);
-
-        if ($result_query) {
-            $result['message'] = "Cargo-Autoridad activada con éxito.";
-        }
-        else {
-            $result['error'] = true;
-            $result['message'] = "No se pudo activar el Cargo-Autoridad.";
-        }
-
-        return $result;
-    }
-
-    public function desactivar(){
-        $result = array('error' => false);
-
-        $sql = "UPDATE GT_CARGO_AUTORIDAD SET condicion = '0' WHERE id = $this->id";
-
-        $result_query = mysqli_query($this->conn, $sql);
-
-        if ($result_query) {
-            $result['message'] = "Cargo-Autoridad desactivada con éxito.";
-        }
-        else {
-            $result['error'] = true;
-            $result['message'] = "No se pudo desactivar el Cargo-Autoridad.";
-        }
-
-        return $result;
-    }
-
-    public function getActivesCargo(){
-        $result = array('error' => false);
-
-        $sql = "SELECT * FROM GT_CARGO WHERE condicion = 1";
-        $result_query = mysqli_query($this->conn, $sql);
-
-        $array_actives_cargo = array();
-
-        while ($row = $result_query->fetch_assoc()) {
-            array_push($array_actives_cargo, $row);
-        }
-
-        $result['array_actives_cargo'] = $array_actives_cargo;
-
-        return $result;
-    }
-
-    public function getActivesAutoridad(){
-        $result = array('error' => false);
-
-        $sql = "SELECT * FROM GT_AUTORIDAD WHERE condicion = 1";
-        $result_query = mysqli_query($this->conn, $sql);
-
-        $array_actives_autoridad = array();
-
-        while ($row = $result_query->fetch_assoc()) {
-            array_push($array_actives_autoridad, $row);
-        }
-
-        $result['array_actives_autoridad'] = $array_actives_autoridad;
-
-        return $result;
-    }
-
     public function getActives(){
         $result = array('error' => false);
 
-        $sql = "SELECT gt_ca.*, gt_car.nombre AS cargoname, gt_aut.nombre AS autoridadname 
+        $sql = "SELECT gt_ca.*, gt_car.nombre AS cargo, gt_aut.nombre AS autoridad
                 FROM GT_CARGO_AUTORIDAD as gt_ca 
                 INNER JOIN GT_CARGO AS gt_car ON gt_ca.idcargo = gt_car.id 
                 INNER JOIN GT_AUTORIDAD AS gt_aut ON gt_ca.idautoridad = gt_aut.id 
@@ -201,5 +96,75 @@ class CargoAutoridad {
 
         return $result;
     }
-    
+
+    public function insertar(){
+        $result = array('error' => false);
+
+        $sql = "INSERT INTO GT_CARGO_AUTORIDAD(idcargo, idautoridad, fecha_inicio, fecha_fin, condicion) VALUES ($this->idcargo,$this->idautoridad, '$this->fecha_inicio', '$this->fecha_fin', 1)";
+        $result_query = mysqli_query($this->conn, $sql);
+
+        if ($result_query) {
+            $result['message'] = "Cargo-Autoridad agregada correctamente.";
+        }
+        else {
+            $result['error'] = true;
+            $result['message'] = "No se pudo agregar Cargo-Autoridad.";
+        }      
+
+        return $result;
+    }
+ 
+    public function actualizar(){
+        $result = array('error' => false);
+
+        $sql = "UPDATE GT_CARGO_AUTORIDAD SET idcargo = $this->idcargo, idautoridad = $this->idautoridad, fecha_inicio = '$this->fecha_inicio', fecha_fin = '$this->fecha_fin' WHERE id = $this->id";
+
+        $result_query = mysqli_query($this->conn, $sql);
+
+        if ($result_query) {
+            $result['message'] = "Cargo-Autoridad actualizada con éxito.";
+        }
+        else {
+            $result['error'] = true;
+            $result['message'] = "No se pudo actualizar el Cargo-Autoridad.";
+        }
+
+        return $result;   
+    }
+
+    public function activar(){
+        $result = array('error' => false);
+
+        $sql = "UPDATE GT_CARGO_AUTORIDAD SET condicion = 1 WHERE id = $this->id";
+
+        $result_query = mysqli_query($this->conn, $sql);
+
+        if ($result_query) {
+            $result['message'] = "Cargo-Autoridad activada con éxito.";
+        }
+        else {
+            $result['error'] = true;
+            $result['message'] = "No se pudo activar el Cargo-Autoridad.";
+        }
+
+        return $result;
+    }
+
+    public function desactivar(){
+        $result = array('error' => false);
+
+        $sql = "UPDATE GT_CARGO_AUTORIDAD SET condicion = 0 WHERE id = $this->id";
+
+        $result_query = mysqli_query($this->conn, $sql);
+
+        if ($result_query) {
+            $result['message'] = "Cargo-Autoridad desactivada con éxito.";
+        }
+        else {
+            $result['error'] = true;
+            $result['message'] = "No se pudo desactivar el Cargo-Autoridad.";
+        }
+
+        return $result;
+    }         
 }

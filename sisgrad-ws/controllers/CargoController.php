@@ -15,9 +15,8 @@ class CargoController {
 	public function store(){
 		$cargo = new Cargo();
 
+		$cargo->setCodigo($_POST['codigo']);
 		$cargo->setNombre($_POST['nombre']);
-
-		$cargo->setTipo($_POST['tipo']);
 
 		$result = $cargo->insertar();
 
@@ -28,8 +27,8 @@ class CargoController {
 		$cargo = new Cargo();
 
 		$cargo->setId($_POST['id']);
-		$cargo->setNombre($_POST['nombre']);
-		$cargo->setTipo($_POST['tipo']);
+		$cargo->setCodigo($_POST['codigo']);
+		$cargo->setNombre($_POST['nombre']);		
 		
 		$result = $cargo->actualizar();
 

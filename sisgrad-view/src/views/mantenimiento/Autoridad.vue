@@ -72,12 +72,12 @@
               <div class="modal-body">
                 <form role="form">
                     <div class="form-group">
-                        <label for="autoridad">Autoridad:</label>
+                        <label for="autoridad">Nombres y Apellidos:</label>
                         <input type="text" v-model="autoridad.nombre" name="autoridad" class="form-control" id="autoridad"/>                        
                     </div>
                     <div class="form-group">
-                        <label for="grado-select">Grado:</label>
-                        <b-form-select id="grado-select" v-model="autoridad.grado" :options="array_grados"></b-form-select>       
+                        <label for="grado">Grado:</label>
+                        <input type="text" v-model="autoridad.grado" name="grado" class="form-control" id="grado"/>                        
                     </div>
                 </form>
               </div>
@@ -121,12 +121,8 @@ export default {
     name: 'autoridad',  
     data() {
         return { 
-            url: '//localhost/grados-unsa/backend2',
-            array_autoridad : [],
-            array_grados : ['Bachiller', 
-                           'Titulado',
-                           'Maestria',
-                           'Doctorado',],
+            url: this.$root.API_URL,
+            array_autoridad : [],            
             autoridad : {
               id: '',
               nombre: '',
@@ -148,8 +144,8 @@ export default {
             },
             columnas: [
               { key: 'id', label: 'ID', sortable: true, class: 'text-center' },
-              { key: 'nombre', label: 'Nombre', sortable: true, class: 'text-left' },
-              { key: 'grado', label: 'Grado', sortable: true, class: 'text-left' },
+              { key: 'nombre', label: 'Nombres y Apellidos', sortable: true, class: 'text-left' },
+              { key: 'grado', label: 'Grado', sortable: true, class: 'text-center' },
               { key: 'condicion', label: 'Condición', class: 'text-center' },
               { key: 'acciones', label: 'Acciones', class: 'text-center' }
             ]                                       

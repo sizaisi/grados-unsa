@@ -8,6 +8,7 @@ class GradoProcedimiento {
     private $tipo_rol; 
     private $url;
     private $orden;
+    private $descripcion;
 
     private $conn;
 	
@@ -69,6 +70,14 @@ class GradoProcedimiento {
 
 	function setOrden($orden) {
 		$this->orden = $orden;
+    }
+    
+    function getDescripcion() {
+		return $this->descripcion;
+	}
+
+	function setDescripcion($descripcion) {
+		$this->descripcion = $descripcion;
 	}
 
     public function getAllGradoProcedimiento(){
@@ -106,7 +115,7 @@ class GradoProcedimiento {
 
             if ($tipo_usuario == 'Administrativo') {
                 $sql = "SELECT GT_GP.*, GT_P.id AS idproc, COUNT(GT_E.id) AS total_expedientes,
-                        GT_P.nombre AS proc_nombre, GT_P.descripcion AS proc_descripcion 
+                        GT_P.nombre AS proc_nombre, GT_GP.descripcion AS proc_descripcion 
                         FROM GT_GRADO_PROCEDIMIENTO AS GT_GP
                         INNER JOIN GT_PROCEDIMIENTO AS GT_P ON GT_P.id = GT_GP.idprocedimiento 
                         INNER JOIN GT_EXPEDIENTE AS GT_E ON GT_E.idgrado_procedimiento = GT_GP.id
@@ -209,8 +218,8 @@ class GradoProcedimiento {
     public function insertar(){
         $result = array('error' => false);
 
-        $sql = "INSERT INTO GT_GRADO_PROCEDIMIENTO(idgrado_modalidad, idprocedimiento, idrol_area, tipo_rol, url_formulario, orden, condicion) 
-                VALUES ($this->idgrado_modalidad, $this->idprocedimiento, $this->idrol, '$this->tipo_rol', '$this->url', $this->orden, 1)";
+        $sql = "INSERT INTO GT_GRADO_PROCEDIMIENTO(idgrado_modalidad, idprocedimiento, idrol_area, tipo_rol, url_formulario, orden, descripcion, condicion) 
+                VALUES ($this->idgrado_modalidad, $this->idprocedimiento, $this->idrol_area, '$this->tipo_rol', '$this->url', $this->orden, '$this->descripcion', 1)";
         $result_query = mysqli_query($this->conn, $sql);
 
         if ($result_query) {
@@ -228,9 +237,10 @@ class GradoProcedimiento {
         $result = array('error' => false);
 
         $sql = "UPDATE GT_GRADO_PROCEDIMIENTO SET idgrado_modalidad = $this->idgrado_modalidad,
-                idprocedimiento = $this->idprocedimiento, idrol_area = $this->idrol,
+                idprocedimiento = $this->idprocedimiento, idrol_area = $this->idrol_area,
                 tipo_rol = '$this->tipo_rol', orden = $this->orden,
-                url_formulario = '$this->url' WHERE id = $this->id";
+                url_formulario = '$this->url', descripcion = '$this->descripcion'
+                WHERE id = $this->id";
 
         $result_query = mysqli_query($this->conn, $sql);
 
@@ -248,7 +258,7 @@ class GradoProcedimiento {
     public function activar() {
         $result = array('error' => false);
 
-        $sql = "UPDATE GT_GRADO_PROCEDIMIENTO SET condicion = '1' WHERE id = $this->id";
+        $sql = "UPDATE GT_GRADO_PROCEDIMIENTO SET condicion = 1 WHERE id = $this->id";
 
         $result_query = mysqli_query($this->conn, $sql);
 
@@ -266,7 +276,7 @@ class GradoProcedimiento {
     public function desactivar() {
         $result = array('error' => false);
 
-        $sql = "UPDATE GT_GRADO_PROCEDIMIENTO SET condicion = '0' WHERE id = $this->id";
+        $sql = "UPDATE GT_GRADO_PROCEDIMIENTO SET condicion = 0 WHERE id = $this->id";
 
         $result_query = mysqli_query($this->conn, $sql);
 

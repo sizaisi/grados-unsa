@@ -106,11 +106,7 @@
                     <div class="form-group">
                         <label for="procedimiento">Procedimiento:</label>
                         <input type="text" v-model="procedimiento.nombre" name="procedimiento" class="form-control" id="procedimiento"/>                        
-                    </div>
-                    <div class="form-group">
-                        <label for="proc_desc">Descripción:</label>
-                        <input type="text" v-model="procedimiento.descripcion" class="form-control" id="proc_desc"/>                        
-                    </div>
+                    </div>                    
                 </form>
               </div>
               <div class="modal-footer">
@@ -157,8 +153,7 @@ export default {
           array_procedimiento : [],
           procedimiento : {
             id: '',
-            nombre: '',
-            descripcion: '',
+            nombre: ''            
           },
           titleAddEditModal : '',
           titleDeleteModal : '',
@@ -176,8 +171,7 @@ export default {
           },
           columnas: [
             { key: 'id', label: 'ID', sortable: true, class: 'text-center' },
-            { key: 'nombre', label: 'Nombre', sortable: true, class: 'text-left' },
-            { key: 'descripcion', label: 'Descripción', sortable: true, class: 'text-left' },
+            { key: 'nombre', label: 'Nombre', sortable: true, class: 'text-left' },            
             { key: 'condicion', label: 'Condición', class: 'text-center' },
             { key: 'acciones', label: 'Acciones', class: 'text-center' }
           ],
@@ -219,8 +213,7 @@ export default {
                 {
                     this.titleAddEditModal = 'Actualizar Procedimiento'
                     this.procedimiento.id = data.id
-                    this.procedimiento.nombre = data.nombre
-                    this.procedimiento.descripcion = data.descripcion
+                    this.procedimiento.nombre = data.nombre                    
                     this.tipoAccion = 'actualizar'
                     break
                 }
@@ -265,8 +258,7 @@ export default {
         cerrarAddEditModal() {
             this.showAddEditModal = false
             this.procedimiento.id = ''
-            this.procedimiento.nombre = ''
-            this.procedimiento.descripcion = ''
+            this.procedimiento.nombre = ''            
             this.errorMsg = ''
             this.successMsg = ''
         },
@@ -315,8 +307,7 @@ export default {
         cerrarDeleteModal() {
             this.showDeleteModal = false
             this.procedimiento.id = ''
-            this.procedimiento.nombre = ''
-            this.procedimiento.descripcion = ''
+            this.procedimiento.nombre = ''            
             this.errorMsg = ''
             this.successMsg = ''
         },
