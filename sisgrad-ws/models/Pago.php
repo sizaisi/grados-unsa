@@ -73,7 +73,7 @@ class Pago {
 
 		$result = array('error' => false);
   
-		$sql = "SELECT * FROM GT_PAGO WHERE idexpediente = $this->idexpediente";
+		$sql = "SELECT * FROM gt_pago WHERE idexpediente = $this->idexpediente";
 		$result_query = mysqli_query($this->conn, $sql);
   
 		$array_pagos_expediente = array();
@@ -91,7 +91,7 @@ class Pago {
   
 		$result = array('error' => false);
   
-		$sql = "INSERT INTO GT_PAGO(idconcepto, concepto, monto, fecha_pago, nro_recibo, idexpediente)
+		$sql = "INSERT INTO gt_pago(idconcepto, concepto, monto, fecha_pago, nro_recibo, idexpediente)
 				VALUES ($this->idconcepto, '$this->concepto', $this->monto,
 						'$this->fecha_pago', '$this->nro_recibo', $this->idexpediente)";
   

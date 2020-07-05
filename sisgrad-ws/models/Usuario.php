@@ -39,7 +39,7 @@ class Usuario {
 		$result = array('error' => false);		
 
 		$sql = "SELECT * 
-				FROM GT_USUARIO
+				FROM gt_usuario
 				WHERE codi_usuario = '$this->codi_usuario'";
 		$result_query = mysqli_query($this->conn, $sql);		
   
@@ -96,16 +96,16 @@ class Usuario {
   
 		$result = array('error' => false);
   
-		$sql = "SELECT gt_u.id, REPLACE(ac_doc.apn,'/',' ') AS apn, ac_doc.dic AS nro_documento " .
-			   "FROM GT_USUARIO AS gt_u " .
-			   "INNER JOIN SIAC_DOC AS ac_doc ON gt_u.codi_usuario = ac_doc.codper " .             
-			   "INNER JOIN actdepa AS ac_d ON ac_doc.depend = ac_d.depa " .             
-			   "WHERE ac_d.facu = (SELECT ac_e.facu " .
-								  "FROM GT_EXPEDIENTE AS gt_e " .
-								  "INNER JOIN actescu ac_e ON gt_e.nues = ac_e.nues " .
-								  "WHERE gt_e.id = $idexpediente) " .
-			   "AND ac_doc.esta_doc = 'A' " .             
-			   "ORDER BY ac_doc.apn ASC";
+		$sql = "SELECT gt_u.id, REPLACE(ac_doc.apn, '/', ' ') AS apn, ac_doc.dic AS nro_documento 
+			    FROM gt_usuario AS gt_u 
+			    INNER JOIN SIAC_DOC AS ac_doc ON gt_u.codi_usuario = ac_doc.codper 
+			    INNER JOIN actdepa AS ac_d ON ac_doc.depend = ac_d.depa      
+			    WHERE ac_d.facu = (SELECT ac_e.facu 
+								   FROM gt_expediente AS gt_e 
+								   INNER JOIN actescu ac_e ON gt_e.nues = ac_e.nues 
+								   WHERE gt_e.id = $idexpediente) 
+			    AND ac_doc.esta_doc = 'A' 
+			    ORDER BY ac_doc.apn ASC";
   
 		$result_query = mysqli_query($this->conn, $sql);
 

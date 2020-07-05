@@ -29,7 +29,7 @@ class ModalidadObtencion {
 	public function getAllModalidadObtencion(){
         $result = array('error' => false);
 
-        $sql = "SELECT * FROM GT_MODALIDAD_OBTENCION";
+        $sql = "SELECT * FROM gt_modalidad_obtencion";
         $result_query = mysqli_query($this->conn, $sql);
 
         $array_modalidad_obtencion = array();
@@ -46,7 +46,7 @@ class ModalidadObtencion {
     public function getActives(){
         $result = array('error' => false);
 
-        $sql = "SELECT * FROM GT_MODALIDAD_OBTENCION where condicion = 1";
+        $sql = "SELECT * FROM gt_modalidad_obtencion where condicion = 1";
         $result_query = mysqli_query($this->conn, $sql);
 
         $array_modalidad_obtencion = array();
@@ -63,7 +63,7 @@ class ModalidadObtencion {
     public function insertar(){
         $result = array('error' => false);
 
-        $sql = "INSERT INTO GT_MODALIDAD_OBTENCION(nombre, condicion, fing) VALUES ('$this->nombre', 1, null)";
+        $sql = "INSERT INTO gt_modalidad_obtencion(nombre, condicion, fing) VALUES ('$this->nombre', 1, null)";
         $result_query = mysqli_query($this->conn, $sql);
 
         if ($result_query) {
@@ -80,7 +80,7 @@ class ModalidadObtencion {
     public function actualizar(){
         $result = array('error' => false);
 
-        $sql = "UPDATE GT_MODALIDAD_OBTENCION SET nombre = '$this->nombre' WHERE id = $this->id";
+        $sql = "UPDATE gt_modalidad_obtencion SET nombre = '$this->nombre' WHERE id = $this->id";
 
         $result_query = mysqli_query($this->conn, $sql);
 
@@ -98,7 +98,7 @@ class ModalidadObtencion {
     public function activar(){
         $result = array('error' => false);
 
-        $sql = "UPDATE GT_MODALIDAD_OBTENCION SET condicion = '1' WHERE id = $this->id";
+        $sql = "UPDATE gt_modalidad_obtencion SET condicion = '1' WHERE id = $this->id";
 
         $result_query = mysqli_query($this->conn, $sql);
 
@@ -116,7 +116,7 @@ class ModalidadObtencion {
     public function desactivar(){
         $result = array('error' => false);
 
-        $sql = "UPDATE GT_MODALIDAD_OBTENCION SET condicion = '0' WHERE id = $this->id";
+        $sql = "UPDATE gt_modalidad_obtencion SET condicion = '0' WHERE id = $this->id";
 
         $result_query = mysqli_query($this->conn, $sql);
 

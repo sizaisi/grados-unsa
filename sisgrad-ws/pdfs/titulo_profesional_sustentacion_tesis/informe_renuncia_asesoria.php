@@ -63,7 +63,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	$pdf->writeHTMLCell(150, '', 30, '', $firma, 0, 0, 0, true, 'C', true); 
 	$pdf->Ln();
 	
-	$pdf->Output('Informe_renuncia_asesoria_'.$expediente->codigo.'.pdf', 'D');
+	$pdf->Output('informe_renuncia_asesoria_'.$expediente->codigo.'.pdf', 'D');
 }
 else {
 	echo "<h3>No tiene permiso de acceso para mostrar el archivo</h3>";

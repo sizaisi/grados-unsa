@@ -130,7 +130,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	$pdf->Ln(); 	
 	
 	//output
-	$pdf->Output('Acta_sustentancion_'.$expediente->codigo.'.pdf', 'D');
+	$pdf->Output('acta_sustentancion_'.$expediente->codigo.'.pdf', 'D');
 	
 }
 else {

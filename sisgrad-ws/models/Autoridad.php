@@ -38,7 +38,7 @@ class Autoridad {
 	public function getAllAutoridad(){
         $result = array('error' => false);
 
-        $sql = "SELECT * FROM GT_AUTORIDAD";
+        $sql = "SELECT * FROM gt_autoridad";
         $result_query = mysqli_query($this->conn, $sql);
 
         $array_autoridad = array();
@@ -55,7 +55,7 @@ class Autoridad {
     public function getActives(){
         $result = array('error' => false);
 
-        $sql = "SELECT * FROM GT_AUTORIDAD WHERE condicion = 1";
+        $sql = "SELECT * FROM gt_autoridad WHERE condicion = 1";
         $result_query = mysqli_query($this->conn, $sql);
 
         $array_actives_autoridad = array();
@@ -72,7 +72,7 @@ class Autoridad {
     public function insertar(){
         $result = array('error' => false);
 
-        $sql = "INSERT INTO GT_AUTORIDAD(nombre, grado, condicion) VALUES ('$this->nombre', '$this->grado', 1)";
+        $sql = "INSERT INTO gt_autoridad(nombre, grado, condicion) VALUES ('$this->nombre', '$this->grado', 1)";
         $result_query = mysqli_query($this->conn, $sql);
 
         if ($result_query) {
@@ -89,7 +89,7 @@ class Autoridad {
     public function actualizar(){
         $result = array('error' => false);
 
-        $sql = "UPDATE GT_AUTORIDAD SET nombre = '$this->nombre', grado ='$this->grado' WHERE id = $this->id";
+        $sql = "UPDATE gt_autoridad SET nombre = '$this->nombre', grado ='$this->grado' WHERE id = $this->id";
 
         $result_query = mysqli_query($this->conn, $sql);
 
@@ -107,7 +107,7 @@ class Autoridad {
     public function activar(){
         $result = array('error' => false);
 
-        $sql = "UPDATE GT_AUTORIDAD SET condicion = '1' WHERE id = $this->id";
+        $sql = "UPDATE gt_autoridad SET condicion = '1' WHERE id = $this->id";
 
         $result_query = mysqli_query($this->conn, $sql);
 
@@ -125,7 +125,7 @@ class Autoridad {
     public function desactivar(){
         $result = array('error' => false);
 
-        $sql = "UPDATE GT_AUTORIDAD SET condicion = '0' WHERE id = $this->id";
+        $sql = "UPDATE gt_autoridad SET condicion = '0' WHERE id = $this->id";
 
         $result_query = mysqli_query($this->conn, $sql);
 

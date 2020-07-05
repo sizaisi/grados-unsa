@@ -51,12 +51,12 @@ class Archivo extends Recurso {
   
 		$sql = "SELECT GT_R.id, GT_A.nombre_asignado AS nombre, GT_A.mime, 
 					   GT_P.nombre AS procedimiento, GT_RA.nombre AS area 
-				FROM GT_RECURSO AS GT_R
-				INNER JOIN GT_ARCHIVO GT_A ON GT_A.idrecurso = GT_R.id				
-				INNER JOIN GT_GRADO_PROCEDIMIENTO GT_GP ON GT_GP.id = GT_R.idgrado_proc
-				INNER JOIN GT_PROCEDIMIENTO GT_P ON GT_P.id = GT_GP.idprocedimiento
-				INNER JOIN GT_USUARIO GT_U ON GT_U.id = GT_R.idusuario
-				INNER JOIN GT_ROL_AREA GT_RA ON GT_RA.id = GT_U.idrol_area
+				FROM gt_recurso AS GT_R
+				INNER JOIN gt_archivo GT_A ON GT_A.idrecurso = GT_R.id				
+				INNER JOIN gt_grado_procedimiento GT_GP ON GT_GP.id = GT_R.idgrado_proc
+				INNER JOIN gt_procedimiento GT_P ON GT_P.id = GT_GP.idprocedimiento
+				INNER JOIN gt_usuario GT_U ON GT_U.id = GT_R.idusuario
+				INNER JOIN gt_rol_area GT_RA ON GT_RA.id = GT_U.idrol_area
 				WHERE GT_R.idexpediente = $this->idexpediente ORDER BY id ASC";
 		$result_query = mysqli_query($this->conn, $sql);
   
@@ -77,16 +77,16 @@ class Archivo extends Recurso {
   
 		$sql = "SELECT GT_RE.id, GT_A.nombre_asignado AS nombre, GT_A.mime, 
 					   GT_P.nombre AS procedimiento, GT_RA.nombre AS area 
-				FROM GT_RECURSO AS GT_RE
-				INNER JOIN GT_ARCHIVO GT_A ON GT_A.idrecurso = GT_RE.id				
-				INNER JOIN GT_GRADO_PROCEDIMIENTO GT_GP ON GT_GP.id = GT_RE.idgrado_proc 
-				INNER JOIN GT_PROCEDIMIENTO GT_P ON GT_P.id = GT_GP.idprocedimiento 
-				INNER JOIN GT_USUARIO GT_U ON GT_U.id  = GT_RE.idusuario
-				INNER JOIN GT_ROL_AREA GT_RA ON GT_RA.id  = GT_U.idrol_area 
+				FROM gt_recurso AS GT_RE
+				INNER JOIN gt_archivo GT_A ON GT_A.idrecurso = GT_RE.id				
+				INNER JOIN gt_grado_procedimiento GT_GP ON GT_GP.id = GT_RE.idgrado_proc 
+				INNER JOIN gt_procedimiento GT_P ON GT_P.id = GT_GP.idprocedimiento 
+				INNER JOIN gt_usuario GT_U ON GT_U.id  = GT_RE.idusuario
+				INNER JOIN gt_rol_area GT_RA ON GT_RA.id  = GT_U.idrol_area 
 				WHERE GT_RE.idexpediente = $this->idexpediente 
 				AND GT_RE.idgrado_proc = ( SELECT GT_R.idgradproc_origen 
-											FROM GT_MOVIMIENTO GT_M 
-											INNER JOIN GT_RUTA GT_R ON GT_M.idruta = GT_R.id 
+											FROM gt_movimiento GT_M 
+											INNER JOIN gt_ruta GT_R ON GT_M.idruta = GT_R.id 
 											WHERE GT_R.idgradproc_destino = $this->idgrado_proc 
 											AND GT_M.idexpediente = $this->idexpediente AND GT_R.condicion = 1 
 											ORDER BY GT_M.id desc limit 1
@@ -111,9 +111,9 @@ class Archivo extends Recurso {
   
 		$result = array('error' => false);
 
-		$sql = "SELECT GT_R.id, GT_A.nombre_asignado AS nombre, GT_A.mime
-				FROM GT_RECURSO AS GT_R
-				INNER JOIN GT_ARCHIVO GT_A ON GT_A.idrecurso = GT_R.id
+		$sql = "SELECT GT_R.id, GT_A.nombre_asignado, GT_A.nombre_archivo, GT_A.mime
+				FROM gt_recurso AS GT_R
+				INNER JOIN gt_archivo AS GT_A ON GT_A.idrecurso = GT_R.id
 				WHERE GT_R.idexpediente = $this->idexpediente 
 				AND GT_R.idgrado_proc = $this->idgrado_proc 
 				AND GT_R.idusuario = $this->idusuario
@@ -143,7 +143,7 @@ class Archivo extends Recurso {
 		$result = array('error' => false);   
 		$this->conn->autocommit(FALSE); //iniciar transaccion	
 		
-		$sql = "INSERT INTO GT_RECURSO(idexpediente, idgrado_proc, idusuario, idmovimiento, idruta) 
+		$sql = "INSERT INTO gt_recurso(idexpediente, idgrado_proc, idusuario, idmovimiento, idruta) 
 				VALUES ($this->idexpediente, $this->idgrado_proc, $this->idusuario, NULL, $this->idruta)";      
 		$result_query = mysqli_query($this->conn, $sql);     
 		
@@ -156,7 +156,7 @@ class Archivo extends Recurso {
 			$idrecurso = mysqli_insert_id($this->conn);
 		}
   
-		$sql = "INSERT INTO GT_ARCHIVO(idrecurso, nombre_asignado, nombre_archivo, mime, data) 
+		$sql = "INSERT INTO gt_archivo(idrecurso, nombre_asignado, nombre_archivo, mime, data) 
 				VALUES ($idrecurso, '$this->nombre_asignado', '$this->nombre_archivo', '$this->mime', '$this->data')";		
 		$result_query = mysqli_query($this->conn, $sql);
 
@@ -183,14 +183,14 @@ class Archivo extends Recurso {
 		$result = array('error' => false);                
 		$this->conn->autocommit(FALSE); //iniciar transaccion	
 		
-		$sql = "DELETE FROM GT_ARCHIVO where idrecurso = $this->id";      
+		$sql = "DELETE FROM gt_archivo where idrecurso = $this->id";      
 		$result_query = mysqli_query($this->conn, $sql);     	
 		
 		if (!$result_query) {
 		   	$result['error'] = true;                    
 		}       	
 		
-		$sql = "DELETE FROM GT_RECURSO where id = $this->id AND idmovimiento IS NULL";
+		$sql = "DELETE FROM gt_recurso where id = $this->id AND idmovimiento IS NULL";
 		$result_query = mysqli_query($this->conn, $sql);     		
   
 		if (!$result_query) {

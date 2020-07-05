@@ -41,9 +41,9 @@ class Persona extends Recurso {
 
 		$sql = "SELECT GT_R.id, GT_P.iddocente, REPLACE(AC_D.apn, '/', ' ') AS apn, 
 				AC_D.dic AS nro_documento, GT_P.tipo, AC_F.nfac AS facultad
-				FROM GT_RECURSO AS GT_R
-				INNER JOIN GT_PERSONA GT_P ON GT_P.idrecurso = GT_R.id
-				INNER JOIN GT_USUARIO AS GT_U ON GT_U.id = GT_P.iddocente
+				FROM gt_recurso AS GT_R
+				INNER JOIN gt_persona GT_P ON GT_P.idrecurso = GT_R.id
+				INNER JOIN gt_usuario AS GT_U ON GT_U.id = GT_P.iddocente
 				INNER JOIN SIAC_DOC AS AC_D ON AC_D.codper = GT_U.codi_usuario 
 				INNER JOIN actdepa AS AC_DE ON AC_DE.depa = AC_D.depend
 				INNER JOIN actfacu AS AC_F ON AC_F.facu = AC_DE.facu
@@ -77,9 +77,9 @@ class Persona extends Recurso {
 
 		$sql = "SELECT GT_R.id, REPLACE(AC_D.apn, '/', ' ') AS apn, 
 				AC_D.dic AS nro_documento, GT_P.tipo
-				FROM GT_RECURSO AS GT_R
-				INNER JOIN GT_PERSONA GT_P ON GT_P.idrecurso = GT_R.id
-				INNER JOIN GT_USUARIO AS GT_U ON GT_U.id = GT_P.iddocente
+				FROM gt_recurso AS GT_R
+				INNER JOIN gt_persona GT_P ON GT_P.idrecurso = GT_R.id
+				INNER JOIN gt_usuario AS GT_U ON GT_U.id = GT_P.iddocente
 				INNER JOIN SIAC_DOC AS AC_D ON AC_D.codper = GT_U.codi_usuario 
 				WHERE GT_R.idexpediente = $this->idexpediente 
                 AND GT_R.idgrado_proc = $this->idgrado_proc 
@@ -107,9 +107,9 @@ class Persona extends Recurso {
 
 		$sql = "SELECT GT_R.id, GT_P.iddocente, REPLACE(AC_D.apn, '/', ' ') AS apn, 
 				       AC_D.dic AS nro_documento, GT_P.tipo
-				FROM GT_RECURSO AS GT_R
-					INNER JOIN GT_PERSONA GT_P ON GT_P.idrecurso = GT_R.id
-					INNER JOIN GT_USUARIO AS GT_U ON GT_U.id = GT_P.iddocente
+				FROM gt_recurso AS GT_R
+					INNER JOIN gt_persona GT_P ON GT_P.idrecurso = GT_R.id
+					INNER JOIN gt_usuario AS GT_U ON GT_U.id = GT_P.iddocente
 					INNER JOIN SIAC_DOC AS AC_D ON AC_D.codper = GT_U.codi_usuario 
 				WHERE GT_R.idexpediente = $this->idexpediente   
 					AND GT_R.idmovimiento IS NOT NULL               												
@@ -140,9 +140,9 @@ class Persona extends Recurso {
 
 		$sql = "SELECT GT_R.id, GT_P.iddocente, REPLACE(AC_D.apn, '/', ' ') AS apn, 
 				AC_D.dic AS nro_documento, GT_P.tipo, AC_F.nfac AS facultad
-				FROM GT_RECURSO AS GT_R
-				INNER JOIN GT_PERSONA GT_P ON GT_P.idrecurso = GT_R.id
-				INNER JOIN GT_USUARIO AS GT_U ON GT_U.id = GT_P.iddocente
+				FROM gt_recurso AS GT_R
+				INNER JOIN gt_persona GT_P ON GT_P.idrecurso = GT_R.id
+				INNER JOIN gt_usuario AS GT_U ON GT_U.id = GT_P.iddocente
 				INNER JOIN SIAC_DOC AS AC_D ON AC_D.codper = GT_U.codi_usuario 
 				INNER JOIN actdepa AS AC_DE ON AC_DE.depa = AC_D.depend
 				INNER JOIN actfacu AS AC_F ON AC_F.facu = AC_DE.facu
@@ -176,9 +176,9 @@ class Persona extends Recurso {
 
 		$sql = "SELECT GT_R.id, GT_P.iddocente, REPLACE(AC_D.apn, '/', ' ') AS apn, 
 				AC_D.dic AS nro_documento, GT_P.tipo, AC_F.nfac AS facultad
-				FROM GT_RECURSO AS GT_R
-				INNER JOIN GT_PERSONA GT_P ON GT_P.idrecurso = GT_R.id
-				INNER JOIN GT_USUARIO AS GT_U ON GT_U.id = GT_P.iddocente
+				FROM gt_recurso AS GT_R
+				INNER JOIN gt_persona GT_P ON GT_P.idrecurso = GT_R.id
+				INNER JOIN gt_usuario AS GT_U ON GT_U.id = GT_P.iddocente
 				INNER JOIN SIAC_DOC AS AC_D ON AC_D.codper = GT_U.codi_usuario 
 				INNER JOIN actdepa AS AC_DE ON AC_DE.depa = AC_D.depend
 				INNER JOIN actfacu AS AC_F ON AC_F.facu = AC_DE.facu
@@ -212,9 +212,9 @@ class Persona extends Recurso {
 
 		$sql = "SELECT GT_R.id, REPLACE(AC_D.apn, '/', ' ') AS apn, 
 				AC_D.dic AS nro_documento, GT_P.tipo
-				FROM GT_RECURSO AS GT_R
-				INNER JOIN GT_PERSONA GT_P ON GT_P.idrecurso = GT_R.id
-				INNER JOIN GT_USUARIO AS GT_U ON GT_U.id = GT_P.iddocente
+				FROM gt_recurso AS GT_R
+				INNER JOIN gt_persona GT_P ON GT_P.idrecurso = GT_R.id
+				INNER JOIN gt_usuario AS GT_U ON GT_U.id = GT_P.iddocente
 				INNER JOIN SIAC_DOC AS AC_D ON AC_D.codper = GT_U.codi_usuario 
 				WHERE GT_R.idexpediente = $this->idexpediente 
                 AND GT_R.idgrado_proc = $this->idgrado_proc 
@@ -246,8 +246,8 @@ class Persona extends Recurso {
 		$this->conn->autocommit(FALSE); //iniciar transaccion	
 
 		//deshabilitar el ultimo duplicado que tenga movimiento del mismo tipo (asesor, secretario, etc)
-		$sql = "UPDATE GT_PERSONA AS GT_P 
-				INNER JOIN GT_RECURSO AS GT_R ON GT_R.id = GT_P.idrecurso
+		$sql = "UPDATE gt_persona AS GT_P 
+				INNER JOIN gt_recurso AS GT_R ON GT_R.id = GT_P.idrecurso
 				SET GT_P.estado = 0
 				WHERE GT_R.idexpediente = $this->idexpediente 
 				AND GT_R.idgrado_proc = $this->idgrado_proc
@@ -260,7 +260,7 @@ class Persona extends Recurso {
 		   $result['error'] = $sql;                    
 		}
 		
-		$sql = "INSERT INTO GT_RECURSO(idexpediente, idgrado_proc, idusuario, idmovimiento, idruta) 
+		$sql = "INSERT INTO gt_recurso(idexpediente, idgrado_proc, idusuario, idmovimiento, idruta) 
 				VALUES ($this->idexpediente, $this->idgrado_proc, $this->idusuario, NULL, $this->idruta)";      
 		$result_query = mysqli_query($this->conn, $sql);     
 		
@@ -273,7 +273,7 @@ class Persona extends Recurso {
 			$idrecurso = mysqli_insert_id($this->conn);
 		}
 		
-		$sql = "INSERT INTO GT_PERSONA(idrecurso, iddocente, tipo) 
+		$sql = "INSERT INTO gt_persona(idrecurso, iddocente, tipo) 
 				VALUES ($idrecurso, $this->iddocente, '$this->tipo')";      
 		$result_query = mysqli_query($this->conn, $sql);     		
   
@@ -299,14 +299,14 @@ class Persona extends Recurso {
 		$result = array('error' => false);                
 		$this->conn->autocommit(FALSE); //iniciar transaccion	
 		
-		$sql = "DELETE FROM GT_PERSONA where idrecurso = $this->id";      
+		$sql = "DELETE FROM gt_persona where idrecurso = $this->id";      
 		$result_query = mysqli_query($this->conn, $sql);     	
 		
 		if (!$result_query) {
 		   	$result['error'] = true;                    
 		}       	
 		
-		$sql = "DELETE FROM GT_RECURSO where id = $this->id AND idmovimiento IS NULL";
+		$sql = "DELETE FROM gt_recurso where id = $this->id AND idmovimiento IS NULL";
 		$result_query = mysqli_query($this->conn, $sql);     		
   
 		if (!$result_query) {
@@ -318,11 +318,11 @@ class Persona extends Recurso {
 		}
 
 		//habilitar el ultimo duplicado que tenga movimiento del mismo tipo (asesor, secretario, etc)										 
-		$sql = "UPDATE GT_PERSONA
+		$sql = "UPDATE gt_persona
 			    SET estado = 1
 				WHERE tipo = '$this->tipo'
 				AND idrecurso = (SELECT MAX(id) 
-								 FROM GT_RECURSO
+								 FROM gt_recurso
 								 WHERE idexpediente = $this->idexpediente 
 								 AND idgrado_proc = $this->idgrado_proc
 								 AND idmovimiento IS NOT NULL)";

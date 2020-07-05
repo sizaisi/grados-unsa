@@ -38,7 +38,7 @@ class Cargo {
 	public function getAllCargo(){
         $result = array('error' => false);
 
-        $sql = "SELECT * FROM GT_CARGO";
+        $sql = "SELECT * FROM gt_cargo";
         $result_query = mysqli_query($this->conn, $sql);
 
         $array_cargo = array();
@@ -55,7 +55,7 @@ class Cargo {
     public function getActives(){
         $result = array('error' => false);
 
-        $sql = "SELECT * FROM GT_CARGO WHERE condicion = 1";
+        $sql = "SELECT * FROM gt_cargo WHERE condicion = 1";
         $result_query = mysqli_query($this->conn, $sql);
 
         $array_actives_cargo = array();
@@ -72,7 +72,7 @@ class Cargo {
     public function insertar(){
         $result = array('error' => false);
 
-        $sql = "INSERT INTO GT_CARGO(codigo, nombre, condicion) VALUES ('$this->codigo', '$this->nombre', 1)";
+        $sql = "INSERT INTO gt_cargo(codigo, nombre, condicion) VALUES ('$this->codigo', '$this->nombre', 1)";
         $result_query = mysqli_query($this->conn, $sql);
 
         if ($result_query) {
@@ -89,7 +89,7 @@ class Cargo {
     public function actualizar(){
         $result = array('error' => false);
 
-        $sql = "UPDATE GT_CARGO SET codigo = '$this->codigo', nombre = '$this->nombre' WHERE id = $this->id";
+        $sql = "UPDATE gt_cargo SET codigo = '$this->codigo', nombre = '$this->nombre' WHERE id = $this->id";
 
         $result_query = mysqli_query($this->conn, $sql);
 
@@ -107,7 +107,7 @@ class Cargo {
     public function activar(){
         $result = array('error' => false);
 
-        $sql = "UPDATE GT_CARGO SET condicion = '1' WHERE id = $this->id";
+        $sql = "UPDATE gt_cargo SET condicion = '1' WHERE id = $this->id";
 
         $result_query = mysqli_query($this->conn, $sql);
 
@@ -125,7 +125,7 @@ class Cargo {
     public function desactivar(){
         $result = array('error' => false);
 
-        $sql = "UPDATE GT_CARGO SET condicion = '0' WHERE id = $this->id";
+        $sql = "UPDATE gt_cargo SET condicion = '0' WHERE id = $this->id";
 
         $result_query = mysqli_query($this->conn, $sql);
 

@@ -29,7 +29,7 @@ class RolArea {
 	public function getAllRolArea(){
         $result = array('error' => false);
 
-        $sql = "select * from GT_ROL_AREA";
+        $sql = "select * from gt_rol_area";
         $result_query = mysqli_query($this->conn, $sql);
 
         $array_rol_area = array();
@@ -46,7 +46,7 @@ class RolArea {
     public function insertar(){
         $result = array('error' => false);
 
-        $sql = "INSERT INTO GT_ROL_AREA(nombre, condicion) VALUES ('$this->nombre', 1)";
+        $sql = "INSERT INTO gt_rol_area(nombre, condicion) VALUES ('$this->nombre', 1)";
         $result_query = mysqli_query($this->conn, $sql);
 
         if ($result_query) {
@@ -63,7 +63,7 @@ class RolArea {
     public function actualizar(){
         $result = array('error' => false);
 
-        $sql = "UPDATE GT_ROL_AREA SET nombre = '$this->nombre' WHERE id = $this->id";
+        $sql = "UPDATE gt_rol_area SET nombre = '$this->nombre' WHERE id = $this->id";
 
         $result_query = mysqli_query($this->conn, $sql);
 
@@ -82,7 +82,7 @@ class RolArea {
     public function activar(){
         $result = array('error' => false);
 
-        $sql = "UPDATE GT_ROL_AREA SET condicion = 'Activo' WHERE id = $this->id";
+        $sql = "UPDATE gt_rol_area SET condicion = 'Activo' WHERE id = $this->id";
 
         $result_query = mysqli_query($this->conn, $sql);
 
@@ -100,7 +100,7 @@ class RolArea {
     public function desactivar(){
         $result = array('error' => false);
 
-        $sql = "UPDATE GT_ROL_AREA SET condicion = 'Inactivo' WHERE id = $this->id";
+        $sql = "UPDATE gt_rol_area SET condicion = 'Inactivo' WHERE id = $this->id";
 
         $result_query = mysqli_query($this->conn, $sql);
 

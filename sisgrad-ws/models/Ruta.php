@@ -60,12 +60,12 @@ class Ruta {
 					   GT_GT.nombre AS nombre_gradotitulo, GT_MO.nombre AS nombre_modobtencion,
 					   GT_P.nombre AS nombre_proc_origen, GT_R.idgradproc_origen, GT_R.idgradproc_destino,
 					   GT_R.etiqueta, GT_R.condicion
-				FROM GT_RUTA AS GT_R 
-				LEFT JOIN GT_GRADO_PROCEDIMIENTO AS GT_GP ON GT_R.idgradproc_origen = GT_GP.id              
-				LEFT JOIN GT_PROCEDIMIENTO AS GT_P ON GT_GP.idprocedimiento = GT_P.id 
-				LEFT JOIN GT_GRADO_MODALIDAD AS GT_GM ON GT_GP.idgrado_modalidad = GT_GM.id 
-				LEFT JOIN GT_GRADO_TITULO AS GT_GT ON GT_GM.idgrado_titulo = GT_GT.id 
-				LEFT JOIN GT_MODALIDAD_OBTENCION AS GT_MO ON GT_GM.idmodalidad_obtencion = GT_MO.id
+				FROM gt_ruta AS GT_R 
+				LEFT JOIN gt_grado_procedimiento AS GT_GP ON GT_R.idgradproc_origen = GT_GP.id              
+				LEFT JOIN gt_procedimiento AS GT_P ON GT_GP.idprocedimiento = GT_P.id 
+				LEFT JOIN gt_grado_modalidad AS GT_GM ON GT_GP.idgrado_modalidad = GT_GM.id 
+				LEFT JOIN gt_grado_titulo AS GT_GT ON GT_GM.idgrado_titulo = GT_GT.id 
+				LEFT JOIN gt_modalidad_obtencion AS GT_MO ON GT_GM.idmodalidad_obtencion = GT_MO.id
 				ORDER BY GT_R.id ASC";
   
 		$result_query = mysqli_query($this->conn, $sql);
@@ -76,12 +76,12 @@ class Ruta {
   
 		   $sql2 = "SELECT GT_P.nombre AS nombre_proc_destino, GT_GM.id AS idgrado_modalidad,
 						   GT_GT.nombre AS nombre_gradotitulo, GT_MO.nombre AS nombre_modobtencion
-					FROM GT_RUTA AS GT_R 
-					LEFT JOIN GT_GRADO_PROCEDIMIENTO AS GT_GP ON GT_R.idgradproc_destino = GT_GP.id 
-					LEFT JOIN GT_PROCEDIMIENTO AS GT_P ON GT_GP.idprocedimiento = GT_P.id
-					LEFT JOIN GT_GRADO_MODALIDAD AS GT_GM ON GT_GP.idgrado_modalidad = GT_GM.id 
-					LEFT JOIN GT_GRADO_TITULO AS GT_GT ON GT_GM.idgrado_titulo = GT_GT.id 
-					LEFT JOIN GT_MODALIDAD_OBTENCION AS GT_MO ON GT_GM.idmodalidad_obtencion = GT_MO.id
+					FROM gt_ruta AS GT_R 
+					LEFT JOIN gt_grado_procedimiento AS GT_GP ON GT_R.idgradproc_destino = GT_GP.id 
+					LEFT JOIN gt_procedimiento AS GT_P ON GT_GP.idprocedimiento = GT_P.id
+					LEFT JOIN gt_grado_modalidad AS GT_GM ON GT_GP.idgrado_modalidad = GT_GM.id 
+					LEFT JOIN gt_grado_titulo AS GT_GT ON GT_GM.idgrado_titulo = GT_GT.id 
+					LEFT JOIN gt_modalidad_obtencion AS GT_MO ON GT_GM.idmodalidad_obtencion = GT_MO.id
 					WHERE GT_R.id = ".$row['idruta'];
 					   
 		   $result_query2 = mysqli_query($this->conn, $sql2);
@@ -113,12 +113,10 @@ class Ruta {
 		$result = array('error' => false);
   
 		$sql = "SELECT GT_R.*, GT_P.nombre AS procedimiento_destino, GT_RA.nombre AS rol_area_destino
-				FROM GT_RUTA GT_R LEFT JOIN GT_GRADO_PROCEDIMIENTO GT_GP
-				ON GT_R.idgradproc_destino = GT_GP.id
-				LEFT JOIN GT_PROCEDIMIENTO GT_P 
-				ON GT_GP.idprocedimiento = GT_P.id
-				LEFT JOIN GT_ROL_AREA GT_RA 
-				ON GT_GP.idrol_area = GT_RA.id
+				FROM gt_ruta GT_R 
+				LEFT JOIN gt_grado_procedimiento AS GT_GP ON GT_R.idgradproc_destino = GT_GP.id
+				LEFT JOIN gt_procedimiento AS GT_P ON GT_GP.idprocedimiento = GT_P.id
+				LEFT JOIN gt_rol_area AS GT_RA ON GT_GP.idrol_area = GT_RA.id
 				WHERE GT_R.idgradproc_origen = $this->idgradproc_origen AND GT_R.condicion = 1";
 		$result_query = mysqli_query($this->conn, $sql);
 
@@ -143,7 +141,7 @@ class Ruta {
 	  public function insertar(){
 		$result = array('error' => false);
   
-		$sql = "INSERT INTO GT_RUTA(idgradproc_origen, idgradproc_destino, etiqueta, condicion)
+		$sql = "INSERT INTO gt_ruta(idgradproc_origen, idgradproc_destino, etiqueta, condicion)
 				 VALUES ($this->idgradproc_origen, $this->idgradproc_destino, '$this->etiqueta' , 1)";
 		$result_query = mysqli_query($this->conn, $sql);
   
@@ -161,7 +159,7 @@ class Ruta {
 	  public function actualizar(){
 		$result = array('error' => false);
   
-		$sql = "UPDATE GT_RUTA SET idgradproc_origen = $this->idgradproc_origen, 
+		$sql = "UPDATE gt_ruta SET idgradproc_origen = $this->idgradproc_origen, 
 								   idgradproc_destino = $this->idgradproc_destino, 
 								   etiqueta = '$this->etiqueta'
 				 WHERE id = $this->id";
@@ -182,7 +180,7 @@ class Ruta {
 	  public function activar(){
 		$result = array('error' => false);
   
-		$sql = "UPDATE GT_RUTA SET condicion = '1' WHERE id = $this->id";
+		$sql = "UPDATE gt_ruta SET condicion = '1' WHERE id = $this->id";
   
 		$result_query = mysqli_query($this->conn, $sql);
   
@@ -200,7 +198,7 @@ class Ruta {
 	  public function desactivar(){
 		$result = array('error' => false);
   
-		$sql = "UPDATE GT_RUTA SET condicion = '0' WHERE id = $this->id";
+		$sql = "UPDATE gt_ruta SET condicion = '0' WHERE id = $this->id";
   
 		$result_query = mysqli_query($this->conn, $sql);
   

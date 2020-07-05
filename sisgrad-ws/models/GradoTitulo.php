@@ -56,7 +56,7 @@ class GradoTitulo {
 	public function getAllGradoTitulo(){
         $result = array('error' => false);
 
-        $sql = "SELECT * FROM GT_GRADO_TITULO";
+        $sql = "SELECT * FROM gt_grado_titulo";
         $result_query = mysqli_query($this->conn, $sql);
 
         $array_grado_titulo = array();
@@ -77,7 +77,7 @@ class GradoTitulo {
     public function getActives(){
         $result = array('error' => false);
 
-        $sql = "SELECT * FROM GT_GRADO_TITULO where condicion = 1";
+        $sql = "SELECT * FROM gt_grado_titulo where condicion = 1";
         $result_query = mysqli_query($this->conn, $sql);
 
         $array_grado_titulo = array();
@@ -98,7 +98,7 @@ class GradoTitulo {
     public function getById(){
         $result = array('error' => false);
 
-        $sql = "SELECT * FROM GT_GRADO_TITULO WHERE id = $this->id";
+        $sql = "SELECT * FROM gt_grado_titulo WHERE id = $this->id";
         $result_query = mysqli_query($this->conn, $sql);
         $row = $result_query->fetch_assoc();
         $this->nombre = $row['nombre'];
@@ -112,7 +112,7 @@ class GradoTitulo {
     public function insertar(){
         $result = array('error' => false);
 
-        $sql = "INSERT INTO GT_GRADO_TITULO VALUES (0, '$this->nombre', '$this->codigo'," .
+        $sql = "INSERT INTO gt_grado_titulo VALUES (0, '$this->nombre', '$this->codigo'," .
                   " $this->idprereq, '$this->descripcion', 1)";
         $result_query = mysqli_query($this->conn, $sql);
 
@@ -130,7 +130,7 @@ class GradoTitulo {
     public function actualizar(){
         $result = array('error' => false);
 
-        $sql = "UPDATE GT_GRADO_TITULO SET nombre = '$this->nombre', " . 
+        $sql = "UPDATE gt_grado_titulo SET nombre = '$this->nombre', " . 
             "codigo = '$this->codigo', idprereq = '$this->idprereq', " .
             "descripcion = '$this->descripcion' WHERE id = $this->id";
 
@@ -150,7 +150,7 @@ class GradoTitulo {
     public function activar(){
         $result = array('error' => false);
 
-        $sql = "UPDATE GT_GRADO_TITULO SET condicion = '1' WHERE id = $this->id";
+        $sql = "UPDATE gt_grado_titulo SET condicion = '1' WHERE id = $this->id";
 
         $result_query = mysqli_query($this->conn, $sql);
 
@@ -168,7 +168,7 @@ class GradoTitulo {
     public function desactivar(){
         $result = array('error' => false);
 
-        $sql = "UPDATE GT_GRADO_TITULO SET condicion = '0' WHERE id = $this->id";
+        $sql = "UPDATE gt_grado_titulo SET condicion = '0' WHERE id = $this->id";
 
         $result_query = mysqli_query($this->conn, $sql);
 

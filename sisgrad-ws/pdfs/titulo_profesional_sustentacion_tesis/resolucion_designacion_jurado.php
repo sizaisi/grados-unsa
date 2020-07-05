@@ -97,7 +97,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	$pdf->writeHTMLCell(170, '', 20, '', '<span style="text-decoration:overline">DECANO DE LA '.$expediente->facultad.'</span>', 0, 0, 0, true, 'L', true); 
 	$pdf->Ln();
 
-	$pdf->Output('Resolucion_nombramiento_jurados_'.$expediente->codigo.'.pdf', 'D');
+	$pdf->Output('resolucion_nombramiento_jurados_'.$expediente->codigo.'.pdf', 'D');
 }
 else {
 	echo "<h3>No tiene permiso de acceso para mostrar el archivo</h3>";

@@ -129,7 +129,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	$pdf->Ln(); 	
 	
 	//output
-	$pdf->Output('Acta_dictamen_'.$expediente->codigo.'.pdf', 'D');	
+	$pdf->Output('acta_dictamen_'.$expediente->codigo.'.pdf', 'D');	
 }
 else {
 	echo "<h3>No tiene permiso de acceso para mostrar el archivo</h3>";

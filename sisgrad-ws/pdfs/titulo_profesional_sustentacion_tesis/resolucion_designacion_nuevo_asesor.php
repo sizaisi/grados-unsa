@@ -74,7 +74,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	$pdf->writeHTMLCell(160, '', 25, '', 'c.c. asesor, interesado y archivo', 0, 0, 0, true, 'L', true); 
 	$pdf->Ln();
 
-	$pdf->Output('Resolucion_designacion_nuevo_asesor_'.$expediente->codigo.'.pdf', 'I');
+	$pdf->Output('resolucion_designacion_nuevo_asesor_'.$expediente->codigo.'.pdf', 'I');
 }
 else {
 	echo "<h3>No tiene permiso de acceso para mostrar el archivo</h3>";

@@ -92,7 +92,7 @@
                     <div class="mb-3">
                       <h4 class="text-info text-center"><i class="fa fa-files-o" aria-hidden="true"></i> Archivos</h4>
                     </div>   
-                    <form ref="show_file" :action="url_show_file" target="_blank" method="post">
+                    <form ref="show_file" :action="url_show_file" target="my-frame" method="post">
                         <input type="hidden" name="file_id">                                            
                     </form>          
                     <b-table                              
@@ -108,8 +108,8 @@
                         primary-key="id"
                     >         
                       <template v-slot:cell(descargar)="data">                                 
-                        <b-button variant="info" size="sm" title="Descargar" @click="mostrarArchivo(data.item.id)">
-                          <b-icon icon="download"></b-icon>
+                        <b-button variant="warning" size="sm" title="Descargar" @click="mostrarArchivo(data.item.id, data.item.nombre)">
+                          <b-icon icon="eye"></b-icon>
                         </b-button>
                       </template>                     
                     </b-table>                  
@@ -130,6 +130,19 @@
                         <table class="table table-bordered table-borderless">
                           <tbody>  
                             <tr>
+                              <th class="bg-light text-right">Procedimiento: </th>
+                              <td v-text="movimiento.procedimiento_origen"></td>                                
+                            </tr>
+                            <tr>
+                              <th class="bg-light text-right">Rol / Área: </th>
+                              <td v-if="movimiento.rol_area_origen != null" v-text="movimiento.rol_area_origen"></td>                           
+                              <td v-else v-text="movimiento.tipo_rol"></td>                              
+                            </tr>
+                            <tr>
+                              <th class="bg-light text-right">Responsable: </th>
+                              <td v-text="movimiento.nombre_usuario"></td>                                                         
+                            </tr>                                               
+                            <tr>
                               <th class="bg-light text-right">Estado: </th>
                               <td>
                                 <b-badge 
@@ -139,21 +152,7 @@
                                 >                                  
                                 </b-badge> 
                               </td>                                  
-                            </tr>
-                            <tr>
-                              <th class="bg-light text-right">Responsable: </th>
-                              <td v-text="movimiento.nombre_usuario"></td>                                                         
-                            </tr>
-                            <tr>
-                              <th class="bg-light text-right">Rol / Área: </th>
-                              <td v-if="movimiento.rol_area_origen != null" v-text="movimiento.rol_area_origen"></td>                           
-                              <td v-else v-text="movimiento.tipo_rol"></td>                              
-                            </tr>
-                            <tr>
-                              <th class="bg-light text-right">Procedimiento: </th>
-                              <td v-text="movimiento.procedimiento_origen"></td>                                
-                            </tr>                                               
-                            
+                            </tr>                                                                                           
                             <tr>
                               <th class="bg-light text-right">Fecha / Hora: </th>
                               <td v-text="movimiento.fecha + ' hrs.'">johncarter@mail.com</td>                              
@@ -168,7 +167,7 @@
                     <div class="mb-4">
                       <h4 class="text-info text-center"><i class="fa fa-files-o" aria-hidden="true"></i> Archivos adjuntos</h4>
                     </div>  
-                    <form ref="show_file_ultimo" :action="url_show_file" target="_blank" method="post">
+                    <form ref="show_file_ultimo" :action="url_show_file" target="my-frame" method="post">
                       <input type="hidden" name="file_id">                                            
                     </form>     
                     <b-table                              
@@ -183,8 +182,8 @@
                         primary-key="id"
                     >         
                       <template v-slot:cell(descargar)="data">                                 
-                        <b-button variant="info" size="sm" title="Descargar" @click="mostrarArchivoUltimos(data.item.id)">
-                          <b-icon icon="download"></b-icon>
+                        <b-button variant="warning" size="sm" title="Descargar" @click="mostrarArchivoUltimo(data.item.id, data.item.nombre)">
+                          <b-icon icon="eye"></b-icon>
                         </b-button>
                       </template>                     
                     </b-table>                   
@@ -212,40 +211,63 @@
           </b-tab>
         </b-tabs>    
       </b-card>         
-   </div>   
+   </div>  
+
+   <!--Inicio del modal-->
+    <div class="modal fade centered-modal" tabindex="-1" :class="{'mostrar' : modal}" role="dialog" aria-labelledby="myModalLabel" style="display: none;" aria-hidden="true">
+        <div class="modal-dialog modal-primary modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" v-text="nombre_documento"></h4>
+                    <button type="button" class="close" aria-label="Close" @click="modal = 0">
+                    <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <iframe name="my-frame" :src="url_show_file" width="660" height="380" frameborder="0" allowtransparency="true"></iframe>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" @click="modal = 0">Cerrar</button>                                          
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+            <!-- /.modal-dialog -->
+    </div>
+    <!--Fin del modal-->   
 </div>   
 </template>
 <script>
 import verificar_requisitos_grado 
-  from '@/components/titulo_profesional_sustentacion_tesis/verificar_requisitos_grado/index.vue'
+  from '@/components/titulo_profesional_sustentacion_tesis/procedimientos/verificar_requisitos_grado/index.vue'
 import verificar_pertinencia_tema 
-  from '@/components/titulo_profesional_sustentacion_tesis/verificar_pertinencia_tema/index.vue'
+  from '@/components/titulo_profesional_sustentacion_tesis/procedimientos/verificar_pertinencia_tema/index.vue'
 import designar_asesor_comision_calificacion
-  from '@/components/titulo_profesional_sustentacion_tesis/designar_asesor_comision_calificacion/index.vue'  
+  from '@/components/titulo_profesional_sustentacion_tesis/procedimientos/designar_asesor_comision_calificacion/index.vue'  
 import resolver_asignacion_asesoria_proyecto
-  from '@/components/titulo_profesional_sustentacion_tesis/resolver_asignacion_asesoria_proyecto/index.vue'
+  from '@/components/titulo_profesional_sustentacion_tesis/procedimientos/resolver_asignacion_asesoria_proyecto/index.vue'
 import emitir_resolucion_asignacion_asesor_tema
-  from '@/components/titulo_profesional_sustentacion_tesis/emitir_resolucion_asignacion_asesor_tema/index.vue'
+  from '@/components/titulo_profesional_sustentacion_tesis/procedimientos/emitir_resolucion_asignacion_asesor_tema/index.vue'
 import dar_conformidad_asesoramiento_proyecto
-  from '@/components/titulo_profesional_sustentacion_tesis/dar_conformidad_asesoramiento_proyecto/index.vue'
+  from '@/components/titulo_profesional_sustentacion_tesis/procedimientos/dar_conformidad_asesoramiento_proyecto/index.vue'
 import nombrar_jurado_adjuntar_resolucion 
-  from '@/components/titulo_profesional_sustentacion_tesis/nombrar_jurado_adjuntar_resolucion/index.vue'
+  from '@/components/titulo_profesional_sustentacion_tesis/procedimientos/nombrar_jurado_adjuntar_resolucion/index.vue'
 import revisar_documentacion_proyecto
-  from '@/components/titulo_profesional_sustentacion_tesis/revisar_documentacion_proyecto/index.vue'
+  from '@/components/titulo_profesional_sustentacion_tesis/procedimientos/revisar_documentacion_proyecto/index.vue'
 import dictaminar_aprobacion_proyecto
-  from '@/components/titulo_profesional_sustentacion_tesis/dictaminar_aprobacion_proyecto/index.vue'
+  from '@/components/titulo_profesional_sustentacion_tesis/procedimientos/dictaminar_aprobacion_proyecto/index.vue'
 import verificar_pagos_adjuntar_documentos
-  from '@/components/titulo_profesional_sustentacion_tesis/verificar_pagos_adjuntar_documentos/index.vue'
+  from '@/components/titulo_profesional_sustentacion_tesis/procedimientos/verificar_pagos_adjuntar_documentos/index.vue'
 import emitir_acta_dictamen
-  from '@/components/titulo_profesional_sustentacion_tesis/emitir_acta_dictamen/index.vue'
+  from '@/components/titulo_profesional_sustentacion_tesis/procedimientos/emitir_acta_dictamen/index.vue'
 import dictaminar_resultado_sustentacion
-  from '@/components/titulo_profesional_sustentacion_tesis/dictaminar_resultado_sustentacion/index.vue'
+  from '@/components/titulo_profesional_sustentacion_tesis/procedimientos/dictaminar_resultado_sustentacion/index.vue'
 import emitir_acta_conformidad_redaccion_trabajo
-  from '@/components/titulo_profesional_sustentacion_tesis/emitir_acta_conformidad_redaccion_trabajo/index.vue'
+  from '@/components/titulo_profesional_sustentacion_tesis/procedimientos/emitir_acta_conformidad_redaccion_trabajo/index.vue'
 import aprobar_consejo_facultad_autorizar_emision_diploma
-  from '@/components/titulo_profesional_sustentacion_tesis/aprobar_consejo_facultad_autorizar_emision_diploma/index.vue'
+  from '@/components/titulo_profesional_sustentacion_tesis/procedimientos/aprobar_consejo_facultad_autorizar_emision_diploma/index.vue'
 import generar_imprimir_diploma
-  from '@/components/titulo_profesional_sustentacion_tesis/generar_imprimir_diploma/index.vue'
+  from '@/components/titulo_profesional_sustentacion_tesis/procedimientos/generar_imprimir_diploma/index.vue'
 
 export default {
   name: 'info-expediente',  
@@ -288,14 +310,16 @@ export default {
         { key: 'nombre', label: 'Nombre', class: 'text-left', sortable: true },
         { key: 'procedimiento', label: 'Procedimiento', class: 'text-left', sortable: true },
         { key: 'area', label: 'Rol-Area', class: 'text-center', sortable: true },
-        { key: 'descargar', label: 'Descargar', class: 'text-center' }
+        { key: 'descargar', label: 'Archivo', class: 'text-center' }
       ],
       columnas_archivos_ultimo: [               
         { key: 'nombre', label: 'Nombre', class: 'text-left' },
         { key: 'procedimiento', label: 'Procedimiento', class: 'text-left' },
         { key: 'area', label: 'Rol-Area', class: 'text-center' },
-        { key: 'descargar', label: 'Descargar', class: 'text-center' }
+        { key: 'descargar', label: 'Archivo', class: 'text-center' }
       ],
+      modal: 0,   
+      nombre_documento: '',
     }    
   },
   methods: {        
@@ -316,13 +340,17 @@ export default {
         }
       })   
     },    
-    mostrarArchivo(id) {               
+    mostrarArchivo(id, nombre_documento) {               
         this.$refs.show_file.file_id.value = id
         this.$refs.show_file.submit()
+        this.nombre_documento = nombre_documento
+        this.modal = 1        
     },        
-    mostrarArchivoUltimos(id) {               
+    mostrarArchivoUltimo(id, nombre_documento) {               
         this.$refs.show_file_ultimo.file_id.value = id
         this.$refs.show_file_ultimo.submit()
+        this.nombre_documento = nombre_documento
+        this.modal = 1        
     },              
     getExpediente() {  // para mostrar los datos del expediente
       let me = this
@@ -333,11 +361,11 @@ export default {
 
       this.axios.post(`${this.url}/Expediente/getExpById`, formData)
       .then(function(response) {
-        if (response.data.error) {
-          me.errorMsg = response.data.message
+        if (!response.data.error) {
+          me.expediente = response.data.expediente                                                            
         }
         else {
-          me.expediente = response.data.expediente                                                  
+          console.log(response.data.message)
         }
       })          
     },                                                             
@@ -428,5 +456,39 @@ export default {
   .estado {
     font-size: 0.80em;
   }
+  /* Modal styles */
+  .modal .modal-dialog {
+    max-width: 700px;
+    margin: 3.75rem auto;
+  }
+  .modal .modal-header, .modal .modal-body, .modal .modal-footer {
+    padding: 10px 20px;
+    border-radius: 5px;
+  }
+  .modal .modal-content {
+    border-radius: 5px;
+  }
+  .modal .modal-footer {
+    background: #ecf0f1;
+    border-radius: 5px;
+  }
+  .modal .modal-title {
+    display: inline-block;
+  }    
+  .modal form label {
+    font-weight: 600;
+  }
+  .modal-content {
+    width: 100% !important;
+    position: absolute !important;
+    left: 0%;
+    margin-top: 20px !important;
+  }
+  .mostrar {
+    display: list-item !important;
+    opacity: 1 !important;
+    position: fixed !important;
+    background: rgba(0, 0, 0, 0.6) !important;        
+  }   
 </style>
 

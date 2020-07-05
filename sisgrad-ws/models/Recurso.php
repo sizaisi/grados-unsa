@@ -68,14 +68,14 @@ class Recurso {
 		$result = array('error' => false);
   
 		$sql = "SELECT GT_RE.*
-			    FROM GT_RECURSO AS GT_RE			    
+			    FROM gt_recurso AS GT_RE			    
 			    WHERE GT_RE.idexpediente = $this->idexpediente 
 				AND GT_RE.idgrado_proc = $this->idgrado_proc 
 				AND GT_RE.idusuario = $this->idusuario 
 				AND GT_RE.idruta <> $this->idruta 
 				AND GT_RE.idmovimiento IS NULL 
 				AND GT_RE.idruta IN (SELECT id
-								     FROM GT_RUTA AS GT_R 								   
+								     FROM gt_ruta AS GT_R 								   
 								     wHERE GT_R.idgradproc_origen = $this->idgrado_proc)";
   
 		$result_query = mysqli_query($this->conn, $sql);

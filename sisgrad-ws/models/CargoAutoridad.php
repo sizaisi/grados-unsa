@@ -57,9 +57,9 @@ class CargoAutoridad {
         $result = array('error' => false);
 
         $sql = "SELECT gt_ca.*, gt_car.nombre AS cargo, gt_aut.nombre AS autoridad
-                FROM GT_CARGO_AUTORIDAD as gt_ca 
-                INNER JOIN GT_CARGO AS gt_car ON gt_ca.idcargo = gt_car.id 
-                INNER JOIN GT_AUTORIDAD AS gt_aut ON gt_ca.idautoridad = gt_aut.id 
+                FROM gt_cargo_autoridad as gt_ca 
+                INNER JOIN gt_cargo AS gt_car ON gt_ca.idcargo = gt_car.id 
+                INNER JOIN gt_autoridad AS gt_aut ON gt_ca.idautoridad = gt_aut.id 
                 WHERE gt_car.condicion = 1 OR gt_aut.condicion = 1
                 ORDER BY gt_ca.id";
         $result_query = mysqli_query($this->conn, $sql);
@@ -79,9 +79,9 @@ class CargoAutoridad {
         $result = array('error' => false);
 
         $sql = "SELECT gt_ca.*, gt_car.nombre AS cargo, gt_aut.nombre AS autoridad
-                FROM GT_CARGO_AUTORIDAD as gt_ca 
-                INNER JOIN GT_CARGO AS gt_car ON gt_ca.idcargo = gt_car.id 
-                INNER JOIN GT_AUTORIDAD AS gt_aut ON gt_ca.idautoridad = gt_aut.id 
+                FROM gt_cargo_autoridad as gt_ca 
+                INNER JOIN gt_cargo AS gt_car ON gt_ca.idcargo = gt_car.id 
+                INNER JOIN gt_autoridad AS gt_aut ON gt_ca.idautoridad = gt_aut.id 
                 WHERE gt_car.condicion = 1 OR gt_aut.condicion = 1
                 ORDER BY gt_ca.id";
         $result_query = mysqli_query($this->conn, $sql);
@@ -100,7 +100,7 @@ class CargoAutoridad {
     public function insertar(){
         $result = array('error' => false);
 
-        $sql = "INSERT INTO GT_CARGO_AUTORIDAD(idcargo, idautoridad, fecha_inicio, fecha_fin, condicion) VALUES ($this->idcargo,$this->idautoridad, '$this->fecha_inicio', '$this->fecha_fin', 1)";
+        $sql = "INSERT INTO gt_cargo_autoridad(idcargo, idautoridad, fecha_inicio, fecha_fin, condicion) VALUES ($this->idcargo,$this->idautoridad, '$this->fecha_inicio', '$this->fecha_fin', 1)";
         $result_query = mysqli_query($this->conn, $sql);
 
         if ($result_query) {
@@ -117,7 +117,7 @@ class CargoAutoridad {
     public function actualizar(){
         $result = array('error' => false);
 
-        $sql = "UPDATE GT_CARGO_AUTORIDAD SET idcargo = $this->idcargo, idautoridad = $this->idautoridad, fecha_inicio = '$this->fecha_inicio', fecha_fin = '$this->fecha_fin' WHERE id = $this->id";
+        $sql = "UPDATE gt_cargo_autoridad SET idcargo = $this->idcargo, idautoridad = $this->idautoridad, fecha_inicio = '$this->fecha_inicio', fecha_fin = '$this->fecha_fin' WHERE id = $this->id";
 
         $result_query = mysqli_query($this->conn, $sql);
 
@@ -135,7 +135,7 @@ class CargoAutoridad {
     public function activar(){
         $result = array('error' => false);
 
-        $sql = "UPDATE GT_CARGO_AUTORIDAD SET condicion = 1 WHERE id = $this->id";
+        $sql = "UPDATE gt_cargo_autoridad SET condicion = 1 WHERE id = $this->id";
 
         $result_query = mysqli_query($this->conn, $sql);
 
@@ -153,7 +153,7 @@ class CargoAutoridad {
     public function desactivar(){
         $result = array('error' => false);
 
-        $sql = "UPDATE GT_CARGO_AUTORIDAD SET condicion = 0 WHERE id = $this->id";
+        $sql = "UPDATE gt_cargo_autoridad SET condicion = 0 WHERE id = $this->id";
 
         $result_query = mysqli_query($this->conn, $sql);
 

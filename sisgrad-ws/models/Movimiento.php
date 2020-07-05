@@ -61,12 +61,12 @@ class Movimiento {
 
 		//obtener el ultimo movimiento
         $sql = "SELECT GT_M.id, GT_U.id AS idusuario, GT_U.codi_usuario, GT_U.tipo AS tipo_usuario, GT_M.fecha, GT_R.etiqueta, GT_P.nombre AS procedimiento_origen, GT_GP.tipo_rol, GT_RA.nombre AS rol_area_origen
-				FROM GT_MOVIMIENTO AS GT_M 
-					INNER JOIN GT_USUARIO AS GT_U ON GT_U.id = GT_M.idusuario 
-					INNER JOIN GT_RUTA AS GT_R ON GT_R.id = GT_M.idruta 
-					INNER JOIN GT_GRADO_PROCEDIMIENTO AS GT_GP ON GT_GP.id = GT_R.idgradproc_origen 
-					INNER JOIN GT_PROCEDIMIENTO AS GT_P ON GT_P.id = GT_GP.idprocedimiento 
-					LEFT JOIN GT_ROL_AREA AS GT_RA ON GT_GP.tipo_rol = '' AND GT_RA.id = GT_GP.idrol_area 
+				FROM gt_movimiento AS GT_M 
+					INNER JOIN gt_usuario AS GT_U ON GT_U.id = GT_M.idusuario 
+					INNER JOIN gt_ruta AS GT_R ON GT_R.id = GT_M.idruta 
+					INNER JOIN gt_grado_procedimiento AS GT_GP ON GT_GP.id = GT_R.idgradproc_origen 
+					INNER JOIN gt_procedimiento AS GT_P ON GT_P.id = GT_GP.idprocedimiento 
+					LEFT JOIN gt_rol_area AS GT_RA ON GT_GP.tipo_rol = '' AND GT_RA.id = GT_GP.idrol_area 
 				WHERE GT_R.idgradproc_destino = $idgradproc_destino 
 					AND GT_M.idexpediente = $this->idexpediente 
 					AND GT_R.condicion = 1
@@ -85,14 +85,14 @@ class Movimiento {
 					
 					case 'Docente':
 						$sql2 = "SELECT REPLACE(apn, '/', ' ') AS nombre_usuario  
-									FROM SIAC_DOC
-									WHERE codper = '" . $row['codi_usuario'] . "'";
+								 FROM SIAC_DOC
+								 WHERE codper = '" . $row['codi_usuario'] . "'";
 						break;
 
-					case 'Estudiante': //si hay conexion con reniec obtendria datos de GT_GRADUANDO
+					case 'Estudiante': //si hay conexion con reniec obtendria datos de gt_graduando
 						$sql2 = "SELECT REPLACE(apn, '/', ' ') AS nombre_usuario  									
-									FROM acdiden 
-									WHERE cui = '" . $row['codi_usuario'] . "'";
+								 FROM acdiden 
+								 WHERE cui = '" . $row['codi_usuario'] . "'";
 						break;
 				}
 
@@ -105,7 +105,7 @@ class Movimiento {
 
 					//actualizar a 1 el campo aceptado del ultimo movimiento del expediente
 					//JEIKEN TEMPORAL ESTE UPDATE DEBE ESTAR EN UNA TRANSACCION Y QUIZAS EN UNA FUNCION APARTE
-					$sql = "UPDATE GT_MOVIMIENTO SET aceptado = 1 WHERE id = " . $row['id'];        
+					$sql = "UPDATE gt_movimiento SET aceptado = 1 WHERE id = " . $row['id'];        
 					$result_query = mysqli_query($this->conn, $sql);
 
 					if (!$result_query) {
@@ -139,11 +139,11 @@ class Movimiento {
 					(SELECT GT_M.id, GT_M.idexpediente, GT_E.codigo, GT_M.fecha AS fecha_envio, GT_E.estado, 
 						GROUP_CONCAT(REPLACE(AC_I.apn,'/',' ') SEPARATOR ' / ') AS graduando,
 						AC_E.nesc AS escuela, GT_R.idgradproc_origen, GT_M.idmov_anterior
-					FROM GT_MOVIMIENTO AS GT_M
-						INNER JOIN GT_RUTA AS GT_R ON GT_R.id = GT_M.idruta 
-						INNER JOIN GT_EXPEDIENTE AS GT_E ON GT_E.id = GT_M.idexpediente 
-						INNER JOIN GT_GRADUANDO_EXPEDIENTE AS GT_GE ON GT_GE.idexpediente = GT_E.id 
-						INNER JOIN GT_GRADUANDO AS GT_G ON GT_G.id = GT_GE.idgraduando 		
+					FROM gt_movimiento AS GT_M
+						INNER JOIN gt_ruta AS GT_R ON GT_R.id = GT_M.idruta 
+						INNER JOIN gt_expediente AS GT_E ON GT_E.id = GT_M.idexpediente 
+						INNER JOIN gt_graduando_expediente AS GT_GE ON GT_GE.idexpediente = GT_E.id 
+						INNER JOIN gt_graduando AS GT_G ON GT_G.id = GT_GE.idgraduando 		
 						INNER JOIN acdiden AS AC_I ON AC_I.cui = GT_G.cui			
 						INNER JOIN actescu AS AC_E ON AC_E.nues = GT_E.nues											
 					WHERE GT_R.idgradproc_origen = $idgradproc_origen  					
@@ -151,8 +151,8 @@ class Movimiento {
 						AND GT_M.aceptado = 0  
 					GROUP BY GT_GE.idexpediente 
 					ORDER BY GT_M.id ASC) AS t_movimiento 
-				INNER JOIN GT_MOVIMIENTO AS GT_MO ON GT_MO.id = t_movimiento.idmov_anterior
-				INNER JOIN GT_RUTA AS GT_RU ON GT_RU.id = GT_MO.idruta";		
+				INNER JOIN gt_movimiento AS GT_MO ON GT_MO.id = t_movimiento.idmov_anterior
+				INNER JOIN gt_ruta AS GT_RU ON GT_RU.id = GT_MO.idruta";		
 		$result_query = mysqli_query($this->conn, $sql);
 
 		if ($result_query) {
@@ -180,7 +180,7 @@ class Movimiento {
 		$this->conn->autocommit(FALSE); //iniciar transaccion
 		
 		//realizar movimiento con la ruta seleccionada
-		$sql = "INSERT INTO GT_MOVIMIENTO(idexpediente, idusuario, fecha, idruta, idmov_anterior) 
+		$sql = "INSERT INTO gt_movimiento(idexpediente, idusuario, fecha, idruta, idmov_anterior) 
 				VALUES ($this->idexpediente, $this->idusuario, now(), $this->idruta, $this->idmov_anterior)";      
 		$result_query = mysqli_query($this->conn, $sql);     
   
@@ -194,7 +194,7 @@ class Movimiento {
 		}
 
 		//asignar el idmovimiento a los recursos agregados en el expediente
-		$sql = "UPDATE GT_RECURSO SET idmovimiento = $idmovimiento
+		$sql = "UPDATE gt_recurso SET idmovimiento = $idmovimiento
 				WHERE idexpediente = $this->idexpediente
 				AND idusuario = $this->idusuario
 				AND idgrado_proc = $idgradproc_origen
@@ -206,7 +206,7 @@ class Movimiento {
 		}
   
 		//actualizar expediente para conocer en que procedimiento se encuentra
-		$sql = "UPDATE GT_EXPEDIENTE 
+		$sql = "UPDATE gt_expediente 
 				SET idgrado_procedimiento = $idgradproc_destino,
 					fecha = now(),
 					estado = '$estado_expediente'  
@@ -239,7 +239,7 @@ class Movimiento {
 		$this->conn->autocommit(FALSE); //iniciar transaccion
 		
 		//eliminar el ultimo movimiento realizado
-		$sql = "DELETE FROM GT_MOVIMIENTO WHERE id = $this->id";      
+		$sql = "DELETE FROM gt_movimiento WHERE id = $this->id";      
 		$result_query = mysqli_query($this->conn, $sql);     
   
 		if (!$result_query) {
@@ -247,7 +247,7 @@ class Movimiento {
 		}     
   
 		//actualizar expediente para conocer en que procedimiento se encuentra		
-		$sql = "UPDATE GT_EXPEDIENTE 
+		$sql = "UPDATE gt_expediente 
 				SET idgrado_procedimiento = $idgradproc_origen, 
 					fecha = '$fecha_ant',
 					estado = '$estado_expediente_ant' 
@@ -259,7 +259,7 @@ class Movimiento {
 		}
 
 		//actualizar a nulo el idmovimiento de los recursos que tienen el idmovimiento seleccionado
-		$sql = "UPDATE GT_RECURSO SET idmovimiento = NULL
+		$sql = "UPDATE gt_recurso SET idmovimiento = NULL
 				WHERE idmovimiento = $this->id";        
 		$result_query = mysqli_query($this->conn, $sql);
   

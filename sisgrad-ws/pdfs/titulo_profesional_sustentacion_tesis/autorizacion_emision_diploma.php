@@ -90,7 +90,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </tr>
             <tr>
                 <td><b>Número total de Créditos</b></td>
-                <td align="center">'.$total_creditos.'</td>
+                <td align="center">'.$expediente->creditos.'</td>
             </tr>
             <tr>
                 <td><b>Enlace o Link de la URL del Trabajo de Investigación, Tesis, etc</b></td>
@@ -200,7 +200,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $pdf->Ln(); 
 
     //output
-    $pdf->Output('Autorizacion_emision_diploma_'.$dia.'-'.$mes1.'-'.$anio_actual.'_'.$expediente->codigo.'.pdf', 'D');
+    $pdf->Output('autorizacion_emision_diploma_'.$dia.'-'.$mes1.'-'.$anio_actual.'_'.$expediente->codigo.'.pdf', 'D');
 }
 else {
 	echo "<h3>No tiene permiso de acceso para mostrar el archivo</h3>";

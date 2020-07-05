@@ -29,7 +29,7 @@ class Procedimiento {
 	public function getAllProcedimiento(){
         $result = array('error' => false);
 
-        $sql = "SELECT * FROM GT_PROCEDIMIENTO";
+        $sql = "SELECT * FROM gt_procedimiento";
         $result_query = mysqli_query($this->conn, $sql);
 
         $array_procedimiento = array();
@@ -46,7 +46,7 @@ class Procedimiento {
     public function getActives(){
         $result = array('error' => false);
 
-        $sql = "SELECT * FROM GT_PROCEDIMIENTO where condicion = 1";
+        $sql = "SELECT * FROM gt_procedimiento where condicion = 1";
         $result_query = mysqli_query($this->conn, $sql);
 
         $array_procedimiento = array();
@@ -63,7 +63,7 @@ class Procedimiento {
     public function insertar(){
         $result = array('error' => false);
 
-        $sql = "INSERT INTO GT_PROCEDIMIENTO(nombre, condicion) VALUES ('$this->nombre', 1)";
+        $sql = "INSERT INTO gt_procedimiento(nombre, condicion) VALUES ('$this->nombre', 1)";
         $result_query = mysqli_query($this->conn, $sql);
 
         if ($result_query) {
@@ -81,7 +81,7 @@ class Procedimiento {
     public function actualizar(){
         $result = array('error' => false);
 
-        $sql = "UPDATE GT_PROCEDIMIENTO SET nombre = '$this->nombre' WHERE id = $this->id";
+        $sql = "UPDATE gt_procedimiento SET nombre = '$this->nombre' WHERE id = $this->id";
 
         $result_query = mysqli_query($this->conn, $sql);
 
@@ -99,7 +99,7 @@ class Procedimiento {
     public function activar(){
         $result = array('error' => false);
 
-        $sql = "UPDATE GT_PROCEDIMIENTO SET condicion = 1 WHERE id = $this->id";
+        $sql = "UPDATE gt_procedimiento SET condicion = 1 WHERE id = $this->id";
 
         $result_query = mysqli_query($this->conn, $sql);
 
@@ -117,7 +117,7 @@ class Procedimiento {
     public function desactivar(){
         $result = array('error' => false);
 
-        $sql = "UPDATE GT_PROCEDIMIENTO SET condicion = 0 WHERE id = $this->id";
+        $sql = "UPDATE gt_procedimiento SET condicion = 0 WHERE id = $this->id";
 
         $result_query = mysqli_query($this->conn, $sql);
 

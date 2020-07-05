@@ -22,8 +22,8 @@ class Observaciones extends Recurso {
 		$result = array('error' => false);
   
 		$sql = "SELECT GT_R.id, GT_O.descripcion
-				FROM GT_RECURSO AS GT_R
-				INNER JOIN GT_OBSERVACIONES GT_O ON GT_O.idrecurso = GT_R.id
+				FROM gt_recurso AS GT_R
+				INNER JOIN gt_observaciones GT_O ON GT_O.idrecurso = GT_R.id
 				WHERE GT_R.idexpediente = $this->idexpediente 
                 AND GT_R.idgrado_proc = $this->idgrado_proc 
 				AND GT_R.idusuario = $this->idusuario
@@ -46,7 +46,7 @@ class Observaciones extends Recurso {
 		$result = array('error' => false);                
 		$this->conn->autocommit(FALSE); //iniciar transaccion	
 		
-		$sql = "INSERT INTO GT_RECURSO(idexpediente, idgrado_proc, idusuario, idmovimiento, idruta) 
+		$sql = "INSERT INTO gt_recurso(idexpediente, idgrado_proc, idusuario, idmovimiento, idruta) 
 				VALUES ($this->idexpediente, $this->idgrado_proc, $this->idusuario, NULL, $this->idruta)";      
 		$result_query = mysqli_query($this->conn, $sql);     
 		
@@ -59,7 +59,7 @@ class Observaciones extends Recurso {
 			$idrecurso = mysqli_insert_id($this->conn);
 		}
 		
-		$sql = "INSERT INTO GT_OBSERVACIONES(idrecurso, descripcion) 
+		$sql = "INSERT INTO gt_observaciones(idrecurso, descripcion) 
 				VALUES ($idrecurso, '$this->descripcion')";      
 		$result_query = mysqli_query($this->conn, $sql);     		
   
@@ -84,7 +84,7 @@ class Observaciones extends Recurso {
     public function actualizar() {  
 		$result = array('error' => false);
   
-		$sql = "UPDATE GT_OBSERVACIONES SET descripcion = '$this->descripcion' WHERE idrecurso = $this->id";
+		$sql = "UPDATE gt_observaciones SET descripcion = '$this->descripcion' WHERE idrecurso = $this->id";
 		
 		$result_query = mysqli_query($this->conn, $sql);
   
@@ -103,14 +103,14 @@ class Observaciones extends Recurso {
 		$result = array('error' => false);                
 		$this->conn->autocommit(FALSE); //iniciar transaccion	
 		
-		$sql = "DELETE FROM GT_OBSERVACIONES where idrecurso = $this->id";      
+		$sql = "DELETE FROM gt_observaciones where idrecurso = $this->id";      
 		$result_query = mysqli_query($this->conn, $sql);     	
 		
 		if (!$result_query) {
 		   	$result['error'] = true;                    
 		}       	
 		
-		$sql = "DELETE FROM GT_RECURSO where id = $this->id AND idmovimiento IS NULL";
+		$sql = "DELETE FROM gt_recurso where id = $this->id AND idmovimiento IS NULL";
 		$result_query = mysqli_query($this->conn, $sql);     		
   
 		if (!$result_query) {

@@ -190,7 +190,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $pdf->Ln();    
 
     //output
-    $pdf->Output('Diploma_'.$dia.'-'.$mes1.'-'.$anio_actual.'_'.$expediente->codigo.'.pdf', 'D');
+    $pdf->Output('diploma_'.$dia.'-'.$mes1.'-'.$anio_actual.'_'.$expediente->codigo.'.pdf', 'D');
 }
 else {
 	echo "<h3>No tiene permiso de acceso para mostrar el archivo</h3>";

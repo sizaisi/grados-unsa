@@ -67,7 +67,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	$pdf->Ln();
 	
 	//$pdf->Output('Acta_conformidad_redaccion_tesis_'.$expediente->codigo.'.pdf', 'I');
-	$pdf->Output('Acta_conformidad_redaccion_tesis_'.$expediente->codigo.'.pdf', 'D');
+	$pdf->Output('acta_conformidad_redaccion_tesis_'.$expediente->codigo.'.pdf', 'D');
 }
 else {
 	echo "<h3>No tiene permiso de acceso para mostrar el archivo</h3>";
