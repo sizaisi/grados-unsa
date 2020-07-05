@@ -98,7 +98,7 @@ class ModalidadObtencion {
     public function activar(){
         $result = array('error' => false);
 
-        $sql = "UPDATE gt_modalidad_obtencion SET condicion = '1' WHERE id = $this->id";
+        $sql = "UPDATE gt_modalidad_obtencion SET condicion = 1 WHERE id = $this->id";
 
         $result_query = mysqli_query($this->conn, $sql);
 
@@ -116,7 +116,7 @@ class ModalidadObtencion {
     public function desactivar(){
         $result = array('error' => false);
 
-        $sql = "UPDATE gt_modalidad_obtencion SET condicion = '0' WHERE id = $this->id";
+        $sql = "UPDATE gt_modalidad_obtencion SET condicion = 0 WHERE id = $this->id";
 
         $result_query = mysqli_query($this->conn, $sql);
 
