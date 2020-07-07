@@ -108,7 +108,7 @@ export default {
             }
         })
     },           
-    getJurados() { // para obtener los jurados de la tabla usuario_expediente
+    getJurados() { 
         let me = this      
         let formData = this._toFormData({
             idexpediente: this.expediente.id,

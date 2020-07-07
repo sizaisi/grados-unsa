@@ -1,10 +1,10 @@
 <?php   
    /***administrativo */
-   include "../../../include/conection.inc.php";
+   /*include "../../../include/conection.inc.php";
    include "../../../include/codigos_menu.inc";
    $acceso=do_conection();
     if(!$cerrar)
-       require "../../../include/sesiones/acse_busc_sesi.php";
+       require "../../../include/sesiones/acse_busc_sesi.php";*/
 
    /***docente */
    /*include "../../../librerias/conection.inc.php";
@@ -14,7 +14,7 @@
    header("Content-Type: text/json");        
    
    //$codi_oper = '9999';   //administrador
-   //$codi_oper = 'fips';   //facultad
+   $codi_oper = 'fips';   //facultad
    //$codi_oper = 'gradis';   //unid de investigacion
    //$codi_oper = '4282_1'; //presidente de jurado aedo
    //$codi_oper = '4686_1';  //asesor anterior adriazola

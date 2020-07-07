@@ -53,7 +53,7 @@ class GradoTitulo {
 		$this->descripcion = $descripcion;
 	}
 	
-	public function getAllGradoTitulo(){
+	public function getAllGradoTitulo() {
         $result = array('error' => false);
 
         $sql = "SELECT * FROM gt_grado_titulo";
@@ -74,7 +74,7 @@ class GradoTitulo {
         return $result;
     }
 
-    public function getActives(){
+    public function getActives() {
         $result = array('error' => false);
 
         $sql = "SELECT * FROM gt_grado_titulo where condicion = 1";
@@ -95,7 +95,7 @@ class GradoTitulo {
         return $result;
     }
 
-    public function getById(){
+    public function getById() {
         $result = array('error' => false);
 
         $sql = "SELECT * FROM gt_grado_titulo WHERE id = $this->id";
@@ -109,7 +109,7 @@ class GradoTitulo {
         return $result;
     }
 
-    public function insertar(){
+    public function insertar() {
         $result = array('error' => false);
 
         $sql = "INSERT INTO gt_grado_titulo VALUES (0, '$this->nombre', '$this->codigo'," .
@@ -127,7 +127,7 @@ class GradoTitulo {
         return $result;
     }
  
-    public function actualizar(){
+    public function actualizar() {
         $result = array('error' => false);
 
         $sql = "UPDATE gt_grado_titulo SET nombre = '$this->nombre', " . 
@@ -147,7 +147,7 @@ class GradoTitulo {
         return $result;   
     }
 
-    public function activar(){
+    public function activar() {
         $result = array('error' => false);
 
         $sql = "UPDATE gt_grado_titulo SET condicion = '1' WHERE id = $this->id";
@@ -165,7 +165,7 @@ class GradoTitulo {
         return $result;
     }
 
-    public function desactivar(){
+    public function desactivar() {
         $result = array('error' => false);
 
         $sql = "UPDATE gt_grado_titulo SET condicion = '0' WHERE id = $this->id";

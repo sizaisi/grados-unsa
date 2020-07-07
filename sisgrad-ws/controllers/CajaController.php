@@ -2,34 +2,17 @@
 require_once 'models/Caja.php';
 
 class CajaController {
-	
-	public function index(){
-          
-	}
-	
-	public function store(){
-   
-	}
-	
-	public function update(){
-           
-	}
-	
-	public function activar(){
-            
-	}	
-	
-	public function desactivar(){
-          
-	}	
 
-	public function getPagosCajaProfesionalTesis(){
-		$servicio_caja = new ServicioCaja();
-        
+	public function getPagosProfesionalTesis(){
+		$caja = new Caja();        
         $cui = '20143489';
-        $depe = '450';        
+		$nues = '450';        
+		$espe = '0';
+		/*$cui = $_POST['cui'];
+		$nues = $_POST['nues'];
+		$espe = $_POST['espe'];*/
 
-        $result = $servicio_caja->getPagosCajaProfesionalTesis($cui, $depe);
+        $result = $caja->getPagosProfesionalTesis($cui, $nues, $espe);
 
         echo json_encode($result);
 	}

@@ -1,7 +1,7 @@
 <template>
     <div>
         <b-form @submit.prevent="registrarDocumento" class="mb-3">                  
-            <b-row>    
+            <b-row v-if="array_opciones == null">    
                 <b-col sm="12" md="8" lg="8">
                     <b-form-file
                         v-model="file"                                    
@@ -16,6 +16,30 @@
                     </b-button>
                 </b-col>
             </b-row>            
+            <b-row v-else> 
+                <b-col sm="12" md="3" lg="3">
+                    <b-form-select 
+                        class="mr-3" 
+                        v-model="opcion_documento" 
+                        :options="array_opciones"                         
+                        required    
+                    >
+                    </b-form-select> 
+                </b-col>   
+                <b-col sm="12" md="6" lg="6">
+                    <b-form-file
+                        v-model="file"                                    
+                        placeholder="Seleccione un archivo..."                            
+                        accept=".jpg, .png, .pdf"  
+                        required                            
+                    ></b-form-file>           
+                </b-col>
+                <b-col sm="12" md="3" lg="3">
+                    <b-button type="submit" variant="success" title="Subir Archivo" :disabled="array_documento.length == max_docs">
+                        <b-icon icon="plus-circle"></b-icon>
+                    </b-button>
+                </b-col>
+            </b-row>
         </b-form>                       
         <b-table                              
             :items="array_documento"
@@ -81,6 +105,7 @@ export default {
         idusuario: String,                        
         ruta: Object,
         nombre_asignado : String,
+        array_opciones: Array,
         max_docs : String,        
     },
     data() {
@@ -89,14 +114,15 @@ export default {
             url_show_file : this.$root.API_URL+'/utils/show_file.php',                        
             array_documento : [],               
             columnas_documento: [               
-                { key: 'nombre_archivo', label: 'Nombre de archivo' },
-                { key: 'nombre_asignado', label: 'Nombre asignado' },                                                              
+                { key: 'nombre_asignado', label: 'Nombre documento' },
+                { key: 'nombre_archivo', label: 'Nombre archivo' },                                                                              
                 { key: 'acciones', label: 'Acciones', class: 'text-center' },            
             ],                         
             file: null,            
             estaOcupado: false,                            
             modal: 0,   
             nombre_documento: '',                     
+            opcion_documento: null
         }
     },
     methods: {   
@@ -127,13 +153,23 @@ export default {
             })   
         },       
         registrarDocumento() {         
-            let me = this                      
+            let me = this          
+            let documento
+
+            if (this.nombre_asignado != null) {
+                documento = this.nombre_asignado
+            }
+            else {
+                documento = this.opcion_documento
+            }
+            
+
             let formData = this._toFormData({
                 idexpediente: this.expediente.id,
                 idgrado_proc: this.idgrado_proc,
                 idusuario: this.idusuario,
                 idruta: this.ruta.id,
-                nombre_asignado: this.nombre_asignado,
+                nombre_asignado: documento,
                 file: this.file,
             })       
             this.estaOcupado = true
@@ -188,7 +224,8 @@ export default {
         resetearValores() {                              
             this.file = null   
             this.errors = []   
-            this.estaOcupado = false                     
+            this.opcion_documento = null
+            this.estaOcupado = false
         },        
         _toFormData(obj) {
             var fd = new FormData()

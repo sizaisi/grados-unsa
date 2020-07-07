@@ -52,8 +52,7 @@
                         <movimiento_expediente
                             :grado_modalidad="grado_modalidad"
                             :grado_procedimiento="grado_procedimiento"                                                    
-                            :usuario="usuario"
-                            :tipo_rol="tipo_rol"                            
+                            :usuario="usuario"                                                       
                             :expediente="expediente"
                             :movimiento="movimiento"
                             :ruta="ruta"                                                            
@@ -144,6 +143,7 @@ export default {
             }                        
 
             if (!this.errors.length) {
+                this.getJuradosAsignados() //obtener los jurados para el pdf 
                 return true
             }      
 
@@ -225,7 +225,7 @@ export default {
         },                               
     },
     mounted: function() {     
-        this.getJuradosAsignados()                   
+        //this.getJuradosAsignados()                   
         this.getAsesor()          
         this.verificarRecursoRutasVecinas()         
     },     

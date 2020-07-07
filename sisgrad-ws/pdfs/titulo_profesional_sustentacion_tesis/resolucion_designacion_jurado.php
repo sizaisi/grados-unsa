@@ -8,7 +8,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	$expediente = json_decode($_POST['expediente']);			
 	$graduando = json_decode($_POST['graduando']);			
 	$asesor = json_decode($_POST['asesor']);
-	$array_jurado = json_decode($_POST['jurados']);
+	$array_jurado = json_decode($_POST['jurados'], true);
+
+	$idx_presidente = array_search('presidente', array_map(function($element) {  return $element['tipo'];}, $array_jurado) );
+	$idx_secreatario = array_search('secretario', array_map(function($element) {  return $element['tipo'];}, $array_jurado) );
+	$idx_suplente = array_search('suplente', array_map(function($element) {  return $element['tipo'];}, $array_jurado) );
+	
+	$presidente = ucwords(strtolower($array_jurado[$idx_presidente]['apn']));
+	$secretario = ucwords(strtolower($array_jurado[$idx_secreatario]['apn']));
+	$suplente = ucwords(strtolower($array_jurado[$idx_suplente]['apn']));
+	$asesor = ucwords(strtolower($asesor->apn));
+
 	//$fecha_sorteo = $_POST['fecha_sorteo'];
 	$fecha_sorteo = '2020-05-24';
 	/**********************************************************************/
@@ -65,15 +75,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	$pdf->SetFont('helvetica', '', 12);
 	$pdf->writeHTMLCell(170, '', 20, '', $texto3, 0, 0, 0, true, 'J', true);
 	$pdf->Ln();
+
 	$lista_jurado = '<ul>';
-
-	foreach($array_jurado as $jurado) {
-		$lista_jurado .= '<li><b>'.$jurado->apn.' ('.$jurado->tipo.')</b></li>';    
-	}
-
-	$lista_jurado .= '<li><b>'.$asesor->apn.' ('.$asesor->tipo.')</b></li>';    
-
+	$lista_jurado .= '<li><b>'.$presidente.' (presidente)</b></li>';    
+	$lista_jurado .= '<li><b>'.$secretario.' (secretario)</b></li>';    
+	$lista_jurado .= '<li><b>'.$suplente.' (suplente)</b></li>';    
+	$lista_jurado .= '<li><b>'.$asesor.' (asesor)</b></li>';    
 	$lista_jurado .= '</ul>';
+	
 	$texto4 = '<b>SE DECRETA: </b><br><br>Nombrar el Jurado integrado por los Señores Docentes:'.$lista_jurado.'<br>';
 	$pdf->SetFont('helvetica', '', 12);
 	$pdf->writeHTMLCell(170, '', 20, '', $texto4, 0, 0, 0, true, 'J', true);
