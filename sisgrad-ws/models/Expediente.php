@@ -214,7 +214,7 @@ class Expediente {
 					INNER JOIN gt_graduando AS GT_G ON GT_G.id = GT_GE.idgraduando					
 					INNER JOIN actescu AS AC_E ON GT_E.nues = AC_E.nues
 					INNER JOIN actfacu AS AC_F ON AC_F.facu = AC_E.facu
-					INNER JOIN acm_graduado AS AC_G ON AC_G.cui = GT_G.cui
+					INNER JOIN ACM_GRADUADO AS AC_G ON AC_G.cui = GT_G.cui
 				WHERE AC_G.nues = GT_E.nues 
 					AND AC_G.espe = GT_E.espe
 					AND GT_E.id = $this->id";

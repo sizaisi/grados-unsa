@@ -109,7 +109,7 @@ class GradoProcedimiento {
 
         $result = array('error' => false);
         
-        $sql = "SELECT idgrado_procedimiento FROM gt_usuario_GRADO_PROCEDIMIENTO WHERE idusuario = $idusuario";
+        $sql = "SELECT idgrado_procedimiento FROM gt_usuario_grado_procedimiento WHERE idusuario = $idusuario";
         $result_query = mysqli_query($this->conn, $sql);       
   
 		if ($result_query && mysqli_num_rows($result_query) == 0) {
